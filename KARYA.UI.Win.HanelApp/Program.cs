@@ -22,8 +22,8 @@ namespace KARYA.HanelApp.UI.Win
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("tr-TR");
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("tr-TR");
+            //Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("tr-TR");
+            //Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("tr-TR");
 
             Application.Run(new Main());
         }
