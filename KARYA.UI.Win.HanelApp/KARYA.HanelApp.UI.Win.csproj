@@ -78,11 +78,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DemoDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="DemoDataSet1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DemoDataSet1.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Forms\Base\BaseReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,17 +174,6 @@
     </None>
     <None Include="DemoDataSet.xss">
       <DependentUpon>DemoDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="DemoDataSet1.xsc">
-      <DependentUpon>DemoDataSet1.xsd</DependentUpon>
-    </None>
-    <None Include="DemoDataSet1.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DemoDataSet1.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="DemoDataSet1.xss">
-      <DependentUpon>DemoDataSet1.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
