@@ -14,6 +14,8 @@ namespace KARYA.HanelApp.UI.Win
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// //dsflsdiflsdlf
+        /// 
         [STAThread]
         static void Main()
         {
