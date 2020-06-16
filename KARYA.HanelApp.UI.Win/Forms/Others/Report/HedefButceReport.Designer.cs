@@ -1,4 +1,4 @@
-﻿namespace KARYA.UI.Win.HanelApp.Forms.Others.Report
+﻿namespace KARYA.HanelApp.UI.Win.Forms.Others.Report
 {
     partial class HedefButceReport
     {
@@ -36,7 +36,7 @@
             this.cmbAylar = new DevExpress.XtraEditors.ComboBoxEdit();
             this.lookUpProje = new DevExpress.XtraEditors.LookUpEdit();
             this.vWPROJELERBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.demoDataSet = new KARYA.UI.Win.HanelApp.DemoDataSet();
+            this.demoDataSet = new KARYA.HanelApp.UI.Win.DemoDataSet();
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
@@ -82,8 +82,8 @@
             this.bandedGridColumn19 = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colGRUP = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
             this.colGRUP_TOPLAM = new DevExpress.XtraGrid.Views.BandedGrid.BandedGridColumn();
-            this.pr_ButceRaporTableAdapter = new KARYA.UI.Win.HanelApp.DemoDataSetTableAdapters.Pr_ButceRaporTableAdapter();
-            this.vW_PROJELERTableAdapter = new KARYA.UI.Win.HanelApp.DemoDataSetTableAdapters.VW_PROJELERTableAdapter();
+            this.pr_ButceRaporTableAdapter = new KARYA.HanelApp.UI.Win.DemoDataSetTableAdapters.Pr_ButceRaporTableAdapter();
+            this.vW_PROJELERTableAdapter = new KARYA.HanelApp.UI.Win.DemoDataSetTableAdapters.VW_PROJELERTableAdapter();
             this.bandMonth = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.bandMonthNow = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.bandMonthLast = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();

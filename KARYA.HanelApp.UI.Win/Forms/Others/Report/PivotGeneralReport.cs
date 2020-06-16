@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KARYA.UI.Win.HanelApp.Forms.Others.Report
+namespace KARYA.HanelApp.UI.Win.Forms.Others.Report
 {
     public partial class PivotGeneralReport : Form
     {

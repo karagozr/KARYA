@@ -1,4 +1,4 @@
-﻿namespace KARYA.UI.Win.HanelApp.Forms.Others.Report
+﻿namespace KARYA.HanelApp.UI.Win.Forms.Others.Report
 {
     partial class PivotGeneralReport
     {
@@ -38,9 +38,9 @@
             this.fieldKAYITYAPANKUL1 = new DevExpress.XtraPivotGrid.PivotGridField();
             this.fieldKAYITTARIHI1 = new DevExpress.XtraPivotGrid.PivotGridField();
             this.pivotGridControl1 = new DevExpress.XtraPivotGrid.PivotGridControl();
-            this.vW_GENEL_RAPORTableAdapter = new KARYA.UI.Win.HanelApp.DemoDataSetTableAdapters.VW_GENEL_RAPORTableAdapter();
+            this.vW_GENEL_RAPORTableAdapter = new KARYA.HanelApp.UI.Win.DemoDataSetTableAdapters.VW_GENEL_RAPORTableAdapter();
             this.vWGENELRAPORBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.demoDataSet = new KARYA.UI.Win.HanelApp.DemoDataSet();
+            this.demoDataSet = new KARYA.HanelApp.UI.Win.DemoDataSet();
             this.demoDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.vWGENELRAPORBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.fieldCARIKODLAR1 = new DevExpress.XtraPivotGrid.PivotGridField();

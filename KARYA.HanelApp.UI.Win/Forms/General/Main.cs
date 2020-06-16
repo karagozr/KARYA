@@ -1,4 +1,4 @@
-﻿using KARYA.UI.Win.HanelApp.Forms.Others.Report;
+﻿using KARYA.HanelApp.UI.Win.Forms.Others.Report;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
