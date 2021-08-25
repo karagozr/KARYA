@@ -1,0 +1,196 @@
+﻿@model SAHIZA.MODEL.Dtos.StokHaraketDto
+@using KARYA.COMMON.Helpers;
+
+
+@{
+
+    if (Model.StokHaraketTur != null)
+    {
+
+        ViewBag.HeaderText = @Model.StokHaraketTur.Description();
+        if (Model.StokHaraketTur == SAHIZA.MODEL.Enums.StokHaraketTur.StokCikis)
+        {
+            ViewBag.HeaderClassName = "card-primary";
+        }
+        else if (Model.StokHaraketTur == SAHIZA.MODEL.Enums.StokHaraketTur.StokGiris)
+        {
+            ViewBag.HeaderClassName = "card-success";
+        }
+    }
+
+
+    ViewData["Title"] = "Stok Haraket";
+    Layout = "_Layout";
+}
+<section class="content">
+    <div class="card @ViewBag.HeaderClassName" style="max-width:1000px">
+        <div class="card-header form-card">
+            <h3 class="card-title">@ViewBag.HeaderText  Ekle/Düzenle</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form class="row" id="mainForm" asp-action="EditHaraket">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                    <input type="hidden" asp-for="StokHaraketTur" class="form-control">
+                </div>
+                <div class="form-group  col-sm-12">
+                    <label asp-for="CariAdi" class="control-label">Cari/Müşteri</label>
+                    <input type="hidden" asp-for="CariId" id="cariId" class="form-control">
+                    <div class="input-group input-group-append">
+                        <input asp-for="CariAdi" id="cariAdi" disabled class="form-control">
+                        <span class="input-group-append" style="max-height: 38px;">
+                            <button type="button" class="btn btn-warning" onclick="CariSec()">...</button>
+                        </span>
+                    </div>
+                    <span asp-validation-for="CariId" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-sm-12">
+                    <label asp-for="StokAdi" class="control-label">Stok Kodu</label>
+                    <input type="hidden" asp-for="StokId" id="stokId" class="form-control">
+                    <div class="input-group input-group-append">
+                        <input asp-for="StokAdi" id="stokName" disabled class="form-control">
+                        <span class="input-group-append" style="max-height: 38px;">
+                            <button type="button" class="btn btn-info" onclick="StokSec()">...</button>
+                        </span>
+                    </div>
+                    <span asp-validation-for="StokId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label asp-for="Birim" class="control-label">Birim</label>
+                    <input asp-for="Birim" id="birim" disabled class="form-control" />
+                    <span asp-validation-for="Birim" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label asp-for="Miktar" class="control-label">Miktar</label>
+                    <input asp-for="Miktar" id="miktar" type="number" class="form-control" onchange="TutarHesapla()" />
+                    <span asp-validation-for="Miktar" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label asp-for="VergiOrani" class="control-label">Vergi Oranı</label>
+                    <input asp-for="VergiOrani" id="vergiOrani" type="number" class="form-control" onchange="TutarHesapla()" />
+                    <span asp-validation-for="VergiOrani" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="Fiyat" class="control-label">Fiyat</label>
+                    <input asp-for="Fiyat" id="fiyat" type="number" class="form-control" onchange="TutarHesapla()" />
+                    <span asp-validation-for="Fiyat" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="Tutar" class="control-label"></label>
+                    <input asp-for="Tutar" id="tutar" type="number" class="form-control" onchange="FiyatHesapla()" />
+                    <span asp-validation-for="Tutar" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label asp-for="Aciklama" class="control-label"></label>
+                    <input asp-for="Aciklama" class="form-control" />
+                    <span asp-validation-for="Aciklama" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="GarantiBaslangic" class="control-label">Garanti Başlangıç Tarihi</label>
+                    <input asp-for="GarantiBaslangic" id="garantiBaslangic" onchange="GarantiBaslangicChange()"  type="date" class="form-control" />
+                    <span asp-validation-for="GarantiBaslangic" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="garantiBitis" class="control-label">Garanti Bitiş Tarihi</label>
+                    <input id="garantiBitis" type="date" disabled class="form-control" />
+                </div>
+            </form>
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" form="mainForm" class="btn btn-warning">
+                <i class="fas fa-save"></i> <span>Kaydet</span>
+            </button>
+            <a asp-action="List" class="btn btn-info" style="float:right;"><i class="fas fa-arrow-left"></i> <span>Listeye geri git</span></a>
+        </div>
+    </div>
+
+
+</section>
+
+<partial name="../partial/cari/cariContact" />
+<partial name="../partial/stok/stokContact" />
+
+<script>
+    let garantiSuresiAy = 0;
+    function StokSec() {
+        function StokBilgi(data) {
+            console.log('stok list : ', data)
+            $("#stokName").val(data.stokAdi);
+            $("#birim").val(data.birim);
+            $("#fiyat").val(data.fiyat);
+            $("#vergiOrani").val(data.vergiOrani);
+            $("#stokId").val(data.id);
+            garantiSuresiAy = data.garantiSuresiAy;
+
+            var date1 = new Date($("#garantiBaslangic").val());
+            var date2 = new Date(date1.setMonth(date1.getMonth() + data.garantiSuresiAy));
+            document.getElementById("garantiBitis").valueAsDate = date2;
+            //$("#garantiBitis").date(data2);
+
+        }
+        StokList(StokBilgi);
+    }
+
+    function CariSec() {
+        function CariBilgi(data) {
+
+            $("#cariId").val(data.id);
+            $("#cariAdi").val(data.cariAdi);
+        }
+        CariList(CariBilgi);
+    }
+
+    function GarantiBaslangicChange() {
+        var date1 = new Date($("#garantiBaslangic").val());
+        var date2 = new Date(date1.setMonth(date1.getMonth() + garantiSuresiAy));
+        document.getElementById("garantiBitis").valueAsDate = date2;
+    }
+
+    function TutarHesapla() {
+        console.log('Tutar')
+        var miktar = parseFloat($("#miktar").val());
+        var fiyat = parseFloat($("#fiyat").val());
+        var vergiOrani = parseFloat($("#vergiOrani").val());
+
+        var tutar = miktar * fiyat * ((100 + vergiOrani) / 100);
+
+        //console.log({ miktar, fiyat, vergiOrani,tutar })
+        $("#tutar").val(tutar);
+    }
+
+    function FiyatHesapla() {
+        console.log('Fiyat')
+
+        var miktar = parseFloat($("#miktar").val());
+        var tutar = parseFloat($("#tutar").val());
+        var vergiOrani = parseFloat($("#vergiOrani").val());
+
+        var fiyat = (tutar * (100 / (100 + vergiOrani))) / miktar;
+
+        //console.log({ miktar, fiyat, vergiOrani,tutar })
+        $("#fiyat").val(fiyat);
+    }
+
+</script>
+
+@*<div class="form-group col-sm-4">
+        <label asp-for="StokKodu" class="control-label">Stok Kodu</label>
+        <div class="input-group input-group-append">
+            <input id="id" class="form-control" />
+            <input asp-for="StokKodu" id="stokName" class="form-control" />
+            <span class="input-group-append" style="max-height: 38px;">
+                <button type="button" class="btn btn-info" onclick="StokList('id','stokName')">...</button>
+            </span>
+        </div>
+        <span asp-validation-for="StokKodu" class="text-danger"></span>
+    </div>*@
+

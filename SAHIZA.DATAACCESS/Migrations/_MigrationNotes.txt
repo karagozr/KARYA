@@ -1,0 +1,5 @@
+﻿KaryaContext Migaretion Builder
+add-migration KaryaFirstMigration -Context KaryaContext -OutputDir Migrations\Karya
+
+SahizaWorldContext Migaretion Builder
+add-migration SahizaWorldFirstMigration -Context SahizaWorldContext -OutputDir Migrations\SahizaWorld

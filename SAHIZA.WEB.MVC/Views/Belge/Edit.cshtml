@@ -1,0 +1,182 @@
+﻿@model SAHIZA.MODEL.Dtos.DizaynBelgeDto
+
+@{
+    ViewData["Title"] = "Belge Düzenle";
+    Layout = "_Layout";
+}
+
+
+
+<section class="content">
+    <div class="card">
+        <div class="card-header form-card">
+
+            <h3 class="card-title">Belge Ekle/Düzenle</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form id="mainForm" asp-action="Edit">
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="DizaynId" class="form-control" />
+                    <input type="hidden" asp-for="BelgeId" class="form-control" />
+
+                    <div class="form-group col-md-2">
+                        <label asp-for="DizaynKodu" class="control-label"></label>
+                        <input asp-for="DizaynKodu" class="form-control" disabled />
+                        <span asp-validation-for="DizaynKodu" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="DizaynAdi" class="control-label"></label>
+                        <input asp-for="DizaynAdi" class="form-control" disabled />
+                        <span asp-validation-for="DizaynAdi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="DizaynAciklama" class="control-label"></label>
+                        <input asp-for="DizaynAciklama" class="form-control" disabled />
+                        <span asp-validation-for="DizaynAciklama" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="BelgeAdi" class="control-label"></label>
+                        <input asp-for="BelgeAdi" class="form-control" />
+                        <span asp-validation-for="BelgeAdi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="BelgeAciklama" class="control-label"></label>
+                        <input asp-for="BelgeAciklama" class="form-control" />
+                        <span asp-validation-for="BelgeAciklama" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Not1" class="control-label"></label>
+                        <input asp-for="Not1" class="form-control" />
+                        <span asp-validation-for="Not1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Not2" class="control-label"></label>
+                        <input asp-for="Not2" class="form-control" />
+                        <span asp-validation-for="Not2" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <h4 style="position:center">Detaylar</h4>
+                <hr />
+                
+                @{
+                    for (int i=0; i< Model.BelgeDetayDtos.Count; i++)
+                    {
+                                <div>
+                                    <input type="hidden" asp-for="@Model.BelgeDetayDtos[i].DizaynDetayId" class="form-control" />
+                                    <input type="hidden" asp-for="@Model.BelgeDetayDtos[i].BelgeDetayId" class="form-control" />
+                                    @{
+                                        if (Model.BelgeDetayDtos[i].DataTipi == SAHIZA.MODEL.Enums.DataTypes.Text)
+                                        {
+                                            <div class="form-group row">
+                                                <label asp-for="@Model.BelgeDetayDtos[i].Text" class="col-sm-4 col-form-label">@Model.BelgeDetayDtos[i].Sira - @Model.BelgeDetayDtos[i].Baslik</label>
+                                                <div class="col-sm-8">
+                                                    <input asp-for="@Model.BelgeDetayDtos[i].Text" class="form-control" />
+                                                    <span asp-validation-for="@Model.BelgeDetayDtos[i].Text" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (Model.BelgeDetayDtos[i].DataTipi == SAHIZA.MODEL.Enums.DataTypes.Bool)
+                                        {
+                                            <div class="form-group row">
+                                                <label asp-for="@Model.BelgeDetayDtos[i].Bool" class="col-sm-4 col-form-label">@Model.BelgeDetayDtos[i].Sira - @Model.BelgeDetayDtos[i].Baslik</label>
+                                                <div class="col-sm-8">
+                                                    <input asp-for="@Model.BelgeDetayDtos[i].Bool" class="col-sm-6 form-control" style="width: 20px; height: 20px;" />
+                                                    <span asp-validation-for="@Model.BelgeDetayDtos[i].Text" class="text-danger"></span>
+                                                </div>
+
+                                            </div>
+                                        }
+                                        else if (Model.BelgeDetayDtos[i].DataTipi == SAHIZA.MODEL.Enums.DataTypes.DateTime)
+                                        {
+                                            <div class="form-group row">
+                                                <label asp-for="@Model.BelgeDetayDtos[i].DateTime" class="col-sm-4 col-form-label">@Model.BelgeDetayDtos[i].Sira - @Model.BelgeDetayDtos[i].Baslik</label>
+                                                <div class="col-sm-8">
+                                                    <input asp-for="@Model.BelgeDetayDtos[i].DateTime" type="date" class="col-sm-6 form-control" />
+                                                    <span asp-validation-for="@Model.BelgeDetayDtos[i].DateTime" class="text-danger"></span>
+                                                </div>
+
+                                            </div>
+                                        }
+                                        else if (Model.BelgeDetayDtos[i].DataTipi == SAHIZA.MODEL.Enums.DataTypes.Double)
+                                        {
+                                            <div class="form-group row">
+                                                <label asp-for="@Model.BelgeDetayDtos[i].DecimalNumber" class="col-sm-4 col-form-label">@Model.BelgeDetayDtos[i].Sira - @Model.BelgeDetayDtos[i].Baslik</label>
+                                                <div class="col-sm-8">
+                                                    <input asp-for="@Model.BelgeDetayDtos[i].DecimalNumber" type="number" class="col-sm-6 form-control" />
+                                                    <span asp-validation-for="@Model.BelgeDetayDtos[i].DecimalNumber" class="text-danger"></span>
+                                                </div>
+
+                                            </div>
+                                        }
+                                        else if (Model.BelgeDetayDtos[i].DataTipi == SAHIZA.MODEL.Enums.DataTypes.Number)
+                                        {
+                                            <div class="form-group row">
+                                                <label asp-for="@Model.BelgeDetayDtos[i].Number" class="col-sm-4 col-form-label">@Model.BelgeDetayDtos[i].Sira - @Model.BelgeDetayDtos[i].Baslik</label>
+                                                <div class="col-sm-8">
+                                                    <input asp-for="@Model.BelgeDetayDtos[i].Number" type="number" class="col-sm-6 form-control" />
+                                                    <span asp-validation-for="@Model.BelgeDetayDtos[i].Number" class="text-danger"></span>
+                                                </div>
+
+                                            </div>
+                                        }
+                                        else if (Model.BelgeDetayDtos[i].DataTipi == SAHIZA.MODEL.Enums.DataTypes.Selection)
+                                        {
+                                            <div class="form-group row">
+                                                <label asp-for="@Model.BelgeDetayDtos[i].Number" class="col-sm-4 col-form-label">@Model.BelgeDetayDtos[i].Sira - @Model.BelgeDetayDtos[i].Baslik</label>
+                                                <div class="col-sm-8">
+                                                    <select asp-for="@Model.BelgeDetayDtos[i].Text" class="form-control" asp-items="@new SelectList(Model.BelgeDetayDtos[i].Deger.Split(','))"></select>
+                                                    <span asp-validation-for="@Model.BelgeDetayDtos[i].Text" class="text-danger"></span>
+                                                </div>
+
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                        
+                    }
+                }
+
+            </form>
+
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            <button type="submit" form="mainForm" class="btn btn-warning">
+                <i class="fas fa-save"></i> <span>Kaydet</span>
+            </button>
+            <button type="submit" form="mainForm" asp-action="List" class="btn btn-info" style="float:right;">
+                <i class="fas fa-arrow-left"></i> <span>Listeye geri git</span>
+            </button>
+        </div>
+
+    </div>
+    <!-- /.card -->
+
+
+
+</section>
+
+
+@*<partial name="../partial/stok/stokContact" />
+
+    <div class="form-group col-sm-4">
+        <label asp-for="StokKodu" class="control-label">Stok Kodu</label>
+        <div class="input-group input-group-append">
+            <input id="id" class="form-control" />
+            <input asp-for="StokKodu" id="stokName" class="form-control" />
+            <span class="input-group-append" style="max-height: 38px;">
+                <button type="button" class="btn btn-info" onclick="StokList('id','stokName')">...</button>
+            </span>
+        </div>
+        <span asp-validation-for="StokKodu" class="text-danger"></span>
+    </div>*@
+

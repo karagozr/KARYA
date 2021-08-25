@@ -1,0 +1,138 @@
+﻿@model SAHIZA.MODEL.Entities.Cari
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Cari Düzenle";
+}
+
+<section class="content">
+    <div class="card">
+        <div class="card-header form-card">
+            <h3 class="card-title">Cari Ekle/Düzenle</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form asp-action="EditCari" id="mainForm" class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="CariKodu" class="control-label">Cari Kodu</label>
+                    <input asp-for="CariKodu" class="form-control" />
+                    <span asp-validation-for="CariKodu" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="CariTip" class="control-label">Cari Tipi</label>
+                    <select asp-for="CariTip" class="form-control" asp-items="@Html.GetEnumSelectList<KARYA.MODEL.Enums.SahizaWorld.CariTip>()"></select>
+                    <span asp-validation-for="CariTip" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="CariAdi" class="control-label">Cari Adı/Ünvan</label>
+                    <input asp-for="CariAdi" class="form-control" />
+                    <span asp-validation-for="CariAdi" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="VergiDairesi" class="control-label">Vergi Dairesi</label>
+                    <input asp-for="VergiDairesi" class="form-control" />
+                    <span asp-validation-for="VergiDairesi" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-md-3">
+                    <label asp-for="VergiNo" class="control-label">Vkn</label>
+                    <input asp-for="VergiNo" class="form-control" />
+                    <span asp-validation-for="VergiNo" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-md-3">
+                    <label asp-for="TcNo" class="control-label">Tckn</label>
+                    <input asp-for="TcNo" class="form-control" />
+                    <span asp-validation-for="TcNo" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Aciklama1" class="control-label">Açıklama-1</label>
+                    <textarea asp-for="Aciklama1" class="form-control"></textarea>
+                    <span asp-validation-for="Aciklama1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Aciklama2" class="control-label">Açıklama-2</label>
+                    <textarea asp-for="Aciklama2" class="form-control"></textarea>
+                    <span asp-validation-for="Aciklama2" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="GrupKod1" class="control-label">Grup Kod-1</label>
+                    <input asp-for="GrupKod1" class="form-control" />
+                    <span asp-validation-for="GrupKod1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="GrupKod2" class="control-label">Grup Kod-2</label>
+                    <input asp-for="GrupKod2" class="form-control" />
+                    <span asp-validation-for="GrupKod2" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="RaporKod1" class="control-label">Rapor Kod-1</label>
+                    <input asp-for="RaporKod1" class="form-control" />
+                    <span asp-validation-for="RaporKod1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="RaporKod2" class="control-label">Rapor Kod-2</label>
+                    <input asp-for="RaporKod2" class="form-control" />
+                    <span asp-validation-for="RaporKod2" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="Tel1" class="control-label">Tel. No.</label>
+                    <input asp-for="Tel1" class="form-control" />
+                    <span asp-validation-for="Tel1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="Tel2" class="control-label">Cep No.</label>
+                    <input asp-for="Tel2" class="form-control" />
+                    <span asp-validation-for="Tel2" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="Eposta" class="control-label"></label>
+                    <input asp-for="Eposta" class="form-control" />
+                    <span asp-validation-for="Eposta" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="Il" class="control-label"></label>
+                    <input asp-for="Il" class="form-control" />
+                    <span asp-validation-for="Il" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="Ilce" class="control-label"></label>
+                    <input asp-for="Ilce" class="form-control" />
+                    <span asp-validation-for="Ilce" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="Adres" class="control-label"></label>
+                    <textarea asp-for="Adres" class="form-control"></textarea>
+                    <span asp-validation-for="Adres" class="text-danger"></span>
+                </div>
+
+                
+            </form>
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" form="mainForm" class="btn btn-warning">
+                <i class="fas fa-save"></i> <span>Kaydet</span>
+            </button>
+            <a asp-action="List" class="btn btn-info" style="float:right;"><i class="fas fa-arrow-left"></i> <span>Listeye geri git</span></a>
+        </div>
+    </div>
+    <!-- /.card -->
+    <div>
+        
+    </div>
+
+
+</section>
+
+

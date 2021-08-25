@@ -1,0 +1,95 @@
+﻿
+
+
+<div class="modal fade" id="modalStokList">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header alert-info" style="padding-bottom:4px; padding-top:8px">
+                <h6>Stok Rehberi</h6>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+
+            </div>
+            <div class="modal-body">
+                <div id="tableStokList">
+
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-bottom:8px; padding-top:4px">
+                <button type="button" data-dismiss="modal" class="btn btn-warning">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+    @*var stokDurum = @Html.Raw(ViewBag.StokDurumList);
+    console.log("---> ",stokDurum);*@
+
+    @*//var stokDurums = @Html.Raw(@ViewBag.StokDurumList);*@
+
+    function StokList(StokSecimYap) {
+        $.get("/Stok/ContactList", null, StokDataBind);
+
+
+        var durums = [{ stokDurum: 0, durumAdi: 'Hepsi' },{ stokDurum: 1, durumAdi: 'Sıfır' }, { stokDurum: 2, durumAdi: 'İkinci El' }];
+
+       
+
+
+        function StokDataBind(stokList) {
+
+            $("#tableStokList").jsGrid({
+                //height: "90%",
+                width: "100%",
+
+                filtering: true,
+                editing: false,
+                inserting: false,
+                deleting: false,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                heading: true,
+                pageSize: window.innerHeight<900?13:15,
+                pageButtonCount: 5,
+                //data: stokList,
+
+                controller: {
+                    loadData: function (filter) {
+                        console.log('filter : ', filter);
+
+                        if (filter.stokKodu === "" && filter.stokAdi === "" && filter.birim === "" && filter.stokDurum === 0) return stokList;
+
+                        return stokList.filter(x =>
+                            (filter.stokKodu !== "" ? x.stokKodu.includes(filter.stokKodu) : true) &&
+                            (filter.stokAdi !== "" ? x.stokAdi.includes(filter.stokAdi) : true) &&
+                            (filter.birim !== "" ? x.birim.includes(filter.birim) : true) &&
+                            (filter.stokDurum !== 0 ? x.stokDurum===filter.stokDurum : true)
+                        );
+                    },
+                },
+                fields: [
+                    { name: "stokKodu", title: "Stok Kodu", type: "text" },
+                    { name: "stokAdi", title: "Stok Adı", type: "text" },
+                    { name: "stokDurum", title: "Durum", type: "select", items: durums, valueField: "stokDurum", textField: "durumAdi" },
+                    { name: "birim", title: "Birim", type: "text" }
+                ],
+                rowClick: function (args) {
+
+                    selectedRow = args.item;
+                    StokSecimYap(selectedRow);
+                    $('#modalStokList').modal('toggle');
+                }
+            });
+
+        }
+        $('#modalStokList').modal('toggle');
+    }
+
+</script>
+

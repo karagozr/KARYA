@@ -1,0 +1,145 @@
+﻿@model KARYA.MODEL.Dtos.Karya.AuthorizeGroupDto
+
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Yetki Grubu Düzenle";
+}
+
+
+
+
+<section class="row content">
+    <div class="col-sm-8">
+        <div class="card card-primary">
+            <div class="card-header form-card">
+                <h3 class="card-title">Yetki Grubu Ekle/Düzenle</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-action="EditAuthorize" id="mainForm">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                    <input asp-for="AuthorizeGrupDetailJson" type="hidden" id="selectedAuthorizes" />
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                </form>
+            </div>
+            <div class="card-footer">
+                <button type="submit" form="mainForm" class="btn btn-warning">
+                    <i class="fas fa-save"></i> <span>Kaydet</span>
+                </button>
+                <a asp-action="AuthorizeList" class="btn btn-info" style="float:right;"><i class="fas fa-arrow-left"></i> <span>Listeye geri git</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card card-warning">
+            <div class="card-header form-card">
+                <h3 class="card-title">Yetki Ağacı Şeç/Kaldır</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="jstree"></div>
+            </div>
+
+            <!-- /.card-body -->
+        </div>
+    </div>
+
+  
+</section>
+
+@section EditAuthorizeScript {
+    <link rel="stylesheet" href="~/plugins/jstree/dist/themes/default/style.min.css" />
+    <script src="~/plugins/jstree/dist/jstree.min.js"></script>
+    <script>
+
+
+        var treeData = @Html.Raw(ViewBag.Json);
+        function list_to_tree(list) {
+            var map = {}, node, roots = [], i;
+
+            for (i = 0; i < list.length; i += 1) {
+                map[list[i].id] = i; // initialize the map
+                list[i].children = []; // initialize the children
+            }
+
+            for (i = 0; i < list.length; i += 1) {
+                node = list[i];
+                if (node.parent !== "0") {
+                    // if you have dangling branches check that map[node.parentId] exists
+                    list[map[node.parentId]].children.push(node);
+                } else {
+                    roots.push(node);
+                }
+            }
+            console.log(roots)
+            return roots;
+        }
+
+        $(function () {
+
+            $('#jstree').on('changed.jstree', function (e, data) {
+                //console.log('data : ', data);
+                //var selected = data.instance.get_selected();
+                //console.log("selected :", selected);
+                //    // Get the path (array of IDs, since we pass true)
+                //for (var i = 0; i < selected.length; i++) {
+                //    path = data.instance.get_path(selected[i], null, true);
+                //    console.log("path :", path);
+                //    // Use `map` to retrieve all nodes
+                //    node_path = path.map(function (id) {
+                //        return treeData.find(function (node) { return node.id === id; });
+                //    });
+                //    $('#selectedAuthorizes').val(node_path);
+                //}
+
+                var checked_ids = [];
+                var selectedNodes = $('#jstree').jstree("get_selected", true);
+                $.each(selectedNodes, function () {
+                    checked_ids.push(this.id);
+                });
+                // You can assign checked_ids to a hidden field of a form before submitting to the server
+                //$('#idshow').text(checked_ids);
+
+                //console.log('data : ', checked_ids);
+                $('#selectedAuthorizes').val(checked_ids);
+
+            }).jstree({
+                "core": {
+                    "multiple": true,
+                    "themes": {
+                        "variant": "large",
+                        "icons": false
+                    },
+                    "data": treeData
+                    },
+                "checkbox": {
+                    "keep_selected_style": false,
+                    "three_state": false
+                },
+                "plugins": ["wholerow", "checkbox"],
+            });
+        });
+    </script>
+}

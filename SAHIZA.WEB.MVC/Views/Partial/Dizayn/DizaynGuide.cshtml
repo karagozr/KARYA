@@ -1,0 +1,100 @@
+﻿<style>
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgb(243 241 213 / 86%);
+    }
+</style>
+
+<div class="modal fade" id="modaldizaynList">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header alert-info">
+                <h4>Dizayn Rehberi</h4>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+
+            </div>
+            <div class="modal-body">
+                <table id="tableDizaynList" class="table table-head-fixed table-hover table-striped table-responsive text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Sıra</th>
+                            <th>Dizayn Kodu</th>
+                            <th>Dizayn Adı</th>
+                            <th>Açıklama</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyDizaynList">
+                    </tbody>
+                </table>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">Kapat</button>
+                </div>
+            </div>
+    </div>
+</div>
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+
+
+
+<script>
+    document.getElementById("tableDizaynList").style.height = window.innerHeight * 0.60+'px';
+
+
+    var _inputCariValueId   = "";
+    var _inputCariDisplayId = ""; 
+
+    function DizaynList() {
+
+        $("#tableBodyDizaynList").empty();
+        SetCariDataModalTable();
+
+        $('#modaldizaynList').modal('toggle');
+    }
+
+
+    function SetCariDataModalTable() {
+
+        $.get("/Dizayn/DizaynList", null, DizaynDataBind);
+
+        function DizaynDataBind(dizaynList) {
+            console.log(dizaynList)
+            var SetData = $('#tableBodyDizaynList');
+
+            for (var i = 0; i < dizaynList.length; i++) {
+
+                var satir =
+                    "<tr onClick=DizaynRowClick(" + dizaynList[i].id+")>" +
+                        "<td>" + (i + 1) + "</td>" +
+                        "<td>" + dizaynList[i].dizaynKodu + "</td>" +
+                        "<td>" + dizaynList[i].dizaynAdi + "</td>" +
+                        "<td>" + dizaynList[i].dizaynAciklama + "</td>" +
+                    "</tr > ";
+
+                SetData.append(satir);
+            }
+
+            $('#tableDizaynList').DataTable({
+                "destroy": true,
+                "paging": false,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": false,
+                "info": true,
+                "autoWidth": false,
+                "responsive": false,
+            });
+
+        }
+
+    }
+
+    function DizaynRowClick(id) {
+        window.location.replace("/belge/edit?dizaynId="+id);
+    }
+   
+
+</script>
+

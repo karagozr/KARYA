@@ -1,0 +1,178 @@
+﻿@using KARYA.MODEL.Authorize.SahizaWorld
+@{ 
+    var appModules = new AppModules();
+}
+<style>
+    .alt-menu {
+        margin-left: 20px
+    }
+    .alt-alt-menu {
+        margin-left: 30px
+    }
+</style>
+
+
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/" class="brand-link" style="padding-top:0; padding-bottom:0;">
+        <img src="~/dist/img/_logo.png" alt="Sahiza World" class="img-size-50" >
+        <span class="brand-text font-weight-bolder">Sahiza World</span>
+    </a>
+
+    <div class="sidebar">
+
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column text-sm" data-widget="treeview" role="menu" data-accordion="false">
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-dolly"></i>
+                        <p>
+                            Stok Menü
+                            <i class="fas fa-angle-left right"></i>
+                            <span class="badge badge-info right">Yeni</span>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item alt-menu">
+                            <a href="/stok/list" class="nav-link">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Stok Kartları</p>
+                            </a>
+                        </li>
+                        <li class="nav-item alt-menu">
+                            <a href="/stokHaraket/list" class="nav-link">
+                                <i class="nav-icon fas fa-truck-loading"></i>
+                                <p>Stok Haraket</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>
+                            Raporlar
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item alt-menu">
+                            <a href="/stok/list" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Stok Rapor</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Cari Menü
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/cari/list" class="nav-link alt-menu">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Cari Kartları</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-drafting-compass"></i>
+                        <p>
+                            Dizayn Menü
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/dizayn/list" class="nav-link alt-menu">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Dizayn Kartları</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-file-alt"></i>
+                        <p>
+                            Belge Menü
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/belge/list" class="nav-link alt-menu">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Belge Kartları</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tools"></i>
+                        <p>
+                            Servis Menü
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/servis/list" class="nav-link alt-menu">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Servis Kartları</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/servis/list" class="nav-link alt-menu">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>Servis Haraketleri</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-users-cog"></i>
+                        <p>
+                            Admin Menü
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/admin/userList" class="nav-link alt-alt-menu">
+                                <i class="nav-icon fas fa-user-lock"></i>
+                                <p>Kullanıcı Kartları</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/authorizeList" class="nav-link alt-alt-menu">
+                                <i class="nav-icon fas fa-user-shield"></i>
+                                <p>Yetki Grubu Kartları</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+            </ul>
+        </nav>
+
+    </div>
+
+</aside>
+

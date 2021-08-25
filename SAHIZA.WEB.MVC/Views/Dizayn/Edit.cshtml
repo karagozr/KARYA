@@ -1,0 +1,235 @@
+﻿@model SAHIZA.MODEL.Dtos.DizaynDto
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Dizayn Düzenle";
+}
+
+<section class="content">
+    <div class="card">
+        <div class="card-header form-card">
+            <h3 class="card-title">Dizayn Ekle/Düzenle</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" id="mainForm" class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="DetayListJson" type="hidden" id="detayListJson" />
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                    <input type="hidden" asp-for="DizaynDetays" class="form-control" />
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="DizaynKodu" class="control-label">Dizayn Kodu</label>
+                    <input asp-for="DizaynKodu" class="form-control" />
+                    <span asp-validation-for="DizaynKodu" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label asp-for="DizaynAdi" class="control-label">Dizayn Adı</label>
+                    <input asp-for="DizaynAdi" class="form-control" />
+                    <span asp-validation-for="DizaynAdi" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label asp-for="Aciklama" class="control-label">Açıklama</label>
+                    <input asp-for="Aciklama" class="form-control" />
+                    <span asp-validation-for="Aciklama" class="text-danger"></span>
+                </div>
+
+            </form>
+            <hr /><hr />
+                  <div class="row">
+                      <div class="col-sm-1">
+                          <div class="form-group">
+                              <label>Sıra</label>
+                              <input type="number" id="dizaynSira" value="1" class="form-control">
+                          </div>
+                      </div>
+                      <div class="col-sm-2">
+                          <!-- select -->
+                          <div class="form-group">
+                              <label>Veri Tipi</label>
+                              <select class="form-control" id="dizaynDataTipi" asp-items="@Html.GetEnumSelectList<SAHIZA.MODEL.Enums.DataTypes>()"></select>
+                          </div>
+                      </div>
+                      <div class="col-sm-8">
+                          <div class="form-group">
+                              <label>Başlık(Maks. 500 kar.)</label>
+                              <input type="text" id="dizaynBaslik" class="form-control" placeholder="...">
+                          </div>
+                      </div>
+                      <div class="col-sm-1" style="padding-top: 24px;">
+                          <button class="btn btn-success" onclick="SatirEkle()" style="min-width: 20px; height: 30px;">
+                              <i class="fas fa-plus"></i> <span>Ekle</span>
+                          </button>
+
+                      </div>
+
+                      <div id="detayDiv" class="col-sm-4">
+                          
+                      </div>
+                  </div>
+
+            <div id="jsGrid1"></div>
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" form="mainForm" class="btn btn-warning">
+                <i class="fas fa-save"></i> <span>Kaydet</span>
+            </button>
+            <a asp-action="List" class="btn btn-info" style="float:right;"><i class="fas fa-arrow-left"></i> <span>Listeye geri git</span></a>
+        </div>
+    </div>
+    <!-- /.card -->
+    <div>
+
+    </div>
+
+
+
+</section>
+
+@section EditDizaynScript {
+    <link rel="stylesheet" href="~/plugins/jsgrid/jsgrid.min.css">
+    <link rel="stylesheet" href="~/plugins/jsgrid/jsgrid-theme.min.css">
+    <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
+    <script src="~/plugins/jsgrid/jsgrid.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <script>
+
+
+        let tableData = $("#detayListJson").val()===""?[]: JSON.parse($("#detayListJson").val());
+
+        let selectedRow = null;
+
+        $("#dizaynDataTipi").change(function (value) {
+            var selectValue = $("#dizaynDataTipi option:selected").text();
+
+            if (selectValue === "Selection") {
+                console.log("sdasd")
+
+                $("#detayDiv").append("<div class='form-group'>" +
+                    "<label> Seçim Listesi(',' ile ayrınız)</label >" +
+                    "<textarea type='text' id='dizaynDetay' class='form-control' placeholder='' /> " +
+                    "</div > ");
+            } else {
+                $("#detayDiv").empty();
+            }
+        }); 
+        
+
+        $(function () {
+
+
+            console.log("--->",$("#detayListJson").val());
+
+            for (var i = 0; i < tableData.length; i++) {
+                tableData[i].Guid = Math.floor((Math.random()) * 0x10000).toString(16);
+            }
+
+            $("#dizaynSira").val(tableData.length + 1);
+
+            $("#jsGrid1").jsGrid({
+                width: "100%",
+
+                sorting: true,
+                paging: true,
+                confirmDeleting: false,
+                data: tableData,
+
+                fields: [
+                    { name: "Sira", title: "Sıra", type: "text" },
+                    { name: "DataTipiText", title:"Data Tipi", type: "text" },
+                    { name: "Baslik", title:"Başlık", type: "text" },
+                    { type: "control", editButton: false, deleteButton: true}
+                ],
+                rowClick: function (args) {
+                    
+                    selectedRow = args.item;
+                    if (selectedRow.DataTipi === 6) {
+                        $("#detayDiv").append("<div class='form-group'>" +
+                            "<label> Seçim Listesi(',' ile ayrınız)</label >" +
+                            "<textarea type='text' id='dizaynDetay' class='form-control' placeholder='' /> " +
+                            "</div > ");
+                    } else {
+                        $("#detayDiv").empty();
+                    }
+
+                    $("#dizaynSira").val(selectedRow.Sira);
+                    $("#dizaynDataTipi").val(selectedRow.DataTipi);
+                    $("#dizaynBaslik").val(selectedRow.Baslik);
+                    $("#dizaynDetay").val(selectedRow.Deger);
+                    
+                },
+                onItemDeleted: function (args) {
+                    toastr.warning('Satır silindi!');
+                    $("#detayListJson").val(JSON.stringify(tableData));
+                }
+            });
+
+
+           
+
+        });
+
+
+        function SatirEkle() {
+
+            if ($("#dizaynBaslik").val() === "") {
+                toastr.error('Başlık bilgisi girmelisiniz!');
+                return;
+            }
+            if ($("#dizaynDataTipi option:selected").text() === "Selection" && $("#dizaynDetay").val() === "") {
+                toastr.error('Deger bilgisi girmelisiniz!');
+                return;
+            }
+
+            console.log("selectedRow : ", tableData);
+            if (selectedRow !== null) {
+                var index = tableData.findIndex(x => x.Guid === selectedRow.Guid);
+                tableData[index].Sira = $("#dizaynSira").val();
+                tableData[index].DataTipi = $("#dizaynDataTipi").val();
+                tableData[index].DataTipiText = $("#dizaynDataTipi option:selected").text()
+                tableData[index].Baslik = $("#dizaynBaslik").val();
+                tableData[index].Deger = $("#dizaynDetay").val();
+            } else {
+
+                if (tableData.some(x => x.Sira === $("#dizaynSira").val())) {
+                    toastr.error('Sıra daha önce kullanılmış');
+                    return;
+                }
+
+                tableData = [...tableData, {
+                    "Guid": Math.floor((Math.random()) * 0x10000).toString(16),
+                    "Sira": $("#dizaynSira").val(), "DataTipi": $("#dizaynDataTipi").val(),
+                    "DataTipiText": $("#dizaynDataTipi option:selected").text(), "Baslik": $("#dizaynBaslik").val(), "Deger": $("#dizaynDetay").val()
+                }];
+
+                $("#dizaynSira").val(parseInt($("#dizaynSira").val()) + 1);
+            }
+
+
+            $("#dizaynBaslik").val("");
+            $("#dizaynDetay").val("");
+
+            $("#jsGrid1").jsGrid({
+                data: tableData
+            });
+            selectedRow = null;
+            toastr.success('Satır bilgisi eklendi.');
+
+            $("#detayListJson").val(JSON.stringify(tableData));
+
+        }
+        
+
+        
+
+    </script>
+}
+

@@ -1,0 +1,122 @@
+﻿@model SAHIZA.MODEL.Dtos.DizaynBelgeDto
+
+@{
+    ViewData["Title"] = "Belge İzle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<section>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card list-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6">
+                                <h3 class="card-title">@Model.DizaynAdi</h3>
+                            </div>
+                            <div class="col-6">
+                                <div class="btn-group" style="float: right">
+                                    <a class="btn btn-block bg-gradient-success" id="btnSubmit"><i class="fas fa-file-pdf"></i> İndir Pdf</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="Grid">
+                            <h4 id="belgeAdi" style="text-align:center">@Model.BelgeAdi</h4>
+                            <p style="text-align:center">@Model.BelgeAciklama</p>
+                            <p style="text-align:center">.</p>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sıra</th>
+                                        <th>Madde</th>
+                                        <th></th>
+                                        <th>Açıklama</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.BelgeDetayDtos)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(modelItem => item.Sira)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Baslik) </td>
+                                            <td>:</td>
+                                            <td>
+                                                @{
+                                                    if (item.DataTipi == SAHIZA.MODEL.Enums.DataTypes.Bool)
+                                                    {
+                                                        if (item.Bool)
+                                                        {
+                                                            <span>&#10003;</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>&#10539;</span>
+                                                        }
+                                                    }
+                                                    else if (item.DataTipi == SAHIZA.MODEL.Enums.DataTypes.DateTime)
+                                                    {
+                                                        @item.DateTime.ToString("dd.MM.yyyy");
+                                                    }
+                                                    else if (item.DataTipi == SAHIZA.MODEL.Enums.DataTypes.Double)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.DecimalNumber);
+                                                    }
+                                                    else if (item.DataTipi == SAHIZA.MODEL.Enums.DataTypes.Number)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Number);
+                                                    }
+                                                    else if (item.DataTipi == SAHIZA.MODEL.Enums.DataTypes.Text)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Text);
+                                                    }
+                                                    else if (item.DataTipi == SAHIZA.MODEL.Enums.DataTypes.Selection)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Text);
+                                                    }
+                                                }
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script src="~/plugins/html2pdf.js-master/dist/html2pdf.bundle.min.js"></script>
+<script type="text/javascript">
+        $(function () {
+            $("#btnSubmit").click(function () {
+                //console.log("TIJKSA");
+                //$("input[name='GridHtml']").val($("#Grid").html());
+                var element = document.getElementById('Grid');
+                var opt = {
+                    margin: 0.25,
+                    filename: $("#belgeAdi").text(),
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 1 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                // New Promise-based usage:
+                html2pdf().set(opt).from(element).save();
+
+                // Old monolithic-style usage:
+                //html2pdf(element, opt);
+            });
+        });
+</script>

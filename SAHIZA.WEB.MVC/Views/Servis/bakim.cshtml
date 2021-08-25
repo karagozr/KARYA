@@ -1,0 +1,218 @@
+﻿@{
+}
+@model SAHIZA.MODEL.Dtos.ServisDto
+@using SAHIZA.MODEL.Enums
+@{
+    ViewData["Title"] = "Servis Bakım";
+    Layout = "_Layout";
+}
+<style>
+    select{
+        padding:1px;
+    }
+</style>
+<section class="content">
+    <div class="card">
+        <div class="card-header form-card">
+
+            <h3 class="card-title">Bakım İşlemi</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form asp-action="bakim" id="mainForm" class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="ServisIslemTur" class="control-label">İşlem Türü</label>
+                    <select asp-for="ServisIslemTur" id="servisIslemTur" class="form-control" asp-items="@Html.GetEnumSelectList<ServisIslemTur>()" 
+                            style="padding:0.1rem" onchange="ServisIslemTurChange()"></select>
+                    <span asp-validation-for="ServisIslemTur" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="ServisDurum" class="control-label">İşlem Türü</label>
+                    <select asp-for="ServisDurum" class="form-control" asp-items="@Html.GetEnumSelectList<ServisDurum>()" style="padding:0.1rem"></select>
+                    <span asp-validation-for="ServisDurum" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="CreatedTime" class="control-label">Kayıt Tarih</label>
+                    <input asp-for="CreatedTime" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="CreatedTime" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-sm-12">
+                    <label asp-for="CariAdi" id="cariLabelId" class="control-label">Cari/Müşteri</label>
+                    <input type="hidden" asp-for="CariId" id="cariId" class="form-control">
+                    <div class="input-group input-group-append">
+                        <input asp-for="CariAdi" id="cariAdi" class="form-control" onchange="CariValueChange()">
+                        <span class="input-group-append" style="max-height: 38px;">
+                            <button type="button" class="btn btn-warning" onclick="CariSec()">...</button>
+                        </span>
+                    </div>
+                    <span asp-validation-for="CariId" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-sm-12">
+                    <label asp-for="StokAdi" class="control-label">Ürün Bilgisi</label>
+                    <input type="hidden" asp-for="StokId" id="stokId" class="form-control">
+                    <div class="input-group input-group-append">
+                        <input asp-for="StokAdi" id="stokName" class="form-control" onchange="StokValueChange()">
+                        <span class="input-group-append" style="max-height: 38px;">
+                            <button type="button" class="btn btn-info" onclick="StokSec()">...</button>
+                        </span>
+                    </div>
+                    <span asp-validation-for="StokId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Not1" class="control-label">Not-1</label>
+                    <textarea asp-for="Not1" class="form-control"></textarea>
+                    <span asp-validation-for="Not1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Not2" class="control-label">Not-2</label>
+                    <textarea asp-for="Not2" class="form-control"></textarea>
+                    <span asp-validation-for="Not2" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12">
+                    <label asp-for="MusteriAdres" class="control-label">Müşteri Adres</label>
+                    <textarea asp-for="MusteriAdres" class="form-control"></textarea>
+                    <span asp-validation-for="MusteriAdres" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Tel1" class="control-label">Tel. No.</label>
+                    <input asp-for="Tel1" class="form-control" />
+                    <span asp-validation-for="Tel1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12">
+                    <label asp-for="Aciklama" class="control-label">Açıklama</label>
+                    <textarea asp-for="Aciklama" class="form-control"></textarea>
+                    <span asp-validation-for="Aciklama" class="text-danger"></span>
+                </div>
+                <div class="row form-group col-md-12" id="fiyatliIslem" style=" border: 0.1rem solid maroon; display: none;">
+                    <div class="form-group col-md-4">
+                        <label asp-for="ToplamFiyat" class="control-label">Fiyat</label>
+                        <input type="number" asp-for="ToplamFiyat" id="toplamFiyat" class="form-control" onchange="TutarHesapla()"/>
+                        <span asp-validation-for="ToplamFiyat" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="VergiOrani" class="control-label">Vergi Oranı</label>
+                        <input type="number" asp-for="VergiOrani" id="vergiOrani" class="form-control"  onchange="TutarHesapla()"/>
+                        <span asp-validation-for="VergiOrani" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="ToplamTutar" class="control-label">Tutar</label>
+                        <input type="number" asp-for="ToplamTutar" id="toplamTutar" class="form-control" onchange="FiyatHesapla()"/>
+                        <span asp-validation-for="ToplamTutar" class="text-danger"></span>
+                    </div>
+                </div>
+                
+            </form>
+
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            <button type="submit" form="mainForm" class="btn btn-warning">
+                <i class="fas fa-save"></i> <span>Kaydet</span>
+            </button>
+            <button type="submit" form="mainForm" asp-action="List" class="btn btn-info" style="float:right;">
+                <i class="fas fa-arrow-left"></i> <span>Listeye geri git</span>
+            </button>
+        </div>
+
+    </div>
+    <!-- /.card -->
+
+
+
+</section>
+
+<partial name="../partial/cari/cariContact" />
+<partial name="../partial/stok/stokContact" />
+
+<script>
+    let garantiSuresiAy = 0;
+    function StokSec() {
+        function StokBilgi(data) {
+            //console.log('stok list : ', data)
+            $("#stokName").val(data.stokAdi);
+            //$("#birim").val(data.birim);
+            //$("#fiyat").val(data.fiyat);
+            //$("#vergiOrani").val(data.vergiOrani);
+            $("#stokId").val(data.id);
+            //garantiSuresiAy = data.garantiSuresiAy;
+
+            //var date1 = new Date($("#garantiBaslangic").val());
+            //var date2 = new Date(date1.setMonth(date1.getMonth() + data.garantiSuresiAy));
+            //document.getElementById("garantiBitis").valueAsDate = date2;
+            //$("#garantiBitis").date(data2);
+
+        }
+        StokList(StokBilgi);
+    }
+
+    function StokValueChange() {
+        $("#stokId").val(0);
+    }
+
+    function CariSec() {
+        function CariBilgi(data) {
+
+            $("#cariId").val(data.id);
+            $("#musteriBilgisi").val(data.cariAdi);
+            $("#cariAdi").val(data.cariAdi);
+            $("#cariLabelId").text('Cari');
+            
+        }
+        CariList(CariBilgi);
+    }
+
+    function CariValueChange() {
+        $("#cariId").val(0);
+        $("#cariLabelId").text('Müşteri');
+    }
+    function ServisIslemTurChange() {
+        if ($("#servisIslemTur").val() == 2) {
+            $("#fiyatliIslem").show();
+        } else {
+            $("#fiyatliIslem").hide();
+            $("#toplamFiyat").val(0);
+            $("#toplamTutar").val(0);
+            $("#vergiOrani").val(0);
+        }
+    }
+
+    function GarantiBaslangicChange() {
+        var date1 = new Date($("#garantiBaslangic").val());
+        var date2 = new Date(date1.setMonth(date1.getMonth() + garantiSuresiAy));
+        document.getElementById("garantiBitis").valueAsDate = date2;
+    }
+
+
+    function TutarHesapla() {
+        
+        var fiyat = parseFloat($("#toplamFiyat").val());
+        var vergiOrani = parseFloat($("#vergiOrani").val());
+
+        var tutar = fiyat * ((100 + vergiOrani) / 100);
+
+        //console.log({ miktar, fiyat, vergiOrani,tutar })
+        $("#toplamTutar").val(tutar);
+    }
+
+    function FiyatHesapla() {
+        var tutar = parseFloat($("#toplamTutar").val());
+        var vergiOrani = parseFloat($("#vergiOrani").val());
+
+        var fiyat = (tutar * (100 / (100 + vergiOrani)));
+
+        //console.log({ miktar, fiyat, vergiOrani,tutar })
+        $("#toplamFiyat").val(fiyat);
+    }
+
+</script>
+

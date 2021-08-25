@@ -1,0 +1,84 @@
+﻿@model IEnumerable<SAHIZA.MODEL.Dtos.StokHaraketListDto>
+@using KARYA.COMMON.Helpers;
+@{
+    ViewData["Title"] = "Stok Haraketleri";
+}
+
+<section>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                       
+                        <div class="row">
+                            <div class="col-6">
+                                <h3 class="card-title">Stok Haraketleri</h3>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="card-tools">
+                                    <div class="btn-group" style="float: right; margin-left: 10px;">
+                                        <a href="/stokHaraket/EditHaraket?StokHaraketTur=@SAHIZA.MODEL.Enums.StokHaraketTur.StokGiris"
+                                           class="btn btn-block bg-gradient-success"><i class="far fa-plus-square"></i> Yeni Giriş</a>
+                                    </div>
+                                    <div class="btn-group" style="float: right">
+                                        <a href="/stokHaraket/EditHaraket?StokHaraketTur=@SAHIZA.MODEL.Enums.StokHaraketTur.StokCikis"
+                                           class="btn btn-block bg-gradient-primary"><i class="far fa-plus-square"></i> Yeni Çıkış</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="card-body">
+                        <table id="stokHaraketTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tarih</th>
+                                    <th>Haraket Tipi</th>
+                                    <th>Stok Adi</th>
+                                    <th>Birim</th>
+                                    <th>Miktar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr style="background-color: @(item.StokHaraketTur == SAHIZA.MODEL.Enums.StokHaraketTur.StokGiris ? "#43b25d6e" : "#1e8bff66")">
+                                        <td>@item.CreatedTime</td>
+                                        <td>@item.StokHaraketTur.Description()</td>
+                                        <td>
+                                            <a href="/stokHaraket/EditHaraket?StokHaraketTur=@item.StokHaraketTur&Id=@item.Id">@item.StokAdi</a>
+                                        </td>
+                                        <td>@item.Birim</td>
+                                        <td>@item.Miktar</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+
+
+<script>
+    $(function () {
+        $('#stokHaraketTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+    });
+
+</script>

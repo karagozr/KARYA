@@ -1,0 +1,128 @@
+﻿@model SAHIZA.MODEL.Entities.Stok
+@using SAHIZA.MODEL.Enums
+@{
+    ViewData["Title"] = "Stok Düzenle";
+    Layout = "_Layout";
+}
+
+<section class="content">
+    <div class="card" style="max-width:1000px">
+        <div class="card-header form-card">
+
+            <h3 class="card-title">Stok Ekle/Düzenle</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form asp-action="EditStok" id="mainForm" class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="StokKodu" class="control-label">Stok Kodu</label>
+                    <input asp-for="StokKodu" class="form-control" />
+                    <span asp-validation-for="StokKodu" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="StokDurum" class="control-label">Stok Durum</label>
+                    <select asp-for="StokDurum" class="form-control" asp-items="@Html.GetEnumSelectList<StokDurum>()"></select>
+                    <span asp-validation-for="StokDurum" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="Birim" class="control-label">Birim</label>
+                    <input asp-for="Birim" class="form-control" />
+                    <span asp-validation-for="Birim" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12">
+                    <label asp-for="StokAdi" class="control-label">Stok Adı</label>
+                    <input asp-for="StokAdi" class="form-control" />
+                    <span asp-validation-for="StokAdi" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Aciklama1" class="control-label">Açıklama-1</label>
+                    <textarea asp-for="Aciklama1" class="form-control"></textarea>
+                    <span asp-validation-for="Aciklama1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Aciklama2" class="control-label">Açıklama-2</label>
+                    <textarea asp-for="Aciklama2" class="form-control"></textarea>
+                    <span asp-validation-for="Aciklama2" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="GrupKod1" class="control-label">Grup Kod-1</label>
+                    <input asp-for="GrupKod1" class="form-control" />
+                    <span asp-validation-for="GrupKod1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="GrupKod2" class="control-label">Grup Kod-2</label>
+                    <input asp-for="GrupKod2" class="form-control" />
+                    <span asp-validation-for="GrupKod2" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="RaporKod1" class="control-label">Rapor Kod-1</label>
+                    <input asp-for="RaporKod1" class="form-control" />
+                    <span asp-validation-for="RaporKod1" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="SatisParaBirimi" class="control-label">Para Birimi</label>
+                    <select asp-for="SatisParaBirimi" class="form-control" asp-items="@Html.GetEnumSelectList<ParaBirimi>()"></select>
+                    <span asp-validation-for="SatisParaBirimi" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="SatisFiyati" class="control-label">Satış Fiyatı</label>
+                    <input asp-for="SatisFiyati" type="number" class="form-control" />
+                    <span asp-validation-for="SatisFiyati" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label asp-for="VergiOrani" class="control-label">Vergi Oranı</label>
+                    <input asp-for="VergiOrani" type="number" min="0" max="100" class="form-control" />
+                    <span asp-validation-for="VergiOrani" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label asp-for="GarantiSuresiAy" class="control-label">Garanti Süresi (Ay)</label>
+                    <input asp-for="GarantiSuresiAy" type="number" min="0" max="100" class="form-control" />
+                    <span asp-validation-for="GarantiSuresiAy" class="text-danger"></span>
+                </div>
+
+
+            </form>
+
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            <button type="submit" form="mainForm" class="btn btn-warning">
+                <i class="fas fa-save"></i> <span>Kaydet</span>
+            </button>
+            <button type="submit" form="mainForm" asp-action="List" class="btn btn-info" style="float:right;">
+                <i class="fas fa-arrow-left"></i> <span>Listeye geri git</span>
+            </button>
+        </div>
+
+    </div>
+    <!-- /.card -->
+   
+
+
+</section>
+
+    
+    @*<partial name="../partial/stok/stokContact" />
+
+    <div class="form-group col-sm-4">
+        <label asp-for="StokKodu" class="control-label">Stok Kodu</label>
+        <div class="input-group input-group-append">
+            <input id="id" class="form-control" />
+            <input asp-for="StokKodu" id="stokName" class="form-control" />
+            <span class="input-group-append" style="max-height: 38px;">
+                <button type="button" class="btn btn-info" onclick="StokList('id','stokName')">...</button>
+            </span>
+        </div>
+        <span asp-validation-for="StokKodu" class="text-danger"></span>
+    </div>*@
+    

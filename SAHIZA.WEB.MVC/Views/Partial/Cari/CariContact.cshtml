@@ -1,0 +1,81 @@
+﻿
+<div class="modal fade" id="modalCariList">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header alert-info" style="padding-bottom:4px; padding-top:8px">
+                <h5>Cari Rehberi</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+
+            </div>
+            <div class="modal-body">
+                <div id="tableCariList">
+
+                </div>
+               
+            </div>
+            <div class="modal-footer" style="padding-bottom:8px; padding-top:4px">
+                <button type="button" data-dismiss="modal" class="btn btn-warning">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById("tableCariList").style.height = window.innerHeight * 0.60 + 'px';
+
+    function CariList(CariSecimYap) {
+        $.get("/Cari/ContactList", null, CariDataBind);
+
+        function CariDataBind(cariList) {
+
+
+            $("#tableCariList").jsGrid({
+                width: "100%",
+                clearFilterButton: true,     
+                filtering: true,
+                editing: false,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                autosearch: true,
+                heading: true,
+                pageSize: window.innerHeight < 900 ? 13 : 15,
+                pageButtonCount: 5,
+
+                //data: cariList,
+                controller: {
+                    loadData: function (filter) {
+                        console.log('filter : ', filter)
+                        if (filter.cariKodu !== "" && filter.cariAdi !== "" && filter.cariTip !== "") return cariList;
+
+                        return cariList.filter(x =>
+                            x.cariKodu.includes(filter.cariKodu)
+                            && x.cariAdi.includes(filter.cariAdi)
+                            && x.cariTip.includes(filter.cariTip)
+                        );
+                    },
+                },
+
+                fields: [
+                    { name: "cariKodu", title: "Cari Kodu", type: "text" },
+                    { name: "cariAdi", title: "Cari Ünvan/Ad", type: "text" },
+                    { name: "cariTip", title: "Cari Tipi", type: "text" }
+                ],
+                rowClick: function (args) {
+
+                    selectedRow = args.item;
+                    CariSecimYap(selectedRow);
+                    $('#modalCariList').modal('toggle');
+                }
+            });
+
+        }
+
+      
+        $('#modalCariList').draggable({
+            handle: '.modal-header'
+        }).modal('toggle');
+    }
+
+</script>

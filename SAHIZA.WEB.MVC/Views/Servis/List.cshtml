@@ -1,0 +1,108 @@
+﻿@model IEnumerable<SAHIZA.MODEL.Dtos.ServisListDto>
+@using KARYA.COMMON.Helpers;
+
+@{
+    ViewData["Title"] = "Servis";
+    Layout = "_Layout";
+}
+
+
+
+<section>
+    <div>
+        @*<div class="row">
+                <div class="col-12">
+                    <div class="card list-card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3 class="card-title">Ürün Ara</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <form asp-action="List">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <input type="submit" value="Save" class="btn btn-primary" />
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>*@
+    </div>
+
+    <div class="card list-card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-6">
+                    <h3 class="card-title">Servis İşlem Listesi</h3>
+                </div>
+                <div class="col-6">
+                    <div class="btn-group" style="float: right">
+                        <a href="#" class="btn btn-block bg-gradient-success" onclick="YeniServisKaydi()"><i class="far fa-plus-square"></i> Yeni Servis İşlemi</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <table id="dizaynListTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>İşlem Türü</th>
+                        <th>Müşteri Bilgisi</th>
+                        <th>Ürün Bilgisi</th>
+                        <th>Servis Durum</th>
+                        <th>Başlangıç Tarihi</th>
+                        <th>Son İşlem Tarihi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.ServisIslemTur.Description()</td>
+                                <td>@item.MusteriBilgisi</td>
+                                <td>@item.UrunBilgisi</td>
+                                <td>@item.ServisDurum.Description()</td>
+                                <td>@item.BaslangicTarihi</td>
+                                <td>@item.SonGuncellemeTarihi</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="modalServisIslem" >
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header alert-info">
+                    <h4>Servis İşlem Türü</h4>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+
+                </div>
+                <div class="modal-body">
+                    <a href="/servis/bakim" class="btn btn-block bg-gradient-success"><i class="far fa-plus-square"></i> Garantili İşlem</a>
+                    <a href="/servis/bakim" class="btn btn-block bg-gradient-info"><i class="far fa-plus-square"></i> Ücretli İşlem</a>
+                    <a href="/servis/bakim" class="btn btn-block bg-gradient-purple"><i class="far fa-plus-square"></i> Ücretsiz İşlem</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function YeniServisKaydi(){
+        $('#modalServisIslem').modal('toggle');
+    }
+</script>

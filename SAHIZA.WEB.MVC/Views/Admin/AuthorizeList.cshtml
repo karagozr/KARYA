@@ -1,0 +1,72 @@
+﻿@model IEnumerable<KARYA.MODEL.Entities.Karya.AuthorizeGroup>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Yetki Grup Listesi";
+}
+
+<section>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6">
+                                <h3 class="card-title">Yetki Grupları</h3>
+                            </div>
+                            <div class="col-6">
+                                <div class="btn-group" style="float: right">
+                                    <a href="/Admin/EditAuthorize" class="btn btn-block bg-gradient-success"><i class="far fa-plus-square"></i> Yeni Ekle</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="stokTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Yetki Grup Adı</th>
+                                    <th>Açıklama</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="/Admin/EditAuthorize?Id=@item.Id">@item.Name</a>
+                                        </td>
+                                        <td>@item.Description</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#userTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+    });
+
+</script>

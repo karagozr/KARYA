@@ -1,0 +1,73 @@
+﻿@model IEnumerable<SAHIZA.MODEL.Entities.Stok>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "List";
+}
+
+<section>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6">
+                                <h3 class="card-title">Stok Kartları</h3>
+                            </div>
+                            <div class="col-6">
+                                <div class="btn-group" style="float: right">
+                                    <a href="/stok/Bakim" class="btn btn-block bg-gradient-success"><i class="far fa-plus-square"></i> Yeni Ekle</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="stokTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Stok Kodu</th>
+                                    <th>Stok Adı</th>
+                                    <th>Stok Durum </th>
+                                    <th>Açıklama</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="/stok/EditStok?Id=@item.Id">@item.StokKodu</a>
+                                        </td>
+                                        <td>@item.StokAdi</td>
+                                        <td>@item.StokDurum</td>
+                                        <td>@item.Aciklama1</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+
+
+<script>
+    $(function () {
+        $('#stokTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true
+        });
+    });
+
+</script>

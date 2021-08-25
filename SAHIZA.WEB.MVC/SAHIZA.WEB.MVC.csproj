@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <UserSecretsId>863fb607-6424-4e61-af88-946185517f9e</UserSecretsId>
+    <RootNamespace>SAHIZA.WEB.MVC</RootNamespace>
+    <AssemblyName>SAHIZA.WEB.MVC</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SAHIZA.BUSINESS\SAHIZA.BUSINESS.csproj" />
+    <ProjectReference Include="..\SAHIZA.MODEL\SAHIZA.MODEL.csproj" />
+    <ProjectReference Include="..\KARYA.BUSINESS\KARYA.BUSINESS.csproj" />
+    <ProjectReference Include="..\KARYA.COMMON\KARYA.COMMON.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\plugins\jstree\.github\FUNDING.yml" />
+    <None Include="wwwroot\plugins\jstree\.github\workflows\npm-publish.yml" />
+  </ItemGroup>
+
+</Project>

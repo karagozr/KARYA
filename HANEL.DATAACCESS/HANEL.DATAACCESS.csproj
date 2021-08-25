@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HANEL.MODEL\HANEL.MODEL.csproj" />
+    <ProjectReference Include="..\KARYA.CORE\KARYA.CORE.csproj" />
+    <ProjectReference Include="..\KARYA.DATAACCESS\KARYA.DATAACCESS.csproj" />
+  </ItemGroup>
+
+</Project>
