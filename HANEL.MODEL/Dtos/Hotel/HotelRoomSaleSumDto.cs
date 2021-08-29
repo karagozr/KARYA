@@ -11,6 +11,7 @@ namespace HANEL.MODEL.Dtos.Hotel
         public DateTime ProcessDate { get; set; }
         public string AgentName { get; set; }
         public string CountryName { get; set; }
+        public string MarketName { get; set; }
         public int Pax { get; set; }
         public int RoomSum { get; set; }
         public double Occupancy { get; set; }

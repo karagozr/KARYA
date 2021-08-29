@@ -127,7 +127,8 @@ namespace HANEL.BUSINESS.Concrete.Hotel
                     var queryString =
                         $" SELECT cst.hrk_tarih AS \"ProcessDate\",                             " +
                         $" cst.acenta_adi AS \"AgentName\",                                     " +
-                        $" cst.ulke_adi AS \"CountryName\",                                     " +
+                        $" cst.ulke_adi AS \"CountryName\",                                     " +   
+                        $" cst.pazar_adi AS \"MarketName\",                                     " +
                         $" SUM(cst.geceleme_pax) AS \"Pax\",                                    " +
                         $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                          " +
                         $" ROUND(SUM(cst.geceleme_odasayisi) / 144, 2) AS \"Occupancy\",        " +
@@ -140,9 +141,9 @@ namespace HANEL.BUSINESS.Concrete.Hotel
                         queryString += $" AND cst.hrk_tarih> '{dateRangeModel.FirstDate.Year}.{dateRangeModel.FirstDate.Month}.{dateRangeModel.FirstDate.Day}' " +
                             $"and cst.hrk_tarih<= '{dateRangeModel.LastDate.Year}.{dateRangeModel.LastDate.Month}.{dateRangeModel.LastDate.Day}' ";
 
-                    queryString += $" GROUP BY cst.hrk_tarih,cst.acenta_adi,cst.ulke_adi  " +
+                    queryString += $" GROUP BY cst.hrk_tarih,cst.acenta_adi,cst.ulke_adi ,cst.pazar_adi " +
                         $" ORDER BY cst.hrk_tarih";
-
+                    
 
                     var data = await connection.QueryAsync<HotelRoomSaleSumDto>(queryString);
 
