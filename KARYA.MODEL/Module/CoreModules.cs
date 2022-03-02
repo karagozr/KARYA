@@ -17,10 +17,10 @@ namespace KARYA.MODEL.Module
             #region USER CONTROL                                                                                                
             ModuleList.Add(new AppModule() { Id = BaseRole.UserControl, ParentId = BaseRole.AdminPanel,         Name = "User Control", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
             ModuleList.Add(new AppModule() { Id = BaseRole.UserAdd, ParentId = BaseRole.UserControl,            Name = "User Add", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = BaseRole.UserEdit, ParentId = BaseRole.UserControl,           Name = "User Edit", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = BaseRole.UserUpdate, ParentId = BaseRole.UserControl,           Name = "User Edit", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
             ModuleList.Add(new AppModule() { Id = BaseRole.UserDelete, ParentId = BaseRole.UserControl,         Name = "User Delete", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
             #endregion
-            #region AUtHORIZE CONTROL
+            #region AUTHORIZE CONTROL
             ModuleList.Add(new AppModule() { Id = BaseRole.AuthorizeModul, ParentId = BaseRole.AdminPanel,      Name = "AuthorizeModul", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
             ModuleList.Add(new AppModule() { Id = BaseRole.AuthorizeAdd, ParentId = BaseRole.AuthorizeModul,    Name = "AuthorizeAdd", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
             ModuleList.Add(new AppModule() { Id = BaseRole.AuthorizeEdit, ParentId = BaseRole.AuthorizeModul,   Name = "AuthorizeEdit", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KARYA.COMMON.Attributes;
+using Microsoft.AspNetCore.Mvc;
 using SAHIZA.BUSINESS.Abstarct;
 using SAHIZA.MODEL.Dtos;
 using SAHIZA.MODEL.Entities;
+using SAHIZA.MODEL.Module;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +24,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
+        [KaryaAuthorize(Role = SahizaRole.BelgeModule)]
         public async Task<IActionResult> List()
         {
             var result = await _belgeManager.GetAll();
@@ -38,6 +41,7 @@ namespace SAHIZA.WEB.MVC.Controllers
 
 
         [HttpGet]
+        [KaryaAuthorize(Role = SahizaRole.BelgeModule)]
         public async Task<IActionResult> Edit(int id=0, int dizaynId=0)
         {
             if (id == 0 && dizaynId>0)
@@ -58,6 +62,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
+        [KaryaAuthorize(Role = SahizaRole.BelgeModule)]
         public async Task<IActionResult> Show(int id = 0)
         {
             var belge = await _belgeManager.GetByIdWithDetay(id);
@@ -74,6 +79,7 @@ namespace SAHIZA.WEB.MVC.Controllers
 
 
         [HttpPost]
+        [KaryaAuthorize(Role = SahizaRole.BelgeUpdate)]
         public async Task<IActionResult> Edit(DizaynBelgeDto dizaynBelgeDto)
         {
             var reult = await _belgeManager.AddUpdateComplex(dizaynBelgeDto);

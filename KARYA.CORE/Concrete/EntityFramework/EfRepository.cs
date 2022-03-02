@@ -174,6 +174,23 @@ namespace KARYA.CORE.Concrete.EntityFramework
                 SCOPE_IDENTY_ID = entity.Id;
             }
         }
+
+        public async Task UpdateComplex(IEnumerable<TEntity> entities)
+        {
+            using (var context = new TContext())
+            {
+                foreach (var item in entities)
+                {
+                    var entity = UpdateLog(item);
+                    var updatedEntity = context.Set<TEntity>().Update(entity);
+                    updatedEntity.State = EntityState.Modified;
+                    SCOPE_IDENTY_ID = entity.Id;
+                }
+
+                await context.SaveChangesAsync();
+            }
+        }
+
         public virtual async Task AddUpdate(TEntity entity)
         {
             using (var context = new TContext())
@@ -192,14 +209,30 @@ namespace KARYA.CORE.Concrete.EntityFramework
         {
             using (var context = new TContext())
             {
-                foreach (var item in entities)
+                if (entities.FirstOrDefault() is IModificationEntity)
                 {
-                    var itemEntity = item.Id == 0 ? CreateLog(item) : UpdateLog(item);
-                    var addedEntity = context.Entry(itemEntity);
-                    addedEntity.Property("CreatedTime").IsModified = item.Id == 0 ? true : false;
-                    addedEntity.Property("CreatedUserId").IsModified = item.Id == 0 ? true : false;
-                    addedEntity.State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+                    foreach (var item in entities)
+                    {
+
+                        var itemEntity = item.Id == 0 ? CreateLog(item) : UpdateLog(item);
+                        var addedEntity = context.Entry(itemEntity);
+
+                        addedEntity.State = EntityState.Detached;
+
+                        addedEntity.Property("CreatedTime").IsModified = item.Id == 0 ? true : false;
+                        addedEntity.Property("CreatedUserId").IsModified = item.Id == 0 ? true : false;
+                        addedEntity.State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+                    }
                 }
+                else
+                {
+                    foreach (var item in entities)
+                    {
+                        var addedEntity = context.Entry(item);
+                        addedEntity.State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+                    }
+                }
+                
 
                 await context.SaveChangesAsync();
 
@@ -237,5 +270,6 @@ namespace KARYA.CORE.Concrete.EntityFramework
             }
         }
 
+        
     }
 }

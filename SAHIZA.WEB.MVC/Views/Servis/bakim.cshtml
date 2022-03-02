@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group col-sm-4">
                     <label asp-for="ServisIslemTur" class="control-label">İşlem Türü</label>
-                    <select asp-for="ServisIslemTur" id="servisIslemTur" class="form-control" asp-items="@Html.GetEnumSelectList<ServisIslemTur>()" 
+                    <select asp-for="ServisIslemTur" id="servisIslemTur" class="form-control" asp-items="@Html.GetEnumSelectList<ServisIslemTur>()"
                             style="padding:0.1rem" onchange="ServisIslemTurChange()"></select>
                     <span asp-validation-for="ServisIslemTur" class="text-danger"></span>
                 </div>
@@ -95,21 +95,21 @@
                 <div class="row form-group col-md-12" id="fiyatliIslem" style=" border: 0.1rem solid maroon; display: none;">
                     <div class="form-group col-md-4">
                         <label asp-for="ToplamFiyat" class="control-label">Fiyat</label>
-                        <input type="number" asp-for="ToplamFiyat" id="toplamFiyat" class="form-control" onchange="TutarHesapla()"/>
+                        <input type="number" asp-for="ToplamFiyat" id="toplamFiyat" class="form-control" onchange="TutarHesapla()" />
                         <span asp-validation-for="ToplamFiyat" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4">
                         <label asp-for="VergiOrani" class="control-label">Vergi Oranı</label>
-                        <input type="number" asp-for="VergiOrani" id="vergiOrani" class="form-control"  onchange="TutarHesapla()"/>
+                        <input type="number" asp-for="VergiOrani" id="vergiOrani" class="form-control" onchange="TutarHesapla()" />
                         <span asp-validation-for="VergiOrani" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4">
                         <label asp-for="ToplamTutar" class="control-label">Tutar</label>
-                        <input type="number" asp-for="ToplamTutar" id="toplamTutar" class="form-control" onchange="FiyatHesapla()"/>
+                        <input type="number" asp-for="ToplamTutar" id="toplamTutar" class="form-control" onchange="FiyatHesapla()" />
                         <span asp-validation-for="ToplamTutar" class="text-danger"></span>
                     </div>
                 </div>
-                
+
             </form>
 
         </div>
@@ -136,83 +136,83 @@
 
 <script>
     let garantiSuresiAy = 0;
-    function StokSec() {
-        function StokBilgi(data) {
+                        function StokSec() {
+                            function StokBilgi(data) {
             //console.log('stok list : ', data)
             $("#stokName").val(data.stokAdi);
             //$("#birim").val(data.birim);
             //$("#fiyat").val(data.fiyat);
             //$("#vergiOrani").val(data.vergiOrani);
             $("#stokId").val(data.id);
-            //garantiSuresiAy = data.garantiSuresiAy;
+                                //garantiSuresiAy = data.garantiSuresiAy;
 
-            //var date1 = new Date($("#garantiBaslangic").val());
-            //var date2 = new Date(date1.setMonth(date1.getMonth() + data.garantiSuresiAy));
-            //document.getElementById("garantiBitis").valueAsDate = date2;
-            //$("#garantiBitis").date(data2);
+                                //var date1 = new Date($("#garantiBaslangic").val());
+                                //var date2 = new Date(date1.setMonth(date1.getMonth() + data.garantiSuresiAy));
+                                //document.getElementById("garantiBitis").valueAsDate = date2;
+                                //$("#garantiBitis").date(data2);
 
-        }
-        StokList(StokBilgi);
-    }
+                            }
+                            StokList(StokBilgi);
+                        }
 
-    function StokValueChange() {
+                        function StokValueChange() {
         $("#stokId").val(0);
-    }
+                        }
 
-    function CariSec() {
-        function CariBilgi(data) {
+                        function CariSec() {
+                            function CariBilgi(data) {
 
             $("#cariId").val(data.id);
             $("#musteriBilgisi").val(data.cariAdi);
             $("#cariAdi").val(data.cariAdi);
             $("#cariLabelId").text('Cari');
-            
-        }
-        CariList(CariBilgi);
-    }
 
-    function CariValueChange() {
+                            }
+                            CariList(CariBilgi);
+                        }
+
+                        function CariValueChange() {
         $("#cariId").val(0);
         $("#cariLabelId").text('Müşteri');
-    }
-    function ServisIslemTurChange() {
-        if ($("#servisIslemTur").val() == 2) {
+                        }
+                        function ServisIslemTurChange() {
+                            if ($("#servisIslemTur").val() == 2) {
             $("#fiyatliIslem").show();
-        } else {
+                            } else {
             $("#fiyatliIslem").hide();
             $("#toplamFiyat").val(0);
             $("#toplamTutar").val(0);
             $("#vergiOrani").val(0);
-        }
-    }
+                            }
+                        }
 
-    function GarantiBaslangicChange() {
-        var date1 = new Date($("#garantiBaslangic").val());
-        var date2 = new Date(date1.setMonth(date1.getMonth() + garantiSuresiAy));
-        document.getElementById("garantiBitis").valueAsDate = date2;
-    }
+                        function GarantiBaslangicChange() {
+                            var date1 = new Date($("#garantiBaslangic").val());
+                            var date2 = new Date(date1.setMonth(date1.getMonth() + garantiSuresiAy));
+                            document.getElementById("garantiBitis").valueAsDate = date2;
+                        }
 
 
-    function TutarHesapla() {
-        
-        var fiyat = parseFloat($("#toplamFiyat").val());
-        var vergiOrani = parseFloat($("#vergiOrani").val());
+                        function TutarHesapla() {
 
-        var tutar = fiyat * ((100 + vergiOrani) / 100);
+                            var fiyat = parseFloat($("#toplamFiyat").val());
+                            var vergiOrani = parseFloat($("#vergiOrani").val());
+
+                            var tutar = fiyat * ((100 + vergiOrani) / 100);
 
         //console.log({ miktar, fiyat, vergiOrani,tutar })
         $("#toplamTutar").val(tutar);
-    }
+                        }
 
-    function FiyatHesapla() {
-        var tutar = parseFloat($("#toplamTutar").val());
-        var vergiOrani = parseFloat($("#vergiOrani").val());
+                        function FiyatHesapla() {
+                            var tutar = parseFloat($("#toplamTutar").val());
+                            var vergiOrani = parseFloat($("#vergiOrani").val());
 
-        var fiyat = (tutar * (100 / (100 + vergiOrani)));
+                            var fiyat = (tutar * (100 / (100 + vergiOrani)));
 
         //console.log({ miktar, fiyat, vergiOrani,tutar })
         $("#toplamFiyat").val(fiyat);
-    }
+                        }
 
 </script>
 

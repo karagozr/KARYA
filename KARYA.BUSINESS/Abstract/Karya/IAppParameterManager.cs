@@ -13,6 +13,10 @@ namespace KARYA.BUSINESS.Abstract.Karya
         Task<IDataResult<IEnumerable<AppParameter>>> GetParameter(string grupName,string name);
 
         Task<IDataResult<AppParameter>> GetParameters(string grupName);
+        
+        Task<IResult> EditSingleParam(string name, string value);
+
+        Task<IDataResult<string>> GetSingleParamValue(string name);
     }
    
 }

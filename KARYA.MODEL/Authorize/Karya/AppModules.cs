@@ -10,42 +10,39 @@ namespace KARYA.MODEL.Authorize.Karya
         public AppModules()
         {
             ModuleList = new List<AppModule>();
-            #region ADMIN PANEL
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.AdminPanel,        ParentId = 0,                                   Name = "Admin Panel",       DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            #region USER CONTROL                                                                                                
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.UserControl,       ParentId = (int)AppRole.AdminPanel,       Name = "User Control",      DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.UserAdd,           ParentId = (int)AppRole.UserControl,      Name = "User Add",          DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.UserEdit,          ParentId = (int)AppRole.UserControl,      Name = "User Edit",         DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.UserDelete,        ParentId = (int)AppRole.UserControl,      Name = "User Delete",       DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.AuthorizeModul,    ParentId = (int)AppRole.AdminPanel,       Name = "Authorize Module",  DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.AuthorizeAdd,      ParentId = (int)AppRole.AuthorizeModul,   Name = "Authorize Add",     DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.AuthorizeEdit,     ParentId = (int)AppRole.AuthorizeModul,   Name = "Authorize Edit",    DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.AuthorizeDelete,   ParentId = (int)AppRole.AuthorizeModul,   Name = "Authorize Edit",    DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            #endregion
-            #endregion
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.AdminModule, ParentId = (int)0, Name = "Admin Modülü", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.UserPanel, ParentId = (int)AppRole.AdminModule, Name = "Kullanıcı Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.UserEdit, ParentId = (int)AppRole.UserPanel, Name = "Kullanıcı Ekle/Düzenle", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.AuthGroupPanel, ParentId = (int)AppRole.AdminModule, Name = "Yetki Grubu Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.AuthGroupDelete, ParentId = (int)AppRole.AuthGroupPanel, Name = "Yetki Grubu Sil", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.AuthGroupEdit, ParentId = (int)AppRole.AuthGroupPanel, Name = "Yetki Grubu Ekle/Düzenle", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.AccountinModule, ParentId = (int)0, Name = "Muhasebe Modülü", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.InvoiceIntegPanel, ParentId = (int)AppRole.AccountinModule, Name = "Fatura Entegre Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.InvoiceIntegAdd, ParentId = (int)AppRole.InvoiceIntegPanel, Name = "Fatura Entegre Ekle", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.InvoiceIntegUpdate, ParentId = (int)AppRole.InvoiceIntegPanel, Name = "Fatura Entegre Düzenle", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.InvoiceIntegDelete, ParentId = (int)AppRole.InvoiceIntegPanel, Name = "Fatura Entegre Sil", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.InvoiceIntegEdit, ParentId = (int)AppRole.InvoiceIntegPanel, Name = "Fatura Entegre Ekle/Düzenle", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.InvoiceIntegPreview, ParentId = (int)AppRole.InvoiceIntegPanel, Name = "Fatura Entegre Önizle", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.InvoiceIntegYevmiyeFisPreview, ParentId = (int)AppRole.InvoiceIntegPanel, Name = "Fatura Entegre Yevmiye Fişi", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.FinanceModule, ParentId = (int)0, Name = "Finans Modülü", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.FinanceReports, ParentId = (int)AppRole.FinanceModule, Name = "Rapor Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.CashFlow, ParentId = (int)AppRole.FinanceReports, Name = "Rapor Nakit Akış Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.CashFlowGes, ParentId = (int)AppRole.CashFlow, Name = "Rapor Nakit Akış Paneli -Ges", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.CashFlowHotel, ParentId = (int)AppRole.CashFlow, Name = "Rapor Nakit Akış Paneli - Otel", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.PLReport, ParentId = (int)AppRole.FinanceReports, Name = "P&L Rapor Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.PlReportGes, ParentId = (int)AppRole.PLReport, Name = "P&L Rapor Paneli - Ges", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.PlReportHotel, ParentId = (int)AppRole.PLReport, Name = "P&L Rapor Paneli - Otel", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.Budget, ParentId = (int)AppRole.FinanceModule, Name = "Bütçe Paneli ", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelModule, ParentId = (int)0, Name = "Otel Modülü", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelReports, ParentId = (int)AppRole.HotelModule, Name = "Otel Rapor Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelTableReports, ParentId = (int)AppRole.HotelReports, Name = "Otel Tablo Rapor Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelRoomSaleForAgentRpt, ParentId = (int)AppRole.HotelTableReports, Name = "Otel Tablo Rapor Oda Satış Acente", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelRoomIncomeForAgentRpt, ParentId = (int)AppRole.HotelTableReports, Name = "Otel Tablo Rapor Oda Gelir Acente", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelDashReports, ParentId = (int)AppRole.HotelReports, Name = "Otel Dashboard Paneli", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelHomeCamDash, ParentId = (int)AppRole.HotelDashReports, Name = "Otel Dashboard Ana Ekran", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelRoomIprCaTreeDash, ParentId = (int)AppRole.HotelDashReports, Name = "Otel Dashboard Ülke Acenta Gelir Oda Pax Ağaç Dash ", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
+            ModuleList.Add(new AppModule() { Id = (int)AppRole.HotelRoomIprLineDash, ParentId = (int)AppRole.HotelDashReports, Name = "Otel Dashboard Gelir Oda Pax Line Dash  ", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
 
-            #region BUDGET
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.BudgetModule,      ParentId = 0,                                   Name = "Budget Module",     DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            #region BuDGET ENTRY                          
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.BudgetEntry,       ParentId = (int)AppRole.BudgetModule,     Name = "Budget Entry",      DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.BudgetEntryEdit,   ParentId = (int)AppRole.BudgetEntry,      Name = "Budget Entry Edit", DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            #endregion
-            #endregion
-
-            #region REPORT
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.ReportModule,      ParentId = 0,                                   Name = "Report Module",     DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            #region P&L REPORT                          
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.PlReport,          ParentId = (int)AppRole.ReportModule,     Name = "P&L Report",        DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.PlDashboard,       ParentId = (int)AppRole.ReportModule,     Name = "P&L Dashboard",     DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.PlPivot,           ParentId = (int)AppRole.ReportModule,     Name = "P&L Pivot",         DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.PlPivotAdd,        ParentId = (int)AppRole.PlPivot,          Name = "P&L Pivot Add",     DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.PlPivotEdit,       ParentId = (int)AppRole.PlPivot,          Name = "P&L Pivot Edit",    DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.PlPivotDelete,     ParentId = (int)AppRole.PlPivot,          Name = "P&L Pivot Delete",  DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            #endregion
-            #endregion
-            #region CARI REPORT                          
-            ModuleList.Add(new AppModule() { Id = (int)AppRole.CariReport,        ParentId = (int)AppRole.ReportModule,    Name = "Cari Report",        DefaultAuthorize = false, RecordBasedAuthorize = false, FieldGroupId = 0 });
-            #endregion
         }
 
 

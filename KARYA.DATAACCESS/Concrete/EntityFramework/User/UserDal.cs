@@ -4,6 +4,7 @@ using KARYA.DATAACCESS.Concrete.EntityFramework.Context;
 using KARYA.MODEL.Entities.Karya;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -55,6 +56,15 @@ namespace KARYA.DATAACCESS.Concrete.EntityFramework.User
                 var updateEntity = context.Users.Update(users);
 
                 await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEnumerable<Users>> GetUserListWithAutorizeGroups(Expression<Func<Users, bool>> filter)
+        {
+            using (var context = new KaryaContext())
+            {
+                return await (filter == null ? context.Set<Users>().Include(x => x.UserAuthorizeGroups).ToListAsync()
+                    : context.Set<Users>().Where(filter).Include(x => x.UserAuthorizeGroups).ToListAsync());
             }
         }
     }

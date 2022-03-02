@@ -36,8 +36,8 @@ namespace HANEL.DATAACCESS.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Parameter1")
                         .HasMaxLength(100)
@@ -73,12 +73,10 @@ namespace HANEL.DATAACCESS.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("BranchCode")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("BudgetMainCode")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -167,8 +165,16 @@ namespace HANEL.DATAACCESS.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<bool>("Enable")
                         .HasColumnType("bit");
+
+                    b.Property<string>("GroupGuid")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("PeriodDate")
                         .HasColumnType("datetime2");
@@ -342,6 +348,110 @@ namespace HANEL.DATAACCESS.Migrations
                     b.ToTable("PivotReportTemplate");
                 });
 
+            modelBuilder.Entity("HANEL.MODEL.Entities.Finance.ReportCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ColorCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Enable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IntegrationCode1")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("IntegrationCode2")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("IntegrationCode3")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsExpanded")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReportCode")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("OrderCode")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdatedUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReportCode");
+                });
+
+            modelBuilder.Entity("HANEL.MODEL.Entities.Finance.ReportCodeUserFilter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("AccessAdd")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AccessDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AccessRead")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AccessUpdate")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BranchCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IntegrationCode1")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("IntegrationCode2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IntegrationCode3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProjectCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReportCodeUserFilter");
+                });
+
             modelBuilder.Entity("HANEL.MODEL.Entities.Muhasebe.Fatura", b =>
                 {
                     b.Property<int>("Id")
@@ -393,8 +503,8 @@ namespace HANEL.DATAACCESS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenAdres")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(800)
+                        .HasColumnType("nvarchar(800)");
 
                     b.Property<string>("GonderenEPosta")
                         .HasMaxLength(250)
@@ -413,8 +523,8 @@ namespace HANEL.DATAACCESS.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("GonderenPosta")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("GonderenSoyad")
                         .HasColumnType("nvarchar(max)");
@@ -475,12 +585,12 @@ namespace HANEL.DATAACCESS.Migrations
 
                     b.Property<string>("Ad")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Birim")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("FaturaId")
                         .HasColumnType("int");
@@ -492,8 +602,8 @@ namespace HANEL.DATAACCESS.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ParaBirimi")
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Sira")
                         .IsRequired()
@@ -527,8 +637,8 @@ namespace HANEL.DATAACCESS.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Kod")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<decimal>("Matrah")
                         .HasColumnType("decimal(18,2)");
@@ -583,7 +693,7 @@ namespace HANEL.DATAACCESS.Migrations
             modelBuilder.Entity("HANEL.MODEL.Entities.Finance.BudgetDetail", b =>
                 {
                     b.HasOne("HANEL.MODEL.Entities.Finance.Budget", "Budget")
-                        .WithMany()
+                        .WithMany("BudgetDetails")
                         .HasForeignKey("BudgetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -633,6 +743,11 @@ namespace HANEL.DATAACCESS.Migrations
                         .IsRequired();
 
                     b.Navigation("Fatura");
+                });
+
+            modelBuilder.Entity("HANEL.MODEL.Entities.Finance.Budget", b =>
+                {
+                    b.Navigation("BudgetDetails");
                 });
 
             modelBuilder.Entity("HANEL.MODEL.Entities.Muhasebe.Fatura", b =>

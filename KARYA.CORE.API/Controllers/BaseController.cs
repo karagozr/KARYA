@@ -7,12 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using KARYA.COMMON.Attributes;
+
 
 namespace KARYA.CORE.API.Controllers
 {
     //[Authorize]
     [ApiController]
-    [Route("[controller]")]
+    //[Route("[controller]")]
     public class BaseController : Controller
     {
         public JsonSerializerSettings _SERILAZERSETTING;

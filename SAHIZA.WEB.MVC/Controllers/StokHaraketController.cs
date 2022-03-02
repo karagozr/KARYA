@@ -21,7 +21,7 @@ namespace SAHIZA.WEB.MVC.Controllers
             
         }
 
-        [KaryaAuthorize(RoleEnum = SahizaRole.StokHaraketModule)]
+        [KaryaAuthorize(Role = SahizaRole.StokHaraketModule)]
         public async Task<IActionResult> List()
         {
             var result = await _stokHaraketManager.GetAll();
@@ -33,8 +33,9 @@ namespace SAHIZA.WEB.MVC.Controllers
                 return View();
 
         }
+
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.StokHaraketModule)]
+        [KaryaAuthorize(Role = SahizaRole.StokHaraketModule)]
         public async Task<IActionResult> EditHaraket(StokHaraketTur stokHaraketTur, int Id=0)
         {
 
@@ -55,8 +56,9 @@ namespace SAHIZA.WEB.MVC.Controllers
             }
             
         }
+
         [HttpPost]
-        [KaryaAuthorize(RoleEnum = SahizaRole.StokHaraketUpdate)]
+        [KaryaAuthorize(Role = SahizaRole.StokHaraketUpdate)]
         public async Task<IActionResult> EditHaraket(StokHaraket stokHaraket)
         {
 
@@ -70,6 +72,32 @@ namespace SAHIZA.WEB.MVC.Controllers
                 return View();
             }
             
+        }
+
+        [HttpGet]
+        [KaryaAuthorize(Role = SahizaRole.StokRapor)]
+        public async Task<IActionResult> StokRapor()
+        {
+            var result = await _stokHaraketManager.StokRaporList(null);
+
+            if (result.Success)
+                return View(result.Data);
+            else
+                return View();
+
+        }
+
+        [HttpPost]
+        [KaryaAuthorize(Role = SahizaRole.StokRapor)]
+        public async Task<IActionResult> StokRapor(StokFilterDto stokFilterDto = null)
+        {
+            var result = await _stokHaraketManager.StokRaporList(stokFilterDto);
+
+            if (result.Success)
+                return View(result.Data);
+            else
+                return View();
+
         }
     }
 }

@@ -5,7 +5,7 @@ using KARYA.CORE.Concrete.EntityFramework;
 
 namespace HANEL.BUSINESS.Concrete.Finance
 {
-    public class BudgetManager : BaseManager<Budget>, IBudgetManager
+    public class BudgetManager : BaseManager<HANEL.MODEL.Entities.Finance.Budget>, IBudgetManager
     {
         IBudgetDal _budgetDal;
 

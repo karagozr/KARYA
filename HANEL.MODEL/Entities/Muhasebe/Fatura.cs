@@ -38,7 +38,7 @@ namespace HANEL.MODEL.Entities.Muhasebe
         [StringLength(50)]
         public string GonderenVkn { get; set; }
 
-        [StringLength(100)]
+        [StringLength(150)]
         public string GonderenPosta { get; set; }
 
         [StringLength(250)]
@@ -47,7 +47,7 @@ namespace HANEL.MODEL.Entities.Muhasebe
         [StringLength(250)]
         public string GonderenIlce { get; set; }
 
-        [StringLength(500)]
+        [StringLength(800)]
         public string GonderenAdres { get; set; }
 
         [StringLength(250)]
@@ -90,13 +90,13 @@ namespace HANEL.MODEL.Entities.Muhasebe
         [Required]
         public string Sira { get; set; }
 
-        [StringLength(250), Required]
+        [StringLength(1000), Required]
         public string Ad { get; set; }
 
-        [StringLength(5)]
+        [StringLength(10)]
         public string ParaBirimi { get; set; }
 
-        [StringLength(10)]
+        [StringLength(20)]
         public string Birim { get; set; }
 
         [Required]
@@ -123,7 +123,7 @@ namespace HANEL.MODEL.Entities.Muhasebe
         [StringLength(100)]
         public string Ad { get; set; }
 
-        [StringLength(50)]
+        [StringLength(80)]
         public string Kod { get; set; }
         public decimal Matrah { get; set; }
         public decimal Oran { get; set; }

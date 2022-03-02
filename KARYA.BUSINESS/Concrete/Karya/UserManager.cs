@@ -5,6 +5,7 @@ using KARYA.CORE.Types.Return.Interfaces;
 using KARYA.DATAACCESS.Abstract.User;
 using KARYA.MODEL.Common.Auth;
 using KARYA.MODEL.DataTransferModels.Karya.Auth;
+using KARYA.MODEL.Dtos.Karya.Admin;
 using KARYA.MODEL.Entities.Karya;
 using System;
 using System.Collections.Generic;
@@ -162,6 +163,7 @@ namespace KARYA.BUSINESS.Concrete.Karya
                 return new ErrorResult(ex.Message);
             }
         }
+        
         public async Task<IDataResult<Users>> Login(UserLoginModel userLoginModel)
         {
             IDataResult<Users> result;
@@ -182,6 +184,48 @@ namespace KARYA.BUSINESS.Concrete.Karya
             }
 
             return result;
+        }
+
+        public async Task<IResult> Edit(UserEditDto editUser)
+        {
+            try
+            {
+                //var userAuthList = new List<UserAuthorizeGroup>();
+                //if (editUser.UserAuthorizeGroups != null)
+                //    userAuthList = editUser.UserAuthorizeGroups.Where(x => user.UserAuthorizeGroupIds != null && user.UserAuthorizeGroupIds.Contains(x.AuthorizeGroupId)).ToList();
+
+                //List<int> newAuthList = new List<int>();
+                //if (user.UserAuthorizeGroupIds != null)
+                //    newAuthList = user.UserAuthorizeGroupIds.Where(x => !userAuthList.Select(z => z.AuthorizeGroupId).Contains(x)).ToList();
+
+                //foreach (var item in newAuthList)
+                //{
+                //    userAuthList.Add(new UserAuthorizeGroup
+                //    {
+                //        UserId = user.Id,
+                //        User = user,
+                //        AuthorizeGroupId = item
+                //    });
+                //}
+
+                //user.UserAuthorizeGroups = userAuthList;
+
+                //if (user.Id == 0)
+                //{
+                //    await _userDal.AddComplex(user);
+                //}
+                //else
+                //{
+                //    await _userDal.UpdateComplex(user);
+                //}
+
+                //_identityId = _userDal.SCOPE_IDENTY_ID;
+                return new SuccessResult("Edit was succesed");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult(ex.Message);
+            }
         }
 
     }

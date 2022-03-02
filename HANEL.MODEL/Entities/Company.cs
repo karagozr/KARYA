@@ -8,7 +8,7 @@ namespace HANEL.MODEL.Entities
 {
     public class Company : BaseEntityEnableCode
     {
-        [StringLength(100),Required]
+        [StringLength(200),Required]
         public string Name { get; set; }
 
         [StringLength(11), Required]

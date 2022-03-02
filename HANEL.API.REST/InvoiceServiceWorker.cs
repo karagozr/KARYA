@@ -19,7 +19,7 @@ namespace HANEL.API.REST
     {
         private readonly ILogger<InvoiceServiceWorker> _logger;
  
-        private Timer _timer;
+        Timer _timer;
 
         ICompanyManager _companyManager;
         IInvoiceManager _invoiceManager;

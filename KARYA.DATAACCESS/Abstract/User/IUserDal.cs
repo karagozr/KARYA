@@ -14,7 +14,7 @@ namespace KARYA.DATAACCESS.Abstract.User
     public interface IUserDal :IBaseDal<Users>
     {
         Task<Users> GetUserWithAutorizeGroups(Expression<Func<Users, bool>> filter);
-
+        Task<IEnumerable<Users>> GetUserListWithAutorizeGroups(Expression<Func<Users, bool>> filter);
         Task AddComplex(Users users);
 
         Task UpdateComplex(Users users);

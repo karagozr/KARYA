@@ -24,7 +24,7 @@ namespace SAHIZA.WEB.MVC.Controllers
 
     }
 
-    [KaryaAuthorize(RoleEnum = SahizaRole.AdminPanel)]
+    [KaryaAuthorize(Role = SahizaRole.AdminPanel)]
     public class AdminController : Controller
     {
         IUserManager _userManager;
@@ -36,7 +36,7 @@ namespace SAHIZA.WEB.MVC.Controllers
             _authorizeGroupManager = authorizeGroupManager;
         }
 
-        [KaryaAuthorize(RoleEnum = SahizaRole.UserControl)]
+        [KaryaAuthorize(Role = SahizaRole.UserControl)]
         public async Task<IActionResult> UserList()
         {
             var result = await _userManager.GetAll();
@@ -48,7 +48,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
         
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.UserControl)]
+        [KaryaAuthorize(Role = SahizaRole.UserControl)]
         public async Task<IActionResult> EditUser(int Id = 0)
         {
             var authorizeGrupsResult = await _authorizeGroupManager.GetAll();
@@ -78,7 +78,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpPost]
-        [KaryaAuthorize(RoleEnum = SahizaRole.UserEdit)]
+        [KaryaAuthorize(Role = SahizaRole.UserUpdate)]
         public async Task<IActionResult> EditUser(UserModel user)
         {
             var result = await _userManager.AddUpdateComplex(user);
@@ -103,7 +103,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.AuthorizeModul)]
+        [KaryaAuthorize(Role = SahizaRole.AuthorizeModul)]
         public async Task<IActionResult> EditAuthorize(int Id = 0)
         {
             
@@ -157,7 +157,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpPost]
-        [KaryaAuthorize(RoleEnum = SahizaRole.AuthorizeEdit)]
+        [KaryaAuthorize(Role = SahizaRole.AuthorizeEdit)]
         public async Task<IActionResult> EditAuthorize(AuthorizeGroupDto authorizeGroup)
         {
             

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SAHIZA.DATAACCESS.Abstract;
 using SAHIZA.MODEL.Dtos;
 using SAHIZA.MODEL.Entities;
+using SAHIZA.MODEL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,42 @@ namespace SAHIZA.DATAACCESS.Concrete.EntityFramework
                         StokId = x.StokId,
                         Id = x.Id
                     }).FirstOrDefaultAsync());
+            }
+        }
+
+        public async Task<IEnumerable<StokRaporDto>> ListStokKalan(Expression<Func<StokHaraket, bool>> filter)
+        {
+            using (var context = new SahizaWorldContext())
+            {
+                return filter != null ?
+                    await context.Set<StokHaraket>().Where(filter).GroupBy(x => x.StokId).Select(x => new
+                    {
+                        StokId = x.Key,
+                        Miktar = x.Sum(x => x.StokHaraketTur == StokHaraketTur.StokGiris ? x.Miktar : (x.StokHaraketTur == StokHaraketTur.StokCikis ? -1 * x.Miktar : 0))
+                    }).Join(context.Set<Stok>(),
+                        sh => sh.StokId,
+                        st => st.Id,
+                        (sh, st) => new StokRaporDto
+                        {
+                            StokId = st.Id,
+                            StokAdi = st.StokAdi,
+                            Birim = st.Birim,
+                            Miktar = sh.Miktar
+                        }).ToListAsync()
+                    : await context.Set<StokHaraket>().GroupBy(x => x.StokId).Select(x => new
+                    {
+                        StokId = x.Key,
+                        Miktar = x.Sum(x => x.StokHaraketTur == StokHaraketTur.StokGiris ? x.Miktar : (x.StokHaraketTur == StokHaraketTur.StokCikis ? -1 * x.Miktar : 0))
+                    }).Join(context.Set<Stok>(),
+                        sh => sh.StokId,
+                        st => st.Id,
+                        (sh, st) => new StokRaporDto
+                        {
+                            StokId = st.Id,
+                            StokAdi = st.StokAdi,
+                            Birim = st.Birim,
+                            Miktar = sh.Miktar
+                        }).ToListAsync();
             }
         }
     }

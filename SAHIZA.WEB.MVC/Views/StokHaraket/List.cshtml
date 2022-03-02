@@ -8,28 +8,17 @@
     <div>
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card list-card">
                     <div class="card-header">
-                       
-                        <div class="row">
-                            <div class="col-6">
-                                <h3 class="card-title">Stok Haraketleri</h3>
-                            </div>
 
-                            <div class="col-6">
-                                <div class="card-tools">
-                                    <div class="btn-group" style="float: right; margin-left: 10px;">
-                                        <a href="/stokHaraket/EditHaraket?StokHaraketTur=@SAHIZA.MODEL.Enums.StokHaraketTur.StokGiris"
-                                           class="btn btn-block bg-gradient-success"><i class="far fa-plus-square"></i> Yeni Giriş</a>
-                                    </div>
-                                    <div class="btn-group" style="float: right">
-                                        <a href="/stokHaraket/EditHaraket?StokHaraketTur=@SAHIZA.MODEL.Enums.StokHaraketTur.StokCikis"
-                                           class="btn btn-block bg-gradient-primary"><i class="far fa-plus-square"></i> Yeni Çıkış</a>
-                                    </div>
-                                </div>
-                            </div>
+                        <h3 class="card-title">Stok Haraketleri</h3>
+                        <div class="card-tools">
+                            <a href="/stokHaraket/EditHaraket?StokHaraketTur=@SAHIZA.MODEL.Enums.StokHaraketTur.StokGiris"
+                               class="btn bg-gradient-success"><i class="far fa-plus-square"></i> Yeni Giriş</a>
+                            <a href="/stokHaraket/EditHaraket?StokHaraketTur=@SAHIZA.MODEL.Enums.StokHaraketTur.StokCikis"
+                               class="btn bg-gradient-primary"><i class="far fa-plus-square"></i> Yeni Çıkış</a>
                         </div>
-                        
+
                     </div>
                     <div class="card-body">
                         <table id="stokHaraketTable" class="table table-bordered table-striped">

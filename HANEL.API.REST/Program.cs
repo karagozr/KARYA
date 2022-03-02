@@ -17,14 +17,25 @@ namespace HANEL.API.REST
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+#if DEBUG
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+#else
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-        .ConfigureServices((hostContext, services)=> {
-            services.AddHostedService<BacgroundTask>();
-        });
+                .ConfigureServices((hostContext, services)=> {
+                    services.AddHostedService<BacgroundTask>();
+                });
+#endif
+        }
+
     }
 }

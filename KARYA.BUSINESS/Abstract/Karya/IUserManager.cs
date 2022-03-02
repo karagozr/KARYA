@@ -2,6 +2,7 @@
 using KARYA.CORE.Types.Return.Interfaces;
 using KARYA.MODEL.Common.Auth;
 using KARYA.MODEL.DataTransferModels.Karya.Auth;
+using KARYA.MODEL.Dtos.Karya.Admin;
 using KARYA.MODEL.Entities.Karya;
 using System.Threading.Tasks;
 
@@ -14,6 +15,8 @@ namespace KARYA.BUSINESS.Abstract.Karya
         Task<IResult> AddComplex(UserModel user);
         Task<IResult> UpdateComplex(UserModel user);
         Task<IResult> AddUpdateComplex(UserModel user);
+
+        Task<IResult> Edit(UserEditDto editUser);
     }
 
 }

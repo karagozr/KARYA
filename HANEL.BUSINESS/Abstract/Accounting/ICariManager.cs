@@ -1,5 +1,6 @@
 ﻿using HANEL.MODEL.Dto.Muhasebe;
 using HANEL.MODEL.Entities.Muhasebe;
+using HANEL.MODEL.Entities.Muhasebe.Erp;
 using KARYA.CORE.Abstract;
 using KARYA.CORE.Types.Return.Interfaces;
 using System;
@@ -17,6 +18,8 @@ namespace HANEL.BUSINESS.Abstract.Accounting
         Task<IDataResult<CariDto>> GetFromVkn(string vkn);
 
         Task<IDataResult<CariDto>> GetById(string cariKodu);
+
+        Task<IDataResult<ErpCari>> AddUpdateCari(ErpCari cariDto);
 
     }
 }

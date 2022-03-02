@@ -51,7 +51,7 @@
         </div>
         <div class="card-body">
 
-            <table id="dizaynListTable" class="table table-bordered table-striped">
+            <table id="servisListTable" class="table table-bordered servis-table">
                 <thead>
                     <tr>
                         <th>İşlem Türü</th>
@@ -66,9 +66,11 @@
                     @{
                         foreach (var item in Model)
                         {
-                            <tr>
+                            <tr class="@item.ServisDurum">
                                 <td>@item.ServisIslemTur.Description()</td>
-                                <td>@item.MusteriBilgisi</td>
+                                <td>
+                                    <a href="/servis/Bakim?Id=@item.Id">@item.MusteriBilgisi</a>
+                                </td>
                                 <td>@item.UrunBilgisi</td>
                                 <td>@item.ServisDurum.Description()</td>
                                 <td>@item.BaslangicTarihi</td>
@@ -89,9 +91,9 @@
 
                 </div>
                 <div class="modal-body">
-                    <a href="/servis/bakim" class="btn btn-block bg-gradient-success"><i class="far fa-plus-square"></i> Garantili İşlem</a>
-                    <a href="/servis/bakim" class="btn btn-block bg-gradient-info"><i class="far fa-plus-square"></i> Ücretli İşlem</a>
-                    <a href="/servis/bakim" class="btn btn-block bg-gradient-purple"><i class="far fa-plus-square"></i> Ücretsiz İşlem</a>
+                    <a href="/servis/Bakim?ServisIslemTur=@SAHIZA.MODEL.Enums.ServisIslemTur.GarantiliBakim" class="btn btn-block bg-gradient-success"><i class="far fa-plus-square"></i> Garantili İşlem</a>
+                    <a href="/servis/Bakim?ServisIslemTur=@SAHIZA.MODEL.Enums.ServisIslemTur.UcretliBakim" class="btn btn-block bg-gradient-info"><i class="far fa-plus-square"></i> Ücretli İşlem</a>
+                    <a href="/servis/Bakim?ServisIslemTur=@SAHIZA.MODEL.Enums.ServisIslemTur.UcretsizBakim" class="btn btn-block bg-gradient-purple"><i class="far fa-plus-square"></i> Ücretsiz İşlem</a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-warning">Kapat</button>
@@ -100,9 +102,21 @@
         </div>
     </div>
 </section>
-
+<script src="~/plugins/jquery/jquery.min.js"></script>
 <script>
-    function YeniServisKaydi(){
+    $(function () {
+        $('#servisListTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+    });
+
+    function YeniServisKaydi() {
         $('#modalServisIslem').modal('toggle');
     }
 </script>

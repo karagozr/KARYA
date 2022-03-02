@@ -64,7 +64,7 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
                          $" F.CARI_KODU,C.CARI_ISIM,C.VERGI_NUMARASI,E.ACIK1,E.ACIK2,E.ACIK16  from TBLFATUIRS as F " +
                          $" inner join TBLFATUEK as E on F.FATIRS_NO = E.FATIRSNO " +
                          $" inner join TBLCASABIT as C on F.CARI_KODU = C.CARI_KOD " +
-                         $" where FTIRSIP=2 and E.FKOD=2) as NF on NF.ACIK16=f.[Guid] or NF.GIB_FATIRS_NO=f.FaturaNo where 1=1 ");
+                         $" where FTIRSIP=2 and E.FKOD='2') as NF on NF.ACIK16=f.[Guid] or NF.GIB_FATIRS_NO=f.FaturaNo where 1=1 ");
 
                     
                     if (invoiceFilterModel.FirstDate != null && invoiceFilterModel.LastDate != null)
@@ -113,7 +113,7 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
                 {
                     var query = $"  select nf.FATIRS_NO as FaturaNo, nf.CARI_KODU as CariKodu, nf.KAYITTARIHI as KayitTarihi, ACIK15 as DuzenlemeTarihi from TBLFATUEK as nfe " +
                     $"inner join TBLFATUIRS as nf on nf.FATIRS_NO = nfe.FATIRSNO and FTIRSIP = 2 " +
-                    $"where ACIK16 = '{guid}' and nfe.FKOD = 2 ";
+                    $"where ACIK16 = '{guid}' and nfe.FKOD = '2' ";
 
                     
                     var data = await connection.QueryFirstOrDefaultAsync<FaturaDto>(query);
@@ -146,7 +146,7 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
                      $" 	case when nc.CARI_KOD is not null then dbo.TRK(nc.CARI_ISIM) else (case when nc1.CARI_ISIM is not null then dbo.TRK(nc1.CARI_ISIM) else dbo.TRK(nc2.CARI_ISIM) end) end as CariUnvan , " +
                      $" 	f.ToplamTutar,f.ToplamFiyat,f.ToplamVergi " +
                      $"  from HANEL_APP..Fatura as f " +
-                     $" 	left join (select t1.*,t2.ACIK16,t2.ACIK15,t2.ACIK1,t2.ACIK2,t2.FKOD from TBLFATUIRS as t1 inner join TBLFATUEK as t2 on t1.FATIRS_NO=t2.FATIRSNO ) as nf on (f.[Guid]=nf.ACIK16 or f.FaturaNo=nf.GIB_FATIRS_NO) and nf.FKOD=2  " +
+                     $" 	left join (select t1.*,t2.ACIK16,t2.ACIK15,t2.ACIK1,t2.ACIK2,t2.FKOD from TBLFATUIRS as t1 inner join TBLFATUEK as t2 on t1.FATIRS_NO=t2.FATIRSNO ) as nf on (f.[Guid]=nf.ACIK16 or f.FaturaNo=nf.GIB_FATIRS_NO) and nf.FKOD='2'  " +
                      $" 	left join TBLCASABIT as nc on nf.CARI_KODU=nc.CARI_KOD " +
                      $" 	left join TBLCASABIT as nc1 on f.GonderenVkn=nc1.VERGI_NUMARASI " +
                      $"  left join (select c.CARI_KOD,CARI_ISIM,TCKIMLIKNO,CARI_TIP from TBLCASABIT as c inner join TBLCASABITEK as ce on c.CARI_KOD=ce.CARI_KOD) as nc2 on f.GonderenTckn=nc2.TCKIMLIKNO " +

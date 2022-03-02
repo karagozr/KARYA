@@ -13,5 +13,6 @@ namespace SAHIZA.DATAACCESS.Abstarct
     public interface IServisDal : IBaseDal<Servis>
     {
         Task<IEnumerable<ServisListDto>> List(Expression<Func<Servis, bool>> filter);
+        Task<ServisDto> Get(Expression<Func<Servis, bool>> filter);
     }
 }

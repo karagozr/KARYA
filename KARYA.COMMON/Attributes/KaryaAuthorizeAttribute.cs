@@ -10,7 +10,7 @@ namespace KARYA.COMMON.Attributes
     public class KaryaAuthorizeAttribute : AuthorizeAttribute
     {
         private int role;
-        public int RoleEnum
+        public int Role
         {
             get { return role; }
             set { role = value; base.Roles = value.ToString(); }

@@ -45,5 +45,50 @@ namespace KARYA.BUSINESS.Concrete.Karya
                 return new ErrorDataResult<IEnumerable<AppParameter>>(null, ex.Message);
             }
         }
+
+        public async Task<IResult> EditSingleParam(string name, string value)
+        {
+            try
+            {
+                AppParameter param = await _appParameterDal.Get(x => x.Name == name && x.GroupName== "Single");
+                if (param == null)
+                {
+                    param = new AppParameter
+                    {
+                        Name = name,
+                        Value = value,
+                        DataType = "Number",
+                        GroupName = "Single",
+                    };
+                }
+                else
+                {
+                    param.Value = value;
+                }
+
+                await _appParameterDal.AddUpdate(param);
+
+                return new SuccessResult();
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult(ex.Message);
+            }
+        }
+
+        public async Task<IDataResult<string>> GetSingleParamValue(string name)
+        {
+            try
+            {
+                var result = await _appParameterDal.Get(x => x.Name == name && x.GroupName == "Single");
+
+                return new SuccessDataResult<string>(result!=null?result.Value:"","");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<string>(null, ex.Message);
+            }
+        }
+
     }
 }

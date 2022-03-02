@@ -25,7 +25,7 @@ namespace SAHIZA.WEB.MVC.Controllers
            
         }
 
-        [KaryaAuthorize(RoleEnum = SahizaRole.StokModule)]
+        [KaryaAuthorize(Role = SahizaRole.StokModule)]
         public async Task<IActionResult> List()
         {
             var result = await _stokManager.GetAll();
@@ -38,7 +38,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
         
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.StokModule)]
+        [KaryaAuthorize(Role = SahizaRole.StokModule)]
         public async Task<IActionResult> EditStok(int Id=0)
         {
             if (Id == 0)
@@ -60,7 +60,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
         
         [HttpPost]
-        [KaryaAuthorize(RoleEnum = SahizaRole.StokUpdate)]
+        [KaryaAuthorize(Role = SahizaRole.StokUpdate)]
         public async Task<IActionResult> EditStok(Stok stok)
         {
 
@@ -77,7 +77,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.StokModule)]
+        [KaryaAuthorize(Role = SahizaRole.StokModule)]
         public async Task<IEnumerable<dynamic>> ContactList()
         {
             var result = await _stokManager.GetAll();

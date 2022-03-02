@@ -28,12 +28,12 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <img src="~/dist/img/Logo.png" style="max-width:320px" />
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Oturum açmak için giriş yapmalısınız</p>
 
                 <form asp-action="Login" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="input-group mb-3">
-                        <input asp-for="UserName" type="text" class="form-control" placeholder="User Name">
+                        <input asp-for="UserName" type="text" class="form-control" placeholder="Kullanıcı Adı">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -42,7 +42,7 @@
                         <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
                     <div class="input-group mb-3">
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Parola">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -55,13 +55,13 @@
                             <div class="icheck-primary">
                                 <input type="checkbox" id="remember">
                                 <label for="remember">
-                                    Remember Me
+                                    Parolayı hatırla
                                 </label>
                             </div>
                         </div>
 
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block">Giriş</button>
                         </div>
 
                     </div>

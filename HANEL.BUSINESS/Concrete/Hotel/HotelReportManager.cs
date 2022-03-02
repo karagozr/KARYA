@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using HANEL.BUSINESS.Abstract.Hotel;
 using HANEL.MODEL.Dtos.Hotel;
-using HANEL.MODEL.FilterDto.Hotel;
+using HANEL.MODEL.Filter.Hotel;
 using KARYA.CORE.Concrete.Dapper;
 using KARYA.CORE.Types.Return;
 using KARYA.CORE.Types.Return.Interfaces;
@@ -18,7 +18,6 @@ namespace HANEL.BUSINESS.Concrete.Hotel
         public HotelReportManager() : base("HOTELERPConnection")
         {
         }
-
         public async Task<IDataResult<IEnumerable<HotelRoomSaleRawDto>>> RoomSaleRawList()
         {
             try
@@ -154,6 +153,118 @@ namespace HANEL.BUSINESS.Concrete.Hotel
                 return new ErrorDataResult<IEnumerable<HotelRoomSaleSumDto>>(ex.Message);
             }
         }
+
+        public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleAgentCountryMarket(DateRangeModel dateRangeModel = null)
+        {
+            try
+            {
+                using (var connection = CreatePostgresConnection())
+                {
+                    var queryString = $" SELECT cst.hrk_tarih AS \"ProcessDate\",                           " +
+                         $" cst.acenta_id AS \"AgentId\",                                                   " +
+                         $" cst.acenta_adi AS \"AgentName\",                                                " +
+                         $" cst.ulke_adi AS \"CountryName\",                                                " +
+                         $" cst.pazar_adi AS \"MarketName\",                                                " +
+                         $" SUM(cst.geceleme_pax) AS \"Pax\",                                               " +
+                         $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                                     " +
+                         $" ROUND(SUM(cst.geceleme_odasayisi) / 144, 2) AS \"Occupancy\",                   " +
+                         $" SUM(cvr.cevrimtutar) AS \"IncomeSumEUR\"                                        " +
+                         $" FROM viewcastcevrim AS cvr                                                      " +
+                         $" LEFT JOIN viewcastlist AS cst ON cst.geceleme_id = cvr.geceleme_id              " +
+                         $" WHERE cst.hrk_yil = CAST(DATE_PART('year', NOW()) AS VARCHAR)                   " +
+                         $" GROUP BY cst.hrk_tarih,cst.acenta_id,cst.acenta_adi,cst.ulke_adi, cst.pazar_adi " +
+                         $" ORDER BY cst.hrk_tarih ";
+
+                    //if (dateRangeModel.FirstDate.Year > 1 || dateRangeModel.LastDate.Year > 1)
+                    //    queryString += $" AND cst.hrk_tarih> '{dateRangeModel.FirstDate.Year}.{dateRangeModel.FirstDate.Month}.{dateRangeModel.FirstDate.Day}' " +
+                    //        $"and cst.hrk_tarih<= '{dateRangeModel.LastDate.Year}.{dateRangeModel.LastDate.Month}.{dateRangeModel.LastDate.Day}' ";
+
+                    //queryString += $" GROUP BY cst.hrk_tarih,cst.acenta_adi,cst.ulke_adi  " +
+                    //    $" ORDER BY cst.hrk_tarih";
+
+
+                    var data = await connection.QueryAsync<HotelRoomSaleSumDto>(queryString);
+
+                    return new SuccessDataResult<IEnumerable<HotelRoomSaleSumDto>>(data.ToList());
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<IEnumerable<HotelRoomSaleSumDto>>(ex.Message);
+            }
+        }
+
+        public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomIncomeByAgentDaily(DateRangeModel dateRangeModel = null)
+        {
+            try
+            {
+                using (var connection = CreatePostgresConnection())
+                {
+                    var queryString = $" SELECT cst.hrk_tarih AS \"ProcessDate\",                           " +
+                         $" cst.acenta_id AS \"AgentId\",                                                   " +
+                         $" cst.acenta_adi AS \"AgentName\",                                                " +
+                         $" SUM(cst.geceleme_pax) AS \"Pax\",                                               " +
+                         $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                                     " +
+                         $" SUM(cvr.cevrimtutar) AS \"IncomeSumEUR\"                                        " +
+                         $" FROM viewcastcevrim AS cvr                                                      " +
+                         $" LEFT JOIN viewcastlist AS cst ON cst.geceleme_id = cvr.geceleme_id              " +
+                         $" WHERE cst.hrk_yil = CAST(DATE_PART('year', NOW()) AS VARCHAR)                   " +
+                         $" GROUP BY cst.hrk_tarih,cst.acenta_id,cst.acenta_adi                             " +
+                         $" ORDER BY cst.hrk_tarih ";
+
+                    //if (dateRangeModel.FirstDate.Year > 1 || dateRangeModel.LastDate.Year > 1)
+                    //    queryString += $" AND cst.hrk_tarih> '{dateRangeModel.FirstDate.Year}.{dateRangeModel.FirstDate.Month}.{dateRangeModel.FirstDate.Day}' " +
+                    //        $"and cst.hrk_tarih<= '{dateRangeModel.LastDate.Year}.{dateRangeModel.LastDate.Month}.{dateRangeModel.LastDate.Day}' ";
+
+                    //queryString += $" GROUP BY cst.hrk_tarih,cst.acenta_adi,cst.ulke_adi  " +
+                    //    $" ORDER BY cst.hrk_tarih";
+
+
+                    var data = await connection.QueryAsync<HotelRoomSaleSumDto>(queryString);
+
+                    return new SuccessDataResult<IEnumerable<HotelRoomSaleSumDto>>(data.ToList());
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<IEnumerable<HotelRoomSaleSumDto>>(ex.Message);
+            }
+        }
+
+        public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleByAgentDaily(DateRangeModel dateRangeModel = null)
+        {
+            try
+            {
+                using (var connection = CreatePostgresConnection())
+                {
+                    var queryString = $" SELECT cst.rez_satistarih AS \"SaleDate\",                 " +
+                        $" cst.acenta_id AS \"AgentId\",                                            " +
+                        $" cst.acenta_adi AS \"AgentName\",                                         " +
+                        $" SUM(cst.geceleme_pax) AS \"Pax\",                                        " +
+                        $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                              " +
+                        $" SUM(cvr.cevrimtutar) AS \"IncomeSumEUR\"                                 " +
+                        $" FROM viewcastcevrim AS cvr                                               " +
+                        $" LEFT JOIN viewcastlist AS cst ON cst.geceleme_id = cvr.geceleme_id       " +
+                        $" WHERE DATE_PART('year', cst.rez_satistarih )  = DATE_PART('year', NOW()) " +
+                        $" GROUP BY cst.rez_satistarih, cst.acenta_id, cst.acenta_adi               " +
+                        $" ORDER BY cst.rez_satistarih ";
+                        
+
+
+                    var data = await connection.QueryAsync<HotelRoomSaleSumDto>(queryString);
+
+                    return new SuccessDataResult<IEnumerable<HotelRoomSaleSumDto>>(data.ToList());
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<IEnumerable<HotelRoomSaleSumDto>>(ex.Message);
+            }
+        }
+
+       
     }
 }
+
+
 

@@ -1,8 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>7f6c7f8a-86de-4d50-9cab-0524ab189f47</UserSecretsId>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Helper\**" />
+    <Content Remove="Helper\**" />
+    <EmbeddedResource Remove="Helper\**" />
+    <None Remove="Helper\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.7.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.4" />
@@ -13,7 +19,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.2.2" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
   </ItemGroup>
@@ -22,9 +30,6 @@
     <ProjectReference Include="..\HANEL.MODEL\HANEL.MODEL.csproj" />
     <ProjectReference Include="..\HANEL.SERVICE.EINVOICE\HANEL.SERVICE.EINVOICE.csproj" />
     <ProjectReference Include="..\KARYA.CORE.API\KARYA.CORE.API.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helper\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NetOpenX.Rest.Client">

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KARYA.COMMON.Attributes;
+using Microsoft.AspNetCore.Mvc;
 using SAHIZA.BUSINESS.Abstarct;
 using SAHIZA.MODEL.Dtos;
+using SAHIZA.MODEL.Enums;
+using SAHIZA.MODEL.Module;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +20,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
+        [KaryaAuthorize(Role = SahizaRole.ServisModule)]
         public async Task<IActionResult> List()
         {
             var result = await _servisManager.List(new ServisFiltreDto { Tarih1=DateTime.Now.AddMonths(-1)});
@@ -27,6 +31,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpPost]
+        [KaryaAuthorize(Role = SahizaRole.ServisModule)]
         public async Task<IActionResult> List(ServisFiltreDto servisFiltreDto)
         {
             var result = await _servisManager.List(servisFiltreDto);
@@ -36,19 +41,33 @@ namespace SAHIZA.WEB.MVC.Controllers
                 return View();
         }
 
+       
+
         [HttpGet]
-        public IActionResult Bakim(int id=0)
+        [KaryaAuthorize(Role = SahizaRole.ServisModule)]
+        public async Task<IActionResult> Bakim(int id=0, ServisIslemTur servisIslemTur=0)
         {
-            if (id == 0)
-                return View(new ServisDto());
+            if (id == 0 && servisIslemTur!=0)
+                return View(new ServisDto {
+                    CreatedTime=DateTime.Now,
+                    ServisIslemTur=servisIslemTur
+                });
             else
-                return View(new ServisDto());
+            {
+                var result = await _servisManager.GetBakimById(id);
+                return View(result.Data);
+            }
         }
 
         [HttpPost]
-        public IActionResult Bakim(ServisDto servisDto)
+        [KaryaAuthorize(Role = SahizaRole.ServisUpdate)]
+        public async Task<IActionResult> Bakim(ServisDto servisDto)
         {
-            return View(new ServisFiltreDto());
+            var result = await _servisManager.AddUpdateBakim(servisDto);
+            if (result.Success)
+                return RedirectToAction("List");
+            else
+                return View(servisDto);
         }
     }
 }

@@ -33,11 +33,14 @@ namespace HANEL.DATAACCESS.Concrete.EntityFramework.Context
             optionsBuilder.UseSqlServer(_connectionString);
         }
 
+        public DbSet<ReportCode> ReportCode { get; set; }
+        public DbSet<ReportCodeUserFilter> ReportCodeUserFilter { get; set; }
         public DbSet<Budget> Budget { get; set; }
 
         public DbSet<BudgetDetail> BudgetDetail { get; set; }
 
         public DbSet<BudgetSubDetail> BudgetSubDetail { get; set; }
+
 
         public DbSet<BudgetExchangeRate> BudgetExchangeRate { get; set; }
 

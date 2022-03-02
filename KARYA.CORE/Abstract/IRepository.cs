@@ -25,6 +25,7 @@ namespace KARYA.CORE.Abstarct
         Task Update(IEnumerable<TEntity> entities);
         Task Update(TEntity entity, IEnumerable<string> fields);
         Task UpdateComplex(TEntity entity);
+        Task UpdateComplex(IEnumerable<TEntity> entities);
         Task AddUpdate(TEntity entity);
         Task AddUpdate(IEnumerable<TEntity> entities);
         Task Delete(TEntity entity);

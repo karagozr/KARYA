@@ -1,4 +1,5 @@
 ﻿using KARYA.BUSINESS.Abstract.Karya;
+using KARYA.BUSINESS.Concrete;
 using KARYA.BUSINESS.Concrete.Karya;
 using KARYA.COMMON.Authorize.Abstract;
 using KARYA.COMMON.Authorize.Concete;
@@ -19,6 +20,7 @@ namespace KARYA.CORE.API.Middlewares
         {
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //TODO Kullanım dışı kalacak IUserManager
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserDal, UserDal>();
 
@@ -35,6 +37,10 @@ namespace KARYA.CORE.API.Middlewares
 
             services.AddScoped<IAppParameterDal, AppParameterDal>();
             services.AddScoped<IAppParameterManager, AppParameterManager>();
+
+            services.AddScoped<KARYA.BUSINESS.Abstract.IUserManager, EfUserManager>();
+
+            services.AddScoped<KARYA.BUSINESS.Abstract.IAuthGroupManager, EfAuthGroupManager>();
 
         }
     }

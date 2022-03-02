@@ -20,7 +20,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.DizaynModule)]
+        [KaryaAuthorize(Role = SahizaRole.DizaynModule)]
         public async Task<IActionResult> List()
         {
             var result = await _dizaynManager.GetAll();
@@ -37,7 +37,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.DizaynModule)]
+        [KaryaAuthorize(Role = SahizaRole.DizaynModule)]
         public async Task<IActionResult> Edit(int Id = 0)
         {
 
@@ -59,7 +59,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpPost]
-        [KaryaAuthorize(RoleEnum = SahizaRole.DizaynUpdate)]
+        [KaryaAuthorize(Role = SahizaRole.DizaynUpdate)]
         public async Task<IActionResult> Edit(DizaynDto dizayn)
         {
             var reult = await _dizaynManager.AddUpdateComplex(dizayn);
@@ -74,7 +74,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.DizaynModule)]
+        [KaryaAuthorize(Role = SahizaRole.DizaynModule)]
         public async Task<IEnumerable<dynamic>> DizaynList()
         {
             var result = await _dizaynManager.GetAll();

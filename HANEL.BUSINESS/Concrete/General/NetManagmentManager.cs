@@ -4,6 +4,7 @@ using HANEL.MODEL.Dto.General;
 using KARYA.CORE.Concrete.Dapper;
 using KARYA.CORE.Types.Return;
 using KARYA.CORE.Types.Return.Interfaces;
+using KARYA.MODEL.Dtos.Erp;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -69,6 +70,27 @@ namespace HANEL.BUSINESS.Concrete.General
             }
         }
 
+        public async Task<IDataResult<IEnumerable<StockAccountDetailCodeDto>>> ListMuhDetailCodes()
+        {
+            try
+            {
+                using (var connection = CreateMsSqlConnection())
+                {
+                    var queryString = $"select md.SUBE_KODU as BranchCode, dbo.TRK(br.UNVAN) as BranchName, MUH_DETAYKOD as Code, dbo.TRK(md.S_YEDEK1) as [Description] " +
+                        $" from TBLSTMUHDETAY as md " +
+                        $" inner join TBLSUBELER as br on md.SUBE_KODU=br.SUBE_KODU ";
+
+                    var data = await connection.QueryAsync<StockAccountDetailCodeDto>(queryString);
+
+                    return new SuccessDataResult<IEnumerable<StockAccountDetailCodeDto>>(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<IEnumerable<StockAccountDetailCodeDto>>(ex.Message);
+            }
+        }
+
         public async Task<IDataResult<IEnumerable<ProjeDto>>> ListProjects(string projectCode = null)
         {
             try
@@ -95,6 +117,44 @@ namespace HANEL.BUSINESS.Concrete.General
             catch (Exception ex)
             {
                 return new ErrorDataResult<IEnumerable<ProjeDto>>(ex.Message);
+            }
+        }
+
+        public async Task<IDataResult<IEnumerable<StockCodeDto>>> ListStokCode1List()
+        {
+            try
+            {
+                using (var connection = CreateMsSqlConnection())
+                {
+                    var queryString = $"select GRUP_KOD as Code, dbo.TRK(GRUP_ISIM) as [Description] from TBLSTOKKOD1";
+
+                    var data = await connection.QueryAsync<StockCodeDto>(queryString);
+
+                    return new SuccessDataResult<IEnumerable<StockCodeDto>>(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<IEnumerable<StockCodeDto>>(ex.Message);
+            }
+        }
+
+        public async Task<IDataResult<IEnumerable<StockCodeDto>>> ListStokGrupCode1List()
+        {
+            try
+            {
+                using (var connection = CreateMsSqlConnection())
+                {
+                    var queryString = $"select GRUP_KOD as Code, dbo.TRK(GRUP_ISIM) as [Description] from TBLSTGRUP";
+
+                    var data = await connection.QueryAsync<StockCodeDto>(queryString);
+
+                    return new SuccessDataResult<IEnumerable<StockCodeDto>>(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<IEnumerable<StockCodeDto>>(ex.Message);
             }
         }
     }

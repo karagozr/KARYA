@@ -12,6 +12,12 @@ namespace HANEL.MODEL.Entities.Finance
 
         [Required]
         public DateTime PeriodDate { get; set; }
+        
+        [StringLength(100)]
+        public string GroupGuid { get; set; }
+
+        [StringLength(500)]
+        public string Description { get; set; }
 
         [Required]
         public short BudgetYear { get; set; }

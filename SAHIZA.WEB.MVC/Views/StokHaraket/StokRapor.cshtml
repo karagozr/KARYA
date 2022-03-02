@@ -1,0 +1,88 @@
+﻿@model IEnumerable<SAHIZA.MODEL.Dtos.StokRaporDto>
+
+@{
+    ViewData["Title"] = "Stok Rapor";
+}
+
+
+<section>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card list-card">
+                    <div class="card-header rapor-card">
+
+                        <h3 class="card-title">Stok Raporu</h3>
+                        <div class="card-tools">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                    <i class="fas fa-bars"></i> Seçenek 
+                                </button>
+                                <div class="dropdown-menu" role="menu">
+                                    <a href="#" class="dropdown-item">Excel Aktar</a>
+                                    <a href="#" class="dropdown-item">Pdf Aktar</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="#" class="dropdown-item">Stok Menusune Geç</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <table id="stokRaporTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Stok Adı</th>
+                                    <th>Birimi</th>
+                                    <th>Miktar</th>
+                                    <th>Uyarı Kota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    @*<td>
+                                        @Html.DisplayFor(modelItem => item.StokId)
+                                    </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StokAdi)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Birim)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Miktar)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UyariKota)
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+
+
+<script>
+    $(function () {
+        $('#stokRaporTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+    });
+
+</script>

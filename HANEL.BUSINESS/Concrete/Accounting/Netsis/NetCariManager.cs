@@ -1,9 +1,13 @@
 ﻿using Dapper;
 using HANEL.BUSINESS.Abstract.Accounting;
+using HANEL.BUSINESS.Concrete.Accounting.Netsis.NetOpenX;
 using HANEL.MODEL.Dto.Muhasebe;
+using HANEL.MODEL.Entities.Muhasebe.Erp;
 using KARYA.CORE.Concrete.Dapper;
 using KARYA.CORE.Types.Return;
 using KARYA.CORE.Types.Return.Interfaces;
+using KARYA.MODEL.Entities.Netsis;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +18,34 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
 {
     public class NetCariManager : DapperRepository, ICariManager
     {
+        IConfiguration _configuration;
         public NetCariManager() : base("NETSISConnection")
         {
         }
 
-      
+        Login _login;
+        public NetCariManager(IConfiguration configuration) : base("NETSISConnection")
+        {
+            _configuration = configuration;
+        }
+
+        public async Task<IDataResult<ErpCari>> AddUpdateCari(ErpCari cariDto)
+        {
+            var netLogin = new KARYA.MODEL.Entities.Netsis.Login
+            {
+                NetsisUser = _configuration["NetsisEnv:NetsisUser"],
+                NetsisPassword = _configuration["NetsisEnv:NetsisPassword"],
+                DbName = _configuration["NetsisEnv:DbName"],
+                NetOpenXUrl = _configuration["NetsisEnv:NetOpenXUrl"],
+                BranchCode = Convert.ToInt32( _configuration["NetsisEnv:BranchCode"]),
+            };
+            using (var _service = new NetsisCariService(netLogin))
+            {
+                var result = await _service.AddCari(cariDto);
+
+                return result;
+            }
+        }
 
         public async Task<IDataResult<CariDto>> GetById(string cariKodu)
         {

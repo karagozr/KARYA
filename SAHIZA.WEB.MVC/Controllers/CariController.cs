@@ -21,7 +21,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.CariModule)]
+        [KaryaAuthorize(Role = SahizaRole.CariModule)]
         public async Task<IActionResult> List()
         {
             var result = await _cariManager.GetAll();
@@ -37,8 +37,25 @@ namespace SAHIZA.WEB.MVC.Controllers
             
         }
 
+        [HttpGet("ApiCariList")]
+        //[KaryaAuthorize(RoleEnum = SahizaRole.CariModule)]
+        public async Task<IActionResult> ApiCariList()
+        {
+            var result = await _cariManager.GetAll();
+
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return Ok();
+            }
+
+        }
+
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.CariModule)]
+        [KaryaAuthorize(Role = SahizaRole.CariModule)]
         public async Task<IActionResult> EditCari(int Id=0)
         {
 
@@ -60,7 +77,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpPost]
-        [KaryaAuthorize(RoleEnum = SahizaRole.CariUpdate)]
+        [KaryaAuthorize(Role = SahizaRole.CariUpdate)]
         public async Task<IActionResult> EditCari(Cari cari)
         {
             var reult = await _cariManager.AddUpdate(cari);
@@ -75,7 +92,7 @@ namespace SAHIZA.WEB.MVC.Controllers
         }
 
         [HttpGet]
-        [KaryaAuthorize(RoleEnum = SahizaRole.CariModule)]
+        [KaryaAuthorize(Role = SahizaRole.CariModule)]
         public async Task<IEnumerable<dynamic>> ContactList()
         {
 

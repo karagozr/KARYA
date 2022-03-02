@@ -42,13 +42,13 @@ namespace SAHIZA.MODEL.Entities
         public double ToplamFiyat { get; set; }
         public double VergiOrani { get; set; }
         public double ToplamTutar { get; set; }
-
+        public DateTime? TahminiBitis { get; set; }
         public DateTime? CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
         public int? CreatedUserId { get; set; }
         public int? UpdatedUserId { get; set; }
         public StokHaraket StokHaraket { get; set; }
-        public Stok Stok { get; set; }
-        public Cari Cari { get; set; }
+        public virtual Stok Stok { get; set; }
+        public virtual Cari Cari { get; set; }
     }
 }

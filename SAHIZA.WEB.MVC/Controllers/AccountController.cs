@@ -96,6 +96,7 @@ namespace SAHIZA.WEB.MVC.Controllers
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             claims.Add(new Claim("Fullname", user.Name + " " + user.Lastname));
+            //claims.Add(new Claim("Fullname", user.Name + " " + user.Lastname));
             //claims.Add(new Claim("FullName", this.FullName));
             //claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 

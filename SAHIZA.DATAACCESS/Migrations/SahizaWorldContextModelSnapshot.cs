@@ -322,9 +322,18 @@ namespace SAHIZA.DATAACCESS.Migrations
                     b.Property<int?>("StokId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("TahminiBitis")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Tel1")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<double>("ToplamFiyat")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ToplamTutar")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("UpdatedTime")
                         .HasColumnType("datetime2");
@@ -336,6 +345,9 @@ namespace SAHIZA.DATAACCESS.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<double>("VergiOrani")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

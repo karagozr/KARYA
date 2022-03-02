@@ -9,6 +9,8 @@ namespace SAHIZA.BUSINESS.Abstarct
 {
     public interface IServisManager : IBaseManager<Servis>
     {
+        Task<IDataResult<ServisDto>> GetBakimById(int id);
         Task<IDataResult<IEnumerable<ServisListDto>>> List(ServisFiltreDto servisFiltreDto);
+        Task<IResult> AddUpdateBakim(ServisDto servisDto);
     }
 }

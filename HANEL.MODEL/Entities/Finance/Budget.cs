@@ -2,6 +2,7 @@
 using KARYA.CORE.Entities.Abstarct;
 using KARYA.CORE.Entities.Concrete;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,7 +13,7 @@ namespace HANEL.MODEL.Entities.Finance
         [Required]
         public BudgetType BudgetType { get; set; }
 
-        [StringLength(20),Required]
+        [StringLength(20)]
         public string BranchCode { get; set; }
 
         [StringLength(20), Required]
@@ -21,7 +22,7 @@ namespace HANEL.MODEL.Entities.Finance
         [Column(Order = 5), StringLength(20)]
         public string SiteCode { get; set; }
 
-        [StringLength(20), Required]
+        [StringLength(20)]
         public string BudgetMainCode { get; set; }
 
         [StringLength(20), Required]
@@ -40,6 +41,6 @@ namespace HANEL.MODEL.Entities.Finance
         public int? CreatedUserId { get; set; }
         public int? UpdatedUserId { get; set; }
 
-        //public IEnumerable<Budget> BudgetDetails { get; set; }
+        public IEnumerable<BudgetDetail> BudgetDetails { get; set; }
     }
 }
