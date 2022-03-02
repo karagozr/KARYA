@@ -31,5 +31,19 @@ namespace KARYA.CORE.Authorize
             }
 
         }
+
+        public IEnumerable<dynamic> UserRoles()
+        {
+            if (HttpContext.User.Claims.Count() > 0)
+            {
+                var result = HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
     }
 }
