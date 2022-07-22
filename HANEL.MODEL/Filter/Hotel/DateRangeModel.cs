@@ -10,5 +10,6 @@ namespace HANEL.MODEL.Filter.Hotel
     {
         public DateTime FirstDate { get; set; }
         public DateTime LastDate { get; set; }
+        
     }
 }

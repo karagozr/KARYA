@@ -19,5 +19,6 @@ namespace HANEL.MODEL.Dto.Muhasebe
         public string SatisHesapKodu { get; set; }
         public string SatisHesapAdi { get; set; }
         public double KdvOrani { get; set; }
+        public string SubeKodu { get; set; }
     }
 }

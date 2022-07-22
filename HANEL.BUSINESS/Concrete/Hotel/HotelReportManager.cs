@@ -25,56 +25,9 @@ namespace HANEL.BUSINESS.Concrete.Hotel
                 using (var connection = CreatePostgresConnection())
                 {
                     var queryString =
-                    $" SELECT hrk.id                                                                                                                                            AS \"HaraketId\",                "+             
-                    $" hrk.tarih                                                                                                                                                AS \"HaraketTarihi\",            "+
-                    $" rez.id                                                                                                                                                   AS \"RezervasyonId\",            "+
-                    $" rez.no                                                                                                                                                   AS \"RezervasyonNo\",            "+
-                    $" rez.satistarih                                                                                                                                           AS \"SatisTarihi\",              "+
-                    $" gece.id                                                                                                                                                  AS \"GecelemeId\",               "+
-                    $" acen.id                                                                                                                                                  AS \"AcentaId\",                 "+
-                    $" acen.kodu                                                                                                                                                AS \"AcentaKodu\",               "+
-                    $" acen.adi                                                                                                                                                 AS \"AcentaAdi\",                "+
-                    $" rezulke.id                                                                                                                                               AS \"UlkeId\",                   "+
-                    $" rezulke.kodu                                                                                                                                             AS \"UlkeKodu\",                 "+
-                    $" rezulke.adi                                                                                                                                              AS \"UlkeAdi\",                  "+
-                    $" rez.cintarih                                                                                                                                             AS \"RezCinTarihi\",             "+
-                    $" rez.couttarih                                                                                                                                            AS \"RezCoutTarihi\",            "+
-                    $" gece.pax                                                                                                                                                 AS \"GecelemePax\",              "+
-                    $" gece.chi                                                                                                                                                 AS \"GecelemeChi\",              "+
-                    $" gece.fre                                                                                                                                                 AS \"GecelemeFre\",              "+
-                    $" gece.beb                                                                                                                                                 AS \"GecelemeBeb\",              "+
-                    $" gece.odasayisi                                                                                                                                           AS \"GecelemeOda\",              "+
-                    $" dov.id                                                                                                                                                   AS \"DovizId\",                  "+
-                    $" dov.kodu                                                                                                                                                 AS \"DovizKodu\",                "+
-                    $" dov.adi                                                                                                                                                  AS \"DovizAdi\",                 "+
-                    $" rezdetay.cinkuru                                                                                                                                         AS \"RezKur\",                   "+
-                    $" kur.kurtutar                                                                                                                                             AS \"EURCinKur\",                "+
-                    $" dep.id                                                                                                                                                   AS \"DepkodId\",                 "+
-                    $" dep.kodu                                                                                                                                                 AS \"DepkodKodu\",               "+
-                    $" dep.adi                                                                                                                                                  AS \"DepkodAdi\",                "+
-                    $" dep.departmantipi                                                                                                                                        AS \"DepartmanTipi\",            "+
-                    $" kdv.id                                                                                                                                                   AS \"KdvId\",                    "+
-                    $" kdv.kodu                                                                                                                                                 AS \"KdvKodu\",                  "+
-                    $" hrk.tutar                                                                                                                                                AS \"HaraketTutar\",             "+
-                    $" round((hrk.tutar - hrk.tutar / ((kdv.kodu::numeric(9, 2) + 100::numeric)::numeric(9, 2) / 100::numeric)::double precision)::numeric(9, 2), 2)            AS \"HaraketTutarKdv\",          "+
-                    $" round((hrk.tutar / ((kdv.kodu::numeric(9, 2) + 100::numeric)::numeric(9, 2) / 100::numeric)::double precision)::numeric(9, 2), 2)                        AS \"HaraketTutarMatrah\",       "+
-                    $" hrk.tutardv                                                                                                                                              AS \"HaraketTutarDoviz\",        "+
-                    $" round((hrk.tutardv - hrk.tutardv / ((kdv.kodu::numeric(9, 2) + 100::numeric)::numeric(9, 2) / 100::numeric)::double precision)::numeric(9, 2), 2)        AS \"HaraketTutarDovizKdv\",     "+
-                    $" round((hrk.tutardv / ((kdv.kodu::numeric(9, 2) + 100::numeric)::numeric(9, 2) / 100::numeric)::double precision)::numeric(9, 2), 2)                      AS \"HaraketTutarDovizMatrah\",  "+
-                    $" hrk.aciklama                                                                                                                                             AS \"Aciklama\"                  "+
-                    $" FROM hrk hrk                                                                                                                                                                              "+
-                    $" LEFT JOIN depkod dep ON hrk.depkodid = dep.id                                                                                                                                             "+
-                    $" LEFT JOIN kdv kdv ON hrk.kdvid = kdv.id                                                                                                                                                   "+
-                    $" LEFT JOIN doviz dov ON hrk.dovizid = dov.id                                                                                                                                               "+
-                    $" LEFT JOIN folio fol ON hrk.folioid = fol.id AND hrk.sirketid = fol.sirketid                                                                                                               "+
-                    $" LEFT JOIN rez rez ON fol.rezid = rez.id AND rez.sirketid = fol.sirketid                                                                                                                   "+
-                    $" LEFT JOIN rezdetayek rezdetay ON rez.id = rezdetay.id                                                                                                                                     "+
-                    $" LEFT JOIN ulke rezulke ON rezdetay.ulkeid = rezulke.id AND rez.sirketid = rezulke.sirketid                                                                                                "+
-                    $" LEFT JOIN geceleme gece ON rez.id = gece.rezid AND rez.sirketid = gece.sirketid AND gece.gun = '1900-01-01 00:00:00'::timestamp without time zone AND gece.silinmis = false               "+
-                    $" LEFT JOIN acenta acen ON gece.acentaid = acen.id AND gece.sirketid = acen.sirketid                                                                                                        "+
-                    $" LEFT JOIN kur as kur ON to_char(kur.tarih, 'YYYYMMDD')= to_char(rez.cintarih, 'YYYYMMDD') AND kur.dovizid = 265                                                                           "+
-                    $" WHERE hrk.sirketid = 1  AND rez.silinmis = false and dep.departmantipi = 1 AND rez.couttarih <= NOW()                                                                                     "+
-                    $" order by rez.id, hrk.tarih";
+                    $" select * from public.hnl_tf_room_sale_list   " +
+                    $" where RezCoutTarihi <= NOW()                 " +
+                    $" order by HaraketId, HaraketTarihi";
 
                     var data = await connection.QueryAsync<HotelRoomSaleRawDto>(queryString);
 
@@ -87,25 +40,15 @@ namespace HANEL.BUSINESS.Concrete.Hotel
             }
         }
 
-        public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleSumList()
+        public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomIncomeSumList(int year = 0)
         {
             try
             {
                 using (var connection = CreatePostgresConnection())
                 {
+                    year = year==0? DateTime.Now.Year:year;
                     var queryString =
-                        $" SELECT cst.hrk_tarih AS \"ProcessDate\",                                 " +
-                        $" SUM(cst.geceleme_pax) AS \"Pax\",                                        " +
-                        $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                              " +
-                        $" ROUND(SUM(cst.geceleme_odasayisi) / 144, 2) AS \"Occupancy\",            " +
-                        $" SUM(cvr.cevrimtutar) AS \"IncomeSumEUR\"                                 " +
-                        $" FROM viewcastcevrim AS cvr                                               " +
-                        $" LEFT JOIN viewcastlist AS cst ON cst.geceleme_id = cvr.geceleme_id       " +
-                        $" WHERE cst.hrk_yil = CAST(DATE_PART('year', NOW()) AS VARCHAR)            " +
-                        $" GROUP BY cst.hrk_tarih                                                   " +
-                        $" ORDER BY cst.hrk_tarih";
-
-
+                        $" select * from hnl_tf_room_income_summary('{year}.{01}.{01}','{year}.{12}.{31}',144) ";
                     var data = await connection.QueryAsync<HotelRoomSaleSumDto>(queryString);
 
                     return new SuccessDataResult<IEnumerable<HotelRoomSaleSumDto>>(data.ToList());
@@ -124,25 +67,7 @@ namespace HANEL.BUSINESS.Concrete.Hotel
                 using (var connection = CreatePostgresConnection())
                 {
                     var queryString =
-                        $" SELECT cst.hrk_tarih AS \"ProcessDate\",                             " +
-                        $" cst.acenta_adi AS \"AgentName\",                                     " +
-                        $" cst.ulke_adi AS \"CountryName\",                                     " +   
-                        $" cst.pazar_adi AS \"MarketName\",                                     " +
-                        $" SUM(cst.geceleme_pax) AS \"Pax\",                                    " +
-                        $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                          " +
-                        $" ROUND(SUM(cst.geceleme_odasayisi) / 144, 2) AS \"Occupancy\",        " +
-                        $" SUM(cvr.cevrimtutar) AS \"IncomeSumEUR\"                             " +
-                        $" FROM viewcastcevrim AS cvr                                           " +
-                        $" LEFT JOIN viewcastlist AS cst ON cst.geceleme_id = cvr.geceleme_id   " +
-                        $" WHERE cst.hrk_yil = CAST(DATE_PART('year', NOW()) AS VARCHAR)        ";
-
-                    if (dateRangeModel.FirstDate.Year>1 || dateRangeModel.LastDate.Year > 1)
-                        queryString += $" AND cst.hrk_tarih> '{dateRangeModel.FirstDate.Year}.{dateRangeModel.FirstDate.Month}.{dateRangeModel.FirstDate.Day}' " +
-                            $"and cst.hrk_tarih<= '{dateRangeModel.LastDate.Year}.{dateRangeModel.LastDate.Month}.{dateRangeModel.LastDate.Day}' ";
-
-                    queryString += $" GROUP BY cst.hrk_tarih,cst.acenta_adi,cst.ulke_adi ,cst.pazar_adi " +
-                        $" ORDER BY cst.hrk_tarih";
-                    
+                        $" SELECT * from hnl_tf_room_sale_summary_agency_coutry_market('{DateTime.Now.Year}.{01}.{01}','{DateTime.Now.Year}.{12}.{31}',144)";
 
                     var data = await connection.QueryAsync<HotelRoomSaleSumDto>(queryString);
 
@@ -159,22 +84,23 @@ namespace HANEL.BUSINESS.Concrete.Hotel
         {
             try
             {
+                if(dateRangeModel == null)
+                {
+                    dateRangeModel = new DateRangeModel();
+                }
+
+                if (dateRangeModel == null || dateRangeModel.FirstDate < new DateTime(2000, 1, 1))
+                    dateRangeModel.FirstDate = new DateTime(DateTime.Now.Year, 1, 1);
+
+                if (dateRangeModel == null || dateRangeModel.LastDate < new DateTime(2000, 1, 1))
+                    dateRangeModel.LastDate = new DateTime(DateTime.Now.Year, 12, 31);
+
                 using (var connection = CreatePostgresConnection())
                 {
-                    var queryString = $" SELECT cst.hrk_tarih AS \"ProcessDate\",                           " +
-                         $" cst.acenta_id AS \"AgentId\",                                                   " +
-                         $" cst.acenta_adi AS \"AgentName\",                                                " +
-                         $" cst.ulke_adi AS \"CountryName\",                                                " +
-                         $" cst.pazar_adi AS \"MarketName\",                                                " +
-                         $" SUM(cst.geceleme_pax) AS \"Pax\",                                               " +
-                         $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                                     " +
-                         $" ROUND(SUM(cst.geceleme_odasayisi) / 144, 2) AS \"Occupancy\",                   " +
-                         $" SUM(cvr.cevrimtutar) AS \"IncomeSumEUR\"                                        " +
-                         $" FROM viewcastcevrim AS cvr                                                      " +
-                         $" LEFT JOIN viewcastlist AS cst ON cst.geceleme_id = cvr.geceleme_id              " +
-                         $" WHERE cst.hrk_yil = CAST(DATE_PART('year', NOW()) AS VARCHAR)                   " +
-                         $" GROUP BY cst.hrk_tarih,cst.acenta_id,cst.acenta_adi,cst.ulke_adi, cst.pazar_adi " +
-                         $" ORDER BY cst.hrk_tarih ";
+
+                    var queryString = $" SELECT * from hnl_tf_room_sale_summary_agency_coutry_market(" +
+                        $"'{dateRangeModel.FirstDate.Year}.{01}.{01}'," +
+                        $"'{dateRangeModel.LastDate.Year}.{12}.{31}',144) ";
 
                     //if (dateRangeModel.FirstDate.Year > 1 || dateRangeModel.LastDate.Year > 1)
                     //    queryString += $" AND cst.hrk_tarih> '{dateRangeModel.FirstDate.Year}.{dateRangeModel.FirstDate.Month}.{dateRangeModel.FirstDate.Day}' " +
@@ -201,22 +127,13 @@ namespace HANEL.BUSINESS.Concrete.Hotel
             {
                 using (var connection = CreatePostgresConnection())
                 {
-                    var queryString = $" SELECT cst.hrk_tarih AS \"ProcessDate\",                           " +
-                         $" cst.acenta_id AS \"AgentId\",                                                   " +
-                         $" cst.acenta_adi AS \"AgentName\",                                                " +
-                         $" SUM(cst.geceleme_pax) AS \"Pax\",                                               " +
-                         $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                                     " +
-                         $" SUM(cvr.cevrimtutar) AS \"IncomeSumEUR\"                                        " +
-                         $" FROM viewcastcevrim AS cvr                                                      " +
-                         $" LEFT JOIN viewcastlist AS cst ON cst.geceleme_id = cvr.geceleme_id              " +
-                         $" WHERE cst.hrk_yil = CAST(DATE_PART('year', NOW()) AS VARCHAR)                   " +
-                         $" GROUP BY cst.hrk_tarih,cst.acenta_id,cst.acenta_adi                             " +
-                         $" ORDER BY cst.hrk_tarih ";
+                    var queryString = $" select * from hnl_vw_room_sale_summary_agency where 1=1 ";
 
-                    //if (dateRangeModel.FirstDate.Year > 1 || dateRangeModel.LastDate.Year > 1)
-                    //    queryString += $" AND cst.hrk_tarih> '{dateRangeModel.FirstDate.Year}.{dateRangeModel.FirstDate.Month}.{dateRangeModel.FirstDate.Day}' " +
-                    //        $"and cst.hrk_tarih<= '{dateRangeModel.LastDate.Year}.{dateRangeModel.LastDate.Month}.{dateRangeModel.LastDate.Day}' ";
-
+                    if (dateRangeModel.FirstDate.Year > 2000 || dateRangeModel.LastDate.Year > 2000)
+                        queryString += $" AND \"ProcessDate\" between '{dateRangeModel.FirstDate.Year}.{dateRangeModel.FirstDate.Month}.{dateRangeModel.FirstDate.Day}' " +
+                            $"and '{dateRangeModel.LastDate.Year}.{dateRangeModel.LastDate.Month}.{dateRangeModel.LastDate.Day}' ";
+                    else 
+                        queryString += $" AND DATE_PART('year', \"ProcessDate\") ={DateTime.Now.Year} ";
                     //queryString += $" GROUP BY cst.hrk_tarih,cst.acenta_adi,cst.ulke_adi  " +
                     //    $" ORDER BY cst.hrk_tarih";
 
@@ -232,26 +149,33 @@ namespace HANEL.BUSINESS.Concrete.Hotel
             }
         }
 
-        public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleByAgentDaily(DateRangeModel dateRangeModel = null)
+        public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleByAgentDaily(SalesAndReservationDateRangeModel dateRangeModel=null)
         {
             try
             {
                 using (var connection = CreatePostgresConnection())
                 {
-                    var queryString = $" SELECT cst.rez_satistarih AS \"SaleDate\",                 " +
-                        $" cst.acenta_id AS \"AgentId\",                                            " +
-                        $" cst.acenta_adi AS \"AgentName\",                                         " +
-                        $" SUM(cst.geceleme_pax) AS \"Pax\",                                        " +
-                        $" SUM(cst.geceleme_odasayisi) AS \"RoomSum\",                              " +
-                        $" SUM(cvr.cevrimtutar) AS \"IncomeSumEUR\"                                 " +
-                        $" FROM viewcastcevrim AS cvr                                               " +
-                        $" LEFT JOIN viewcastlist AS cst ON cst.geceleme_id = cvr.geceleme_id       " +
-                        $" WHERE DATE_PART('year', cst.rez_satistarih )  = DATE_PART('year', NOW()) " +
-                        $" GROUP BY cst.rez_satistarih, cst.acenta_id, cst.acenta_adi               " +
-                        $" ORDER BY cst.rez_satistarih ";
-                        
 
+                    if (dateRangeModel.SaleDate1 < new DateTime(2000, 1, 1))  
+                        dateRangeModel.SaleDate1 = new DateTime(DateTime.Now.Year, 1, 1);
 
+                    if (dateRangeModel.SaleDate2 < new DateTime(2000, 1, 1)) 
+                        dateRangeModel.SaleDate2 = new DateTime(DateTime.Now.Year, 12, 31);
+
+                    if (dateRangeModel.ResDate1 < new DateTime(2000, 1, 1))  
+                        dateRangeModel.ResDate1 = new DateTime(DateTime.Now.Year, 1, 1);
+
+                    if (dateRangeModel.ResDate2 < new DateTime(2000, 1, 1))  
+                        dateRangeModel.ResDate2 = new DateTime(DateTime.Now.Year, 12, 31);
+
+                    var s1 = dateRangeModel.SaleDate1;
+                    var s2 = dateRangeModel.SaleDate2;
+                    var r1 = dateRangeModel.ResDate1;
+                    var r2 = dateRangeModel.ResDate2;
+
+                    var queryString = $" select * from hnl_tf_room_sale_summary_agency('{s1.Year}.{s1.Month}.{s1.Day}','{s2.Year}.{s2.Month}.{s2.Day}'," +
+                        $"'{r1.Year}.{r1.Month}.{r1.Day}','{r2.Year}.{r2.Month}.{r2.Day}')  ";
+                    
                     var data = await connection.QueryAsync<HotelRoomSaleSumDto>(queryString);
 
                     return new SuccessDataResult<IEnumerable<HotelRoomSaleSumDto>>(data.ToList());

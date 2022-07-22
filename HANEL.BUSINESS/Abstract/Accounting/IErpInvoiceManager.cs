@@ -12,8 +12,8 @@ namespace HANEL.BUSINESS.Abstract.Accounting
         Task<IDataResult<FaturaDto>> CheckInvoice(string guid);
         Task<IDataResult<FaturaDto>> GetInvoice(string guid);
         Task<IDataResult<IEnumerable<FaturaDto>>> ListInvoice(InvoiceFilterModel invoiceFilterModel);
-        Task<IDataResult<string>> SaveInvoice(FaturaDto invoice, Login login = null);
-        Task<IResult> DeleteInvoice(string faturaNo, string cariKodu, Login login = null);
+        Task<IDataResult<string>> SaveInvoice(FaturaDto invoice);
+        Task<IResult> DeleteInvoice(string faturaNo, string cariKodu, int subeKodu);
         Task<IDataResult<YevmiyeFisInfo>> GetYevmiyeFis(string faturaNo, short faturaIrsaliye, string cariKodu);
 
     }

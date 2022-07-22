@@ -8,6 +8,8 @@ using HANEL.SERVICE.EINVOICE.Concrete.EFinansService;
 using KARYA.COMMON.Attributes;
 using KARYA.COMMON.DirectoryAndFileHelpers;
 using KARYA.CORE.API.Controllers;
+using KARYA.CORE.Entities.Enum;
+using KARYA.CORE.Types.Api;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,7 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
         ICariManager _cariManager;
         IErpInvoiceManager _erpInvoiceManager;
         IConfiguration _configuration;
+
         public InvoiceController(IErpInvoiceManager erpInvoiceManager, IInvoiceManager invoiceManager, ICariManager cariManager, IConfiguration configuration)
         {
             _cariManager = cariManager;
@@ -40,10 +43,10 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
         [KaryaAuthorize(Role = HanelRole.InvoiceIntegPanel)]
         public async Task<IActionResult> List(InvoiceFilterModel invoiceFilterModel)
         {
-            if (invoiceFilterModel.IncomeFirstDate != null && invoiceFilterModel.IncomeFirstDate.Value.Hour == 21) invoiceFilterModel.IncomeFirstDate= Convert.ToDateTime(invoiceFilterModel.IncomeFirstDate).AddHours(3);
-            if (invoiceFilterModel.IncomeLastDate != null && invoiceFilterModel.IncomeLastDate.Value.Hour == 21) invoiceFilterModel.IncomeLastDate= Convert.ToDateTime(invoiceFilterModel.IncomeLastDate).AddHours(3);
-            if (invoiceFilterModel.FirstDate != null && invoiceFilterModel.FirstDate.Value.Hour == 21) invoiceFilterModel.FirstDate=Convert.ToDateTime(invoiceFilterModel.FirstDate).AddHours(3);
-            if (invoiceFilterModel.LastDate != null && invoiceFilterModel.LastDate.Value.Hour == 21) invoiceFilterModel.LastDate=Convert.ToDateTime(invoiceFilterModel.LastDate).AddHours(3);
+            if (invoiceFilterModel.IncomeFirstDate != null && invoiceFilterModel.IncomeFirstDate.Value.Hour == 21) invoiceFilterModel.IncomeFirstDate = Convert.ToDateTime(invoiceFilterModel.IncomeFirstDate).AddHours(3);
+            if (invoiceFilterModel.IncomeLastDate != null && invoiceFilterModel.IncomeLastDate.Value.Hour == 21) invoiceFilterModel.IncomeLastDate = Convert.ToDateTime(invoiceFilterModel.IncomeLastDate).AddHours(3);
+            if (invoiceFilterModel.FirstDate != null && invoiceFilterModel.FirstDate.Value.Hour == 21) invoiceFilterModel.FirstDate = Convert.ToDateTime(invoiceFilterModel.FirstDate).AddHours(3);
+            if (invoiceFilterModel.LastDate != null && invoiceFilterModel.LastDate.Value.Hour == 21) invoiceFilterModel.LastDate = Convert.ToDateTime(invoiceFilterModel.LastDate).AddHours(3);
             var result = await _erpInvoiceManager.ListInvoice(invoiceFilterModel);
 
             if (result.Success) return Ok(result.Data);
@@ -56,7 +59,7 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
         {
             var resultEntity = await _invoiceManager.GetById(id);
             faturaUpdate.ApplyTo(resultEntity.Data, ModelState);
-            var result = await _invoiceManager.PatchUpdate(new FaturaUpdateDto { Fatura = resultEntity.Data, UpdateColumns= faturaUpdate.Operations.Select(x=> char.ToUpper(x.path[0]) + x.path.Substring(1)).ToArray() }) ;
+            var result = await _invoiceManager.PatchUpdate(new FaturaUpdateDto { Fatura = resultEntity.Data, UpdateColumns = faturaUpdate.Operations.Select(x => char.ToUpper(x.path[0]) + x.path.Substring(1)).ToArray() });
 
             return Ok();
 
@@ -66,19 +69,19 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
 
         [HttpGet("GetDocument")]
         [KaryaAuthorize(Role = HanelRole.InvoiceIntegPreview)]
-        public async Task<IActionResult> GetDocument(string ett,string belgeTuru, bool isString=false)
+        public async Task<IActionResult> GetDocument(string ett, string belgeTuru, bool isString = false)
         {
             var resultInvoice = await _invoiceManager.GetById(ett);
             var invoice = resultInvoice.Data;
 
-            if (invoice==null) return BadRequest("Fatura Sistemde Yok");
+            if (invoice == null) return BadRequest("Fatura Sistemde Yok");
 
             if (!resultInvoice.Success) return BadRequest(resultInvoice.Message);
-            
+
             var checkFile = DirectoryHelper.CheckLocalData(ett + "." + belgeTuru, "Invoices");
             if (checkFile.Success == true)
             {
-                if(isString)
+                if (isString)
                     using (StreamReader sr = new StreamReader(checkFile.Data, Encoding.Default))
                     {
                         string resultTExt = "";
@@ -139,7 +142,7 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
                         return Ok("");
                         throw;
                     }
-                    
+
 
                 }
             }
@@ -154,10 +157,9 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
             if (checkFile.Success == true)
             {
                 var stream = new FileStream($"{checkFile.Data}", FileMode.Open);
-                return File(stream, belgeTuru.ToLower() == "pdf" ? "application/pdf" : "text/html",ett+"."+belgeTuru);
+                return File(stream, belgeTuru.ToLower() == "pdf" ? "application/pdf" : "text/html", ett + "." + belgeTuru);
             }
 
-            
             //html kayıtlı olup pdf kayıtlı değilse
             var checkFile1 = DirectoryHelper.CheckLocalData(ett + ".html", "Invoices");
             if (checkFile1.Success == true)
@@ -173,13 +175,12 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
                             resultTExt += s;
                         }
 
-                        DocumentHelper.HtmltoPdf(resultTExt, DirectoryHelper.GetLocalDataPath("Invoices")+ett);
+                        DocumentHelper.HtmltoPdf(resultTExt, DirectoryHelper.GetLocalDataPath("Invoices") + ett);
                     }
                 }
                 var stream = new FileStream($"{DirectoryHelper.GetLocalDataPath("Invoices") + ett}.pdf", FileMode.Open);
                 return File(stream, belgeTuru.ToLower() == "pdf" ? "application/pdf" : "text/html", ett + "." + belgeTuru);
             }
-
 
             //yerelde yoksa kaydı ara
             var resultInvoice = await _invoiceManager.GetById(ett);
@@ -228,9 +229,9 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
                                 DocumentHelper.HtmltoPdf(resultTExt, DirectoryHelper.GetLocalDataPath("Invoices") + ett);
                             }
                         }
-                            
 
-                        var stream = new FileStream($"{DirectoryHelper.GetLocalDataPath("Invoices") + ett+"."+belgeTuru}", FileMode.Open);
+
+                        var stream = new FileStream($"{DirectoryHelper.GetLocalDataPath("Invoices") + ett + "." + belgeTuru}", FileMode.Open);
                         return File(stream, belgeTuru.ToLower() == "pdf" ? "application/pdf" : "text/html", ett + "." + belgeTuru);
                     }
                     catch (Exception ex)
@@ -258,63 +259,49 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
         [KaryaAuthorize(Role = HanelRole.InvoiceIntegEdit)]
         public async Task<IActionResult> SaveInvoice(FaturaDto invoice)
         {
-
-            var serviceInvoice = await _invoiceManager.GetById(invoice.Guid);
-
-            if (!serviceInvoice.Success) return BadRequest(serviceInvoice.Message);
-
-            var dipTutar = Math.Round(invoice.FaturaDetays.Sum(x => (x.Tutar)), 2);
-
-            if (Convert.ToInt32(serviceInvoice.Data.ToplamTutar) != Convert.ToInt32(dipTutar)) return BadRequest("Fatura dip toplamı tutmuyor.");
-
-            var netLogin = new KARYA.MODEL.Entities.Netsis.Login
-            {
-                NetsisUser = _configuration["NetsisEnv:NetsisUser"],
-                NetsisPassword = _configuration["NetsisEnv:NetsisPassword"],
-                DbName = _configuration["NetsisEnv:DbName"],
-                NetOpenXUrl = _configuration["NetsisEnv:NetOpenXUrl"],
-                BranchCode = invoice.SubeKodu,
-            };
-            
-            var checkInvoice = await _erpInvoiceManager.CheckInvoice(invoice.Guid);
-
-            if (!checkInvoice.Success) return BadRequest(checkInvoice.Message);
-
-            if (checkInvoice.Data != null && invoice.Guncelleme == false)
-                return Conflict();
-            else if (checkInvoice.Data != null && invoice.Guncelleme == true)
-            {
-                var resultDelete = await _erpInvoiceManager.DeleteInvoice(checkInvoice.Data.FaturaNo,checkInvoice.Data.CariKodu, netLogin);
-                if (!resultDelete.Success) return BadRequest(resultDelete.Message);
-                invoice.KayitTarihi = checkInvoice.Data.KayitTarihi==null?  checkInvoice.Data.KayitTarihi: checkInvoice.Data.KayitTarihi;
-            }
-
-            var result = await _erpInvoiceManager.SaveInvoice(invoice,netLogin);
-
+            var result = await _erpInvoiceManager.SaveInvoice(invoice);
             if (result.Success)
             {
                 if (invoice.ReturnYevmiyeFisi == true)
                 {
                     var yemiyeFis = await _erpInvoiceManager.GetYevmiyeFis(result.Data, 2, invoice.CariKodu);
-                    return Created("", new { YevmiyeFisi=yemiyeFis.Data.YevmiyeFisList, FaturaNo=result.Data, CariKodu=invoice.CariKodu, FisNo = yemiyeFis.Data.FisNo, BranchCode = yemiyeFis.Data.BranchCode, BranchName = yemiyeFis.Data.BranchName, FirmCode = yemiyeFis.Data.FirmCode, FirmName = yemiyeFis.Data.FirmName });
+                    return ApiResult<dynamic>(ResultCode.SUCCESS_INVOICE_SAVED,result.Message,
+                        new
+                        {
+                            YevmiyeFisi = yemiyeFis.Data.YevmiyeFisList,
+                            FaturaNo = result.Data,
+                            CariKodu = invoice.CariKodu,
+                            FisNo = yemiyeFis.Data.FisNo,
+                            BranchCode = yemiyeFis.Data.BranchCode,
+                            BranchName = yemiyeFis.Data.BranchName,
+                            FirmCode = yemiyeFis.Data.FirmCode,
+                            FirmName = yemiyeFis.Data.FirmName
+                        });
                 }
-                else
-                {
-                    return Created("", null);
-                }
-                
+
+                return ApiResult(ResultCode.SUCCESS_INVOICE_SAVED, result.Message);
+
+
+            }else if (!result.Success && result.Code == ResultCode.DEFAULT)
+            {
+                return BadRequest(result.Message);
+            }
+            else if (!result.Success)
+            {
+                return ApiResult(result);
             }
             else
+            {
                 return BadRequest(result.Message);
-            
-
+            }
         }
+
         [HttpGet("GetYevmiyeFisi")]
         [KaryaAuthorize(Role = HanelRole.InvoiceIntegYevmiyeFisPreview)]
         public async Task<IActionResult> GetYevmiyeFisi(string faturaNo, string cariKodu)
         {
             var result = await _erpInvoiceManager.GetYevmiyeFis(faturaNo, 2, cariKodu);
-            if (result.Success) return Ok(new { YevmiyeFisi = result.Data.YevmiyeFisList, FaturaNo = faturaNo, CariKodu = cariKodu, FisNo= result.Data.FisNo, BranchCode= result.Data.BranchCode, BranchName = result.Data.BranchName, FirmCode = result.Data.FirmCode, FirmName = result.Data.FirmName });
+            if (result.Success) return Ok(new { YevmiyeFisi = result.Data.YevmiyeFisList, FaturaNo = faturaNo, CariKodu = cariKodu, FisNo = result.Data.FisNo, BranchCode = result.Data.BranchCode, BranchName = result.Data.BranchName, FirmCode = result.Data.FirmCode, FirmName = result.Data.FirmName });
             else return BadRequest(result.Message);
         }
 
@@ -336,7 +323,7 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
             //headers.Add("Fatura No ", faturaNo);
             //headers.Add("Cari Ünvan ", $"{resultCari.Data.CariUnvan}-({cariKodu})");
             //headers.Add("Şirket", $"{yemiyeFis.Data.FirmName}-({yemiyeFis.Data.FirmCode})");
-           
+
             headers.Add("Tarih ", DateTime.Today.ToShortDateString());
             string[] columns = { "Hesap Kodu", "Hesap Adı", "Acıklama", "Borç", "Alacak", "Proje", "Referans", "Açıklama-1", "Açıklama-2" };
             string[] protectedColumns = { "Hesap Kodu" };
@@ -349,5 +336,21 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
 
         }
 
+        [HttpGet("Test")]
+        public async Task<IActionResult> Test(string value)
+        {
+            var ll = new List<FaturaDto>();
+            ll.Add(new FaturaDto
+            {
+                AboneNo = "sadasdsa"
+            });
+
+            ll.Add(new FaturaDto
+            {
+                AboneNo = "dasdsadsadsadsad"
+            });
+
+            return ApiResult<IList<FaturaDto>>(ResultCode.ERROR_INVOICE_NOT_FOUND,ll);
+        } 
     }
 }

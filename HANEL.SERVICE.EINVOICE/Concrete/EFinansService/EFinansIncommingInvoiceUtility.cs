@@ -5,13 +5,18 @@ using HANEL.SERVICE.EINVOICE.Abstract;
 using HANEL.SERVICE.EINVOICE.Helpers;
 using KARYA.COMMON.DirectoryAndFileHelpers;
 using KARYA.COMMON.Helpers;
+using KARYA.CORE.Helpers;
 using KARYA.CORE.Types.Return;
 using KARYA.CORE.Types.Return.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HANEL.SERVICE.EINVOICE.Concrete.EFinansService
 {
@@ -37,6 +42,150 @@ namespace HANEL.SERVICE.EINVOICE.Concrete.EFinansService
         public Task<IDataResult<Fatura>> GetInvoice(FaturaFiltreModel faturaFiltreModel)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IDataResult<double>> GetInvoiceRoundingDetail(XDocument xml)
+        {
+            try
+            {
+               
+                var yuvarlamas = AppsettingHelper.GetStringArrayValue("Yuvarlama");
+
+                string yuvarlama = null;
+
+                var findYuvarlama = xml.Descendants().Where(x => x.Name.LocalName == "Note" && yuvarlamas.Any(y => x.Value.Contains(y))).Select(s => s.Value).FirstOrDefault();
+
+                foreach (var itemRand in yuvarlamas)
+                {
+                    if (findYuvarlama != null)
+                    {
+                        yuvarlama = findYuvarlama.Remove(findYuvarlama.IndexOf(itemRand), itemRand.Length);
+                        yuvarlama = new string(yuvarlama.Where(p => char.IsDigit(p) || p == ',' || p == '.').ToArray());
+                    }
+
+                }
+
+                var _yuvarlamaDouble = Convert.ToDouble(yuvarlama);
+
+                return new SuccessDataResult<double>(_yuvarlamaDouble, "");
+
+            }
+            catch (System.Exception ex)
+            {
+                return new ErrorDataResult<double>(0, ex.Message);
+            }
+        }
+        public async Task<IDataResult<string>> GetInvoiceSubscribeNo(XDocument xml)
+        {
+            try
+            {
+               
+                var subscribeNums = AppsettingHelper.GetStringArrayValue("InvoiceSubscribeNums");
+                var subscribe = AppsettingHelper.GetStringArrayValue("InvoiceSubscribeNums");
+                var redundantTexts = AppsettingHelper.GetStringArrayValue("InvoiceSubscribeRedundantText");
+
+                string subscribeNum = null;
+
+                var hasOne = xml.Descendants().Any(x => x.Name.LocalName == "ID" && x.Attribute("schemeID") != null && subscribeNums.Contains(x.FirstAttribute.Value));
+
+
+                if (hasOne)
+                    subscribeNum = xml.Descendants().FirstOrDefault(x => x.Name.LocalName == "ID" && x.Attribute("schemeID") != null && subscribeNums.Contains(x.FirstAttribute.Value))?.Value;
+                else
+                {
+                    var others = xml.Descendants().Where(x => x.Name.LocalName == "Note" && subscribeNums.Any(y => x.Value.Contains(y))).Select(s => s.Value).ToList();
+
+                    foreach (var radnText in redundantTexts)
+                    {
+                        var hasRadnText = others.Any(w => w.Contains(radnText));
+
+                        if (hasRadnText)
+                            subscribeNum = others.FirstOrDefault(w => w.Contains(radnText)).Remove(others.FirstOrDefault(w => w.Contains(radnText)).IndexOf(radnText), radnText.Length);
+
+
+                    }
+
+                }
+
+                return new SuccessDataResult<string>(subscribeNum,"");
+
+            }
+            catch (System.Exception ex)
+            {
+                return new ErrorDataResult<string>(null,ex.Message);
+            }
+        }
+        public async Task<IDataResult<double>> GetInvoiceMahsupDetail(XDocument xml)
+        {
+            try
+            {
+                
+
+                var mahsups = AppsettingHelper.GetStringArrayValue("Mahsup");
+
+                string mahsup = "0";
+
+                var findMahsup = xml.Descendants().Where(x => x.Name.LocalName == "Note" && mahsups.Any(y => x.Value.Contains(y))).Select(s => s.Value).FirstOrDefault();
+
+                foreach (var itemRand in mahsups)
+                {
+                    if (findMahsup != null)
+                    {
+                        mahsup = findMahsup.Remove(findMahsup.IndexOf(itemRand), itemRand.Length);
+                        mahsup = new string(mahsup.Where(p => char.IsDigit(p) || p == ',' || p == '.').ToArray());
+                    }
+
+                }
+
+
+
+
+                double _mahsupDouble = Convert.ToDouble(mahsup);
+
+                return new SuccessDataResult<double>(_mahsupDouble);
+
+            }
+            catch (System.Exception ex)
+            {
+                return new ErrorDataResult<double>(0, ex.Message);
+            }
+        }
+        public async Task<IDataResult<XDocument>> GetInvoiceXML(string guid, string belgeTuru, string vergiTcKimlikNo)
+        {
+            try
+            {
+                string[] ett = { guid };
+                var result = await _connectorService.gelenBelgeleriIndirExtAsync(new gelenBelgeParametreleri
+                {
+                    ettn = ett,
+                    belgeTuru = belgeTuru,
+                    belgeFormati = "UBL",
+                    vergiTcKimlikNo = vergiTcKimlikNo
+                });
+
+
+                var file = result.@return.GetArchiveFromByteArr().GetEntriesInArchive().First();
+
+
+
+                XDocument xml = null;
+
+                foreach (var entry in file.Archive.Entries)
+                {
+                    using (var stream = entry.Open())
+                    {
+                       xml = System.Xml.Linq.XDocument.Load(stream);
+
+                    }
+                }
+
+                return new SuccessDataResult<XDocument>(xml);
+
+            }
+            catch (System.Exception ex)
+            {
+                return new ErrorDataResult<XDocument>(null, ex.Message);
+            }
         }
 
         public async Task<IDataResult<string>> GetInvoiceDocument(FaturaFiltreModel faturaFiltreModel)
@@ -78,20 +227,78 @@ namespace HANEL.SERVICE.EINVOICE.Concrete.EFinansService
 
                 if (serviceResult.@return == null) return new SuccessDataResult<IEnumerable<Fatura>>(returnData);
 
+                int pp = 0;
+
                 foreach (belge item in serviceResult.@return)
                 {
                     var res = UblHelper.LoadAndValidateInvoice(item.belgeVerisi);
+
+                    
+
+                    string[] ett = { item.ettn };
+                    var result = await _connectorService.gelenBelgeleriIndirExtAsync(new gelenBelgeParametreleri
+                    {
+                        ettn=ett,
+                        belgeTuru = faturaFiltreModel.BelgeTipi,
+                        belgeFormati = "UBL",
+                        vergiTcKimlikNo=faturaFiltreModel.VergiNo
+                    });
+
+                    //if (pp == 5)
+                    //    Console.WriteLine("STOP");
+
+                    var path = DirectoryHelper.GetLocalDataPath("Invoices/xml") + item.gonderenVknTckn + (res.satici.unvan.Length >20 ?res.satici.unvan.Substring(0,20) : res.satici.unvan) + "-" +ett[0] + ".xml";
+
+                    var file = result.@return.GetArchiveFromByteArr().GetEntriesInArchive().First();
+
+
+                   
+
+                    var subscribeNums = AppsettingHelper.GetStringArrayValue("InvoiceSubscribeNums");
+
+                    string subscribeNum = null;
+
+                    double yuvarlama = 0;
+
+                    double mahsup = 0;
+
+                    foreach (var entry in file.Archive.Entries)
+                    {
+                        using (var stream = entry.Open())
+                        {
+                            var xml = System.Xml.Linq.XDocument.Load(stream);
+
+                            yuvarlama =  GetInvoiceRoundingDetail(xml).Result.Data;
+
+                            mahsup = GetInvoiceMahsupDetail(xml).Result.Data;
+
+                            var hasOne = xml.Descendants().Any(x => x.Name.LocalName == "ID" && x.Attribute("schemeID") != null && subscribeNums.Contains(x.FirstAttribute.Value));
+                            
+                            if(hasOne)
+                                subscribeNum = xml.Descendants().FirstOrDefault(x => x.Name.LocalName == "ID" && x.Attribute("schemeID") != null && subscribeNums.Contains(x.FirstAttribute.Value) )?.Value;
+
+                       
+                        }
+                    }
+
+
+                    //var saveResult = result.@return.GetArchiveFromByteArr().GetEntriesInArchive().First().ExtractFile(path);
+
 
                     //bool dur = false;
                     //if (res.satici.vergiNo == "8770013406")
                     //{
                     //    string[] arrr = { "7e4b2ec1-9cba-4960-887a-03ee82b350ac" };
-                    //    var serviceResult11 = await _connectorService.gelenBelgeleriIndirAsync(faturaFiltreModel.VergiNo, arrr, faturaFiltreModel.BelgeTipi,"UBL");
+                    //    var serviceResult11 = await _connectorService.gelenBelgeleriIndirAsync(faturaFiltreModel.VergiNo, arrr, faturaFiltreModel.BelgeTipi, "UBL");
                     //}
-                        
+
+                    Console.WriteLine("Gonderen : " + res.satici.unvan + " : " + res.satici.vergiNo +" - "+(pp++).ToString());
 
                     var fatura = new Fatura
                     {
+                        Yuvarlama= Convert.ToDecimal(yuvarlama),
+                        Mahsup= Convert.ToDecimal(mahsup),
+                        AboneNo = subscribeNum,
                         GonderenTckn = item.gonderenVknTckn.Length == 11 ? item.gonderenVknTckn : null,
                         GonderenVkn = item.gonderenVknTckn.Length == 10 ? item.gonderenVknTckn : null,
                         GonderenPosta = item.gonderenEtiket,
@@ -182,6 +389,8 @@ namespace HANEL.SERVICE.EINVOICE.Concrete.EFinansService
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
+
+        
     }
 }
 

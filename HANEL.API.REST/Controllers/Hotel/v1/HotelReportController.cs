@@ -35,9 +35,9 @@ namespace HANEL.API.REST.Controllers.Hotel.v1
 
         [HttpGet("GetRoomSaleSumReport")]
         [KaryaAuthorize(Role = HanelRole.HotelRoomIprLineDash)]
-        public async Task<IActionResult> GetRoomSaleSumReport()
+        public async Task<IActionResult> GetRoomSaleSumReport(int year=0)
         {
-            var result = await _hotelReportManager.RoomSaleSumList();
+            var result = await _hotelReportManager.RoomIncomeSumList(year);
             if (result.Success) return Ok(result.Data);
             else return BadRequest();
         }
@@ -60,7 +60,7 @@ namespace HANEL.API.REST.Controllers.Hotel.v1
 
         [HttpGet("GetRoomSaleAgentDaily")]
         [KaryaAuthorize(Role = HanelRole.HotelRoomSaleForAgentRpt)]
-        public async Task<IActionResult> GetRoomSaleAgentDaily([FromQuery] DateRangeModel dateRangeModel = null)
+        public async Task<IActionResult> GetRoomSaleAgentDaily([FromQuery] SalesAndReservationDateRangeModel dateRangeModel = null)
         {
             var result = await _hotelReportManager.RoomSaleByAgentDaily(dateRangeModel);
             return result.Success ? Ok(JsonConvert.SerializeObject(result.Data, _SERILAZERSETTING)) : BadRequest();

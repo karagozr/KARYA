@@ -1,0 +1,16 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:51041/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "HANEL.WEB.REPORT": {
+      "commandName": "Project",
+      "launchBrowser": true
+    }
+  }
+}

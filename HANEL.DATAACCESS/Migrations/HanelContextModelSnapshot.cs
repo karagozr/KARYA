@@ -459,96 +459,80 @@ namespace HANEL.DATAACCESS.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AboneNo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AlanPosta")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AlanTckn")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AlanUnvan")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AlanVkn")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("BelgeTarihi")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("BelgeTipi")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DefaultNote")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FaturaNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FaturaTarihi")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("GelisTarihi")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime2");
 
                     b.Property<string>("GonderenAdi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenAdres")
-                        .HasMaxLength(800)
-                        .HasColumnType("nvarchar(800)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenEPosta")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenFax")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenIl")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenIlce")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenPosta")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenSoyad")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenTckn")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenTel")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenUnvan")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GonderenVkn")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Guid")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Mahsup")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("OdenecekTutar")
                         .HasColumnType("decimal(18,2)");
@@ -568,8 +552,14 @@ namespace HANEL.DATAACCESS.Migrations
                     b.Property<decimal>("ToplamVergi")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("UpdatetedIndex")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserNotes")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Yuvarlama")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -688,6 +678,99 @@ namespace HANEL.DATAACCESS.Migrations
                     b.HasIndex("FaturaId");
 
                     b.ToTable("FaturaVergiKalem");
+                });
+
+            modelBuilder.Entity("HANEL.MODEL.Entities.Muhasebe.OtoFatura", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AboneNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Aciklama")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Aciklama1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Aciklama2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Aktif")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AlanVkn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CariKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GonderenTckn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GonderenVkn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsletmeKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OzelAd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProjeKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefGuid")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubeKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OtoFatura");
+                });
+
+            modelBuilder.Entity("HANEL.MODEL.Entities.Muhasebe.OtoFaturaDetay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Fiyat")
+                        .HasColumnType("float");
+
+                    b.Property<string>("HashKalem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("KalemAciklama")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Kdv")
+                        .HasColumnType("float");
+
+                    b.Property<string>("MuhasebeKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OtoFaturaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProjeKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferansKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StokKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OtoFaturaDetay");
                 });
 
             modelBuilder.Entity("HANEL.MODEL.Entities.Finance.BudgetDetail", b =>

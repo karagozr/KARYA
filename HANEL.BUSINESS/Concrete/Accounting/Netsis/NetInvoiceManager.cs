@@ -3,48 +3,125 @@ using HANEL.BUSINESS.Abstract.Accounting;
 using HANEL.BUSINESS.Concrete.Accounting.Netsis.NetOpenX;
 using HANEL.MODEL.DataTransferModels.Accounting;
 using HANEL.MODEL.Dtos.Muhasebe;
+using KARYA.COMMON.Helpers;
 using KARYA.CORE.Concrete.Dapper;
+using KARYA.CORE.Entities.Enum;
 using KARYA.CORE.Types.Return;
 using KARYA.CORE.Types.Return.Interfaces;
 using KARYA.MODEL.Entities.Netsis;
+using Microsoft.Extensions.Configuration;
 using NetOpenX.Rest.Client;
 using NetOpenX.Rest.Client.BLL;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
 {
     public class NetInvoiceManager : DapperRepository, IErpInvoiceManager, IDisposable
     {
+        
         ItemSlipsManager _manager;
         public oAuth2 AUTH;
-        public NetInvoiceManager() : base("NETSISConnection"){ }
+        IConfiguration _configuration;
+        IInvoiceManager _invoiceManager;
+        private Login _netLogin; 
+        public NetInvoiceManager(IConfiguration configuration, IInvoiceManager invoiceManager) : base("NETSISConnection"){
+            _configuration = configuration;
+            _invoiceManager = invoiceManager;
+            _netLogin = new KARYA.MODEL.Entities.Netsis.Login
+            {
+                NetsisUser = _configuration["NetsisEnv:NetsisUser"],
+                NetsisPassword = _configuration["NetsisEnv:NetsisPassword"],
+                DbName = _configuration["NetsisEnv:DbName"],
+                NetOpenXUrl = _configuration["NetsisEnv:NetOpenXUrl"],
+                BranchCode = 0
+            };
+        }
 
-        public NetInvoiceManager(Login login) : base("NETSISConnection")
+        public NetInvoiceManager(Login login, IConfiguration configuration, IInvoiceManager invoiceManager) : base("NETSISConnection")
         {
-            using(NetOpenXAuth auth =  new NetOpenXAuth())
+            _configuration = configuration;
+            _invoiceManager = invoiceManager;
+            using (NetOpenXAuth auth =  new NetOpenXAuth())
             {
                 var result = auth.Login(login).Result;
                 if (result.Success) AUTH = auth.AUTH;
             }
             _manager = new ItemSlipsManager(AUTH);
         }
-        public async Task<IDataResult<string>> SaveInvoice(FaturaDto invoice, Login login = null)
+        public async Task<IDataResult<string>> SaveInvoice(FaturaDto invoice)
         {
-            using (var _service = new NetsisInvoiceService(login))
+            _netLogin.BranchCode = invoice.SubeKodu;
+
+            using (var _service = new NetsisInvoiceService(_netLogin))
             {
-                return await _service.SaveInvoice(invoice);
+                //servisten gelen faturayı al
+                var serviceInvoice = await _invoiceManager.GetById(invoice.Guid);
+
+                if (!serviceInvoice.Success)  return new ErrorDataResult<string>(null, serviceInvoice.Message);
+
+                //kayıtlı fatura varmı kontrol et
+                var checkInvoice = await CheckInvoice(invoice.Guid);
+               
+                if (!checkInvoice.Success)  return new ErrorDataResult<string>(null, checkInvoice.Message);
+
+
+                //fatura dip tutar kontrolu yap
+                var dipTutar = Math.Round(invoice.FaturaDetays.Sum(x => (x.Tutar)), 2);
+                //fatura dip tutar tutmaz ve dip tutar kontrolu varsa
+                if (Convert.ToInt32(serviceInvoice.Data.OdenecekTutar) != Convert.ToInt32(dipTutar) && !invoice.RetryTutar)
+                {
+                    return new ErrorDataResult<string>("",
+                        ResultCode.ERROR_INVOICE_SUMMARY_NOT_CORRECT.Description(),
+                        ResultCode.ERROR_INVOICE_SUMMARY_NOT_CORRECT);
+                }
+
+                //fatura kdv tutar kontrolu yap
+                var kdvTutar = Math.Round(invoice.FaturaDetays.Sum(x => (x.Fiyat * (x.Kdv)) / 100),3);
+                //fatura dip kdv tutmaz ve kdv tutar kontrolu varsa
+                if (Math.Abs(Convert.ToDouble(serviceInvoice.Data.ToplamVergi) - Convert.ToDouble(kdvTutar))>0.01 && !invoice.RetryKdv)
+                {
+                    return new ErrorDataResult<string>("",
+                        ResultCode.ERROR_INVOICE_TAX_SUM_NOT_CORRECT.Description(),
+                        ResultCode.ERROR_INVOICE_TAX_SUM_NOT_CORRECT);
+                }
+
+                //kayıtlı fatura var ve fatura güncelleme izni yoksa hata yolla
+                //güncelleme emri varsa eski faturayı sil ve yeni faturayı kaydet
+                if (checkInvoice.Data != null && invoice.Guncelleme == false)
+                {
+                    return new ErrorDataResult<string>("",
+                        ResultCode.ERROR_INVOICE_HAS_SAVED.Description(),
+                        ResultCode.ERROR_INVOICE_HAS_SAVED);
+                }
+                else if (checkInvoice.Data != null && invoice.Guncelleme == true)
+                {    
+                    //faturayı sil
+                    var resultDelete = await _service.DeleteInvoice(invoice.FaturaNo, invoice.CariKodu);
+
+                    if (!resultDelete.Success) return new ErrorDataResult<string>(null, resultDelete.Message);
+
+                    invoice.KayitTarihi = checkInvoice.Data.KayitTarihi != null ? checkInvoice.Data.KayitTarihi : DateTime.Now.ToLongTimeString();
+                }
+            
+                var res =  await _service.SaveInvoice(invoice);
+
+                return res;
             }
         }
-        public async Task<IResult> DeleteInvoice(string faturaNo, string cariKodu, Login login = null)
+       
+        public async Task<IResult> DeleteInvoice(string faturaNo, string cariKodu, int subeKodu)
         {
-            using (var _service = new NetsisInvoiceService(login))
+            _netLogin.BranchCode = subeKodu;
+            using (var _service = new NetsisInvoiceService(_netLogin))
             {
                 return await _service.DeleteInvoice(faturaNo, cariKodu);
             }
 
         }
+        
         public async Task<IDataResult<IEnumerable<FaturaDto>>> ListInvoice(InvoiceFilterModel invoiceFilterModel)
         {
             try
@@ -52,47 +129,35 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
                 using (var connection = CreateMsSqlConnection())
                 {
                     
-                    var query = (
-                         $" select f.Id,f.DefaultNote,f.UserNotes, case when NF.FATIRSNO is null then F.FaturaNo else NF.FATIRSNO end as FaturaNo, F.FaturaTarihi, NF.ACIKLAMA AS Aciklama, NF.CARI_KODU as CariKodu, " +
-                         $" NF.CARI_ISIM as CariUnvan, F.GonderenUnvan,F.AlanUnvan, F.AlanVkn as Vkn, " +
-                         $" case when F.GonderenVkn is null then GonderenTckn else F.GonderenVkn end as CariVkn," +
-                         $" F.GonderenTckn as CariTckn, nf.ACIK1 as Aciklama1,NF.ACIK2 as Aciklama2," +
-                         $" F.ToplamTutar,f.ToplamFiyat,F.ToplamVergi, " +
-                         $" f.[Guid], case when NF.ACIK16 is not null then CAST(1 as bit) else CAST(0 as bit) end as Kayitli " +
-                         $" from HANEL_APP..Fatura as f left join " +
-                         $" (select case when F.GIB_FATIRS_NO is null then F.FATIRS_NO else F.GIB_FATIRS_NO end as FATIRS_NO,GIB_FATIRS_NO,FATIRS_NO as FATIRSNO, F.TARIH,F.ACIKLAMA," +
-                         $" F.CARI_KODU,C.CARI_ISIM,C.VERGI_NUMARASI,E.ACIK1,E.ACIK2,E.ACIK16  from TBLFATUIRS as F " +
-                         $" inner join TBLFATUEK as E on F.FATIRS_NO = E.FATIRSNO " +
-                         $" inner join TBLCASABIT as C on F.CARI_KODU = C.CARI_KOD " +
-                         $" where FTIRSIP=2 and E.FKOD='2') as NF on NF.ACIK16=f.[Guid] or NF.GIB_FATIRS_NO=f.FaturaNo where 1=1 ");
+                    var query = $" select * from HNL_VW_FATURA_AKTARIM_LISTE where 1=1 ";
 
                     
                     if (invoiceFilterModel.FirstDate != null && invoiceFilterModel.LastDate != null)
                     {
-                        query += $" and f.FaturaTarihi between '{invoiceFilterModel.FirstDate?.ToString("yyyy-MM-dd")} 00:00:00' and '{invoiceFilterModel.LastDate?.ToString("yyyy-MM-dd")} 23:59:59' ";
+                        query += $" and FaturaTarihi between '{invoiceFilterModel.FirstDate?.ToString("yyyy-MM-dd")} 00:00:00' and '{invoiceFilterModel.LastDate?.ToString("yyyy-MM-dd")} 23:59:59' ";
                     }
                     else if (invoiceFilterModel.IncomeFirstDate != null && invoiceFilterModel.IncomeLastDate != null)
                     {
-                        query += $" and f.GelisTarihi between '{invoiceFilterModel.IncomeFirstDate?.ToString("yyyy-MM-dd")} 00:00:00' and '{invoiceFilterModel.IncomeLastDate?.ToString("yyyy-MM-dd")} 23:59:59' ";
+                        query += $" and GelisTarihi between '{invoiceFilterModel.IncomeFirstDate?.ToString("yyyy-MM-dd")} 00:00:00' and '{invoiceFilterModel.IncomeLastDate?.ToString("yyyy-MM-dd")} 23:59:59' ";
                     }
                     if (!string.IsNullOrEmpty(invoiceFilterModel.SenderVkn) && invoiceFilterModel.SenderVkn.Length >= 10)
                     {
-                        query += $" and f.GonderenVkn = '{invoiceFilterModel.SenderVkn}' ";
+                        query += $" and GonderenVkn = '{invoiceFilterModel.SenderVkn}' ";
                     }
                     if (!string.IsNullOrEmpty(invoiceFilterModel.SenderName))
                     {
-                        query += $" and f.GonderenUnvan like '%{invoiceFilterModel.SenderName}%' ";
+                        query += $" and GonderenUnvan like '%{invoiceFilterModel.SenderName}%' ";
                     }
                     if (!string.IsNullOrEmpty(invoiceFilterModel.CompanyVkn) && invoiceFilterModel.CompanyVkn.Length >= 10)
                     {
-                        query += $" and f.AlanVkn = '{invoiceFilterModel.CompanyVkn}' ";
+                        query += $" and Vkn = '{invoiceFilterModel.CompanyVkn}' ";
                     }
                     if (!string.IsNullOrEmpty(invoiceFilterModel.CompanyVkn) && invoiceFilterModel.CompanyVkn.Length >= 10)
                     {
-                        query += $" and f.AlanVkn = '{invoiceFilterModel.CompanyVkn}' ";
+                        query += $" and Vkn = '{invoiceFilterModel.CompanyVkn}' ";
                     }
 
-                    query += " order by F.FaturaTarihi desc ";
+                    query += " order by FaturaTarihi desc ";
 
                     var data = await connection.QueryAsync<FaturaDto>(query);
 
@@ -105,6 +170,7 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
             }
            
         }
+
         public async Task<IDataResult<FaturaDto>> CheckInvoice(string guid)
         {
             try
@@ -127,6 +193,7 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
             }
             
         }
+
         public async Task<IDataResult<FaturaDto>> GetInvoice(string guid)
         {
             try
@@ -134,46 +201,23 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
                 using (var connection = CreateMsSqlConnection())
                 {
                     var faturaBaslikQuery =
-                     $"  select top 1 case when nf.ACIK16 = f.[Guid] then CAST(1 as bit) else CAST(0 as bit) end as Kayitli, " +
-                     $"  dbo.TRK(nf.ACIKLAMA) as Aciklama, dbo.TRK(nf.ACIK1)  as Aciklama1, dbo.TRK(nf.ACIK2)  as Aciklama2, " +
-                     $" 	isnull(nf.SUBE_KODU,nsb.SUBE_KODU) as SubeKodu, " +
-                     $" 	nf.PROJE_KODU as ProjeKodu, " +
-                     $" 	f.Id,F.[Guid],f.AlanVkn as Vkn, " +
-                     $" 	isnull(dbo.TRK(nf.GIB_FATIRS_NO),f.FaturaNo) as FaturaNo, " +
-                     $" 	isnull(nf.TARIH,f.FaturaTarihi) as FaturaTarihi, " +
-                     $" 	isnull(f.GonderenVkn,f.GonderenTckn) as CariVkn, " +
-                     $" 	case when nc.CARI_KOD is not null then dbo.TRK(nc.CARI_KOD)  else (case when nc1.CARI_KOD is not null then dbo.TRK(nc1.CARI_KOD) else dbo.TRK(nc2.CARI_KOD) end) end as CariKodu,   " +
-                     $" 	case when nc.CARI_KOD is not null then dbo.TRK(nc.CARI_ISIM) else (case when nc1.CARI_ISIM is not null then dbo.TRK(nc1.CARI_ISIM) else dbo.TRK(nc2.CARI_ISIM) end) end as CariUnvan , " +
-                     $" 	f.ToplamTutar,f.ToplamFiyat,f.ToplamVergi " +
-                     $"  from HANEL_APP..Fatura as f " +
-                     $" 	left join (select t1.*,t2.ACIK16,t2.ACIK15,t2.ACIK1,t2.ACIK2,t2.FKOD from TBLFATUIRS as t1 inner join TBLFATUEK as t2 on t1.FATIRS_NO=t2.FATIRSNO ) as nf on (f.[Guid]=nf.ACIK16 or f.FaturaNo=nf.GIB_FATIRS_NO) and nf.FKOD='2'  " +
-                     $" 	left join TBLCASABIT as nc on nf.CARI_KODU=nc.CARI_KOD " +
-                     $" 	left join TBLCASABIT as nc1 on f.GonderenVkn=nc1.VERGI_NUMARASI " +
-                     $"  left join (select c.CARI_KOD,CARI_ISIM,TCKIMLIKNO,CARI_TIP from TBLCASABIT as c inner join TBLCASABITEK as ce on c.CARI_KOD=ce.CARI_KOD) as nc2 on f.GonderenTckn=nc2.TCKIMLIKNO " +
-                     $" 	left join (select * from TBLSUBELER where ISLETME_KODU!=SUBE_KODU) as nsb on f.AlanVkn=nsb.VNO  " +
-                     $"  where [Guid] = '{guid}'   order by nc1.CARI_TIP desc";
+                     $"  exec HNL_SP_FATURA_BASLIK '{guid}'   ";
 
                     var dataFaturaBaslik = await connection.QueryFirstOrDefaultAsync<FaturaDto>(faturaBaslikQuery);
 
-                    var faturaKalemQuery =
-                            $" select dbo.TRK(EKALAN) as KalemAciklama, " +
-                            $" STHAR_GCMIK as Miktar, " +
-                            $" STOK_KODU as StokKodu, " +
-                            $" MUH_KODU as MuhasebeKodu, " +
-                            $" k.PROJE_KODU as ProjeKodu, " +
-                            $" k.S_YEDEK1 as ReferansKodu, " +
-                            $" STHAR_DOVTIP, " +
-                            $" STHAR_KDV as Kdv, " +
-                            $" STHAR_NF as Fiyat, " +
-                            $" (STHAR_GCMIK*STHAR_BF*(STHAR_KDV+100))/100 as Tutar " +
-                            $" from HANEL_APP..Fatura as f " +
-                            $" inner join (select t1.*,t2.ACIK16,t2.ACIK15,t2.ACIK1,t2.ACIK2,t2.FKOD from TBLFATUIRS as t1 inner join TBLFATUEK as t2 on t1.FATIRS_NO = t2.FATIRSNO ) as nf on f.[Guid]= nf.ACIK16 or f.FaturaNo = nf.GIB_FATIRS_NO " +
-                            $" right join TBLSTHAR as k on nf.FATIRS_NO = k.FISNO " +
-                            $" where f.[Guid] = '{guid}'  ";
+                    var faturaKalemQuery = $" declare @id nvarchar(200); select @id=Id from HANEL_APP..Fatura Where [Guid]='{guid}' exec [HNL_SP_FATURA_KALEM]   @id";
+
 
                     var dataFaturaKalem = await connection.QueryAsync<FaturaDetayDto>(faturaKalemQuery);
 
-                    dataFaturaBaslik.FaturaDetays = dataFaturaKalem;
+
+                    dataFaturaBaslik.FaturaDetays = dataFaturaKalem.Where(x=>   !(x.HashKalem != null ? x.HashKalem : "").Contains("-015") && !(x.HashKalem != null ? x.HashKalem : "").Contains("-016"));
+
+                    var yuvarlama = dataFaturaKalem.FirstOrDefault(x => (x.HashKalem != null ? x.HashKalem : "").Contains("-015") )!=null? dataFaturaKalem.FirstOrDefault(x => x.HashKalem.Contains("-015")).Tutar:0;
+                    var otoAvaible = !dataFaturaKalem.Any(x => x.HashKalem == null);
+                    dataFaturaBaslik.Yuvarlama = dataFaturaBaslik.Yuvarlama == 0 ? yuvarlama : dataFaturaBaslik.Yuvarlama;
+                    dataFaturaBaslik.OtoAvaible = otoAvaible;
+                    //dataFaturaBaslik.Mahsup = dataFaturaBaslik.Mahsup == 0 ? mahsup : dataFaturaBaslik.Mahsup;
 
                     return new SuccessDataResult<FaturaDto>(dataFaturaBaslik);
                 }
@@ -252,6 +296,8 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
 
                     var data = await connection.QueryAsync<YevmiyeFis>(query);
 
+                    if(data==null || data.Count()<1)
+                        return new ErrorDataResult<YevmiyeFisInfo>("Yevmiya kaydı alınamadı. Fatura kaydı olamayabilir.");
 
                     var fisInfoDataQuery = $" select " +
                     $" FISNO as FisNo, " +

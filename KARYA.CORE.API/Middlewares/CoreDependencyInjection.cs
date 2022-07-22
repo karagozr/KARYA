@@ -41,7 +41,7 @@ namespace KARYA.CORE.API.Middlewares
             services.AddScoped<KARYA.BUSINESS.Abstract.IUserManager, EfUserManager>();
 
             services.AddScoped<KARYA.BUSINESS.Abstract.IAuthGroupManager, EfAuthGroupManager>();
-
+            
         }
     }
 }

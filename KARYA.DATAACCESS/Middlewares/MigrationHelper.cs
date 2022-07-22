@@ -10,9 +10,13 @@ namespace KARYA.DATAACCESS.Middlewares
     {
         public static void AddKaryaMigrate(this IServiceCollection services, IConfiguration configuration)
         {
-            string programName = typeof(MigrationHelper).Assembly.GetName().Name;
-            services.AddDbContext<KaryaContext>(options => options.UseSqlServer(configuration.GetConnectionString("KARYAConnection"), x => x.MigrationsAssembly(programName)));
-            services.BuildServiceProvider().GetService<KaryaContext>().Database.Migrate();
+            if (configuration.GetConnectionString("KARYAConnection") != null)
+            {
+                string programName = typeof(MigrationHelper).Assembly.GetName().Name;
+                services.AddDbContext<KaryaContext>(options => options.UseSqlServer(configuration.GetConnectionString("KARYAConnection"), x => x.MigrationsAssembly(programName)));
+                services.BuildServiceProvider().GetService<KaryaContext>().Database.Migrate();
+            }
+            
         }
     }
 

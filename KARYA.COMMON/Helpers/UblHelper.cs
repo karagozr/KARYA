@@ -15,6 +15,17 @@ namespace KARYA.COMMON.Helpers
 {
     public static class UblHelper
     {
+        public static string GetValueFromElement(this XDocument xml, string attributeName, string attributeValue)
+        {
+           
+            var res = xml.Descendants()
+                .FirstOrDefault(x => x.Name.LocalName == "ID" && x.Attribute(attributeName) != null 
+                                                              && x.FirstAttribute.Value == attributeValue).Value;
+            return res;
+
+
+        }
+
         public static fatura LoadAndValidateInvoice(string xmlString)
         {
             using (var xmlReader = XmlReader.Create(new StringReader(xmlString))) 

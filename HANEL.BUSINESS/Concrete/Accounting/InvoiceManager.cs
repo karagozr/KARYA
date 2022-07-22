@@ -19,7 +19,9 @@ namespace HANEL.BUSINESS.Concrete.Accounting
         IInvoiceDal _invoiceDal;
         IConfiguration _configuration;
         KARYA.MODEL.Entities.Netsis.Login netsisLogin;
-        public InvoiceManager(IInvoiceDal invoiceDal) :base(invoiceDal) { }
+        public InvoiceManager(IInvoiceDal invoiceDal) :base(invoiceDal) {
+            _invoiceDal = invoiceDal;
+        }
         public InvoiceManager(IInvoiceDal invoiceDal, IConfiguration configuration) : base(invoiceDal)
         {
             _invoiceDal = invoiceDal;

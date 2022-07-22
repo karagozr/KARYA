@@ -12,10 +12,10 @@ namespace HANEL.BUSINESS.Abstract.Hotel
     public interface IHotelReportManager
     {
         Task<IDataResult<IEnumerable<HotelRoomSaleRawDto>>> RoomSaleRawList();
-        Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleSumList();
+        Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomIncomeSumList(int year = 0);
         Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleSumWithAgentList(DateRangeModel dateRangeModel = null);
         Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleAgentCountryMarket(DateRangeModel dateRangeModel = null);
         Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomIncomeByAgentDaily(DateRangeModel dateRangeModel = null);
-        Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleByAgentDaily(DateRangeModel dateRangeModel = null);
+        Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleByAgentDaily(SalesAndReservationDateRangeModel dateRangeModel = null);
     }
 }

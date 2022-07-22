@@ -1,6 +1,7 @@
 using HANEL.API.REST.Middlewares;
 using HANEL.DATAACCESS.Middlewares;
 using KARYA.CORE.API;
+using KARYA.CORE.Middlewares;
 using KARYA.DATAACCESS.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -50,24 +51,11 @@ namespace HANEL.API.REST
             
 
             services.AddHanelMigrate(Configuration);
-            
+            services.AddCoreAuthotincation(Configuration);
             services.AddControllers().AddNewtonsoftJson(options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                    };
-                });
+            
            
 
             services.AddControllers(options =>
@@ -158,27 +146,7 @@ namespace HANEL.API.REST
 
             services.AddSwaggerDocumentation();
 
-            //services.AddApiVersioning(options =>
-            //{
-            //    options.DefaultApiVersion = new ApiVersion(1, 0);
-            //    options.AssumeDefaultVersionWhenUnspecified = true;
-            //    options.ReportApiVersions = true;
-            //});
-
-            //services.AddVersionedApiExplorer(options =>
-            //{
-            //    // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service  
-            //    // note: the specified format code will format the version as "'v'major[.minor][-status]"  
-            //    options.GroupNameFormat = "'v'VVV";
-
-            //    // note: this option is only necessary when versioning by url segment. the SubstitutionFormat  
-            //    // can also be used to control the format of the API version in route templates  
-            //    options.SubstituteApiVersionInUrl = true;
-            //});
-            ////services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            ////services.AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
-
-            //services.AddSwaggerGen();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -212,12 +180,6 @@ namespace HANEL.API.REST
             });
 
             
-            
-            //app.AddCoreApiConfigure(env);
-
-
-            //app.UseSwaggerDocumentation();
-
             
         }
     }

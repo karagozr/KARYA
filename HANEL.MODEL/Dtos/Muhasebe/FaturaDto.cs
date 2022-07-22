@@ -9,8 +9,10 @@ namespace HANEL.MODEL.Dtos.Muhasebe
     public class FaturaDto
     {
         public int Id { get; set; }
+        public bool OtoMod { get; set; }
         public bool Kayitli { get; set; }
         public string Guid { get; set; }
+        public string AboneNo { get; set; }
         public string AlanUnvan { get; set; }
         public string DefaultNote { get; set; }
         public string UserNotes { get; set; }
@@ -32,6 +34,7 @@ namespace HANEL.MODEL.Dtos.Muhasebe
         public decimal ToplamVergi { get; set; }
         public decimal ToplamTutar { get; set; }
         public decimal OdenecekTutar { get; set; }
+        public decimal Yuvarlama { get; set; }
         public DateTime FaturaTarihi{ get; set; }
         public string KayitTarihi { get; set; }
         public string DuzenlemeTarihi { get; set; }
@@ -39,6 +42,10 @@ namespace HANEL.MODEL.Dtos.Muhasebe
         public IEnumerable<FaturaDetayDto> FaturaDetays { get; set; }
         public string Aciklama15 { get; set; }
         public bool ReturnYevmiyeFisi { get; set; }
+        public double YuvarlamaTutari { get; set; }
+        public bool RetryKdv { get; set; }
+        public bool RetryTutar { get; set; }
+        public bool OtoAvaible { get; set; }
     }
 
     public class FaturaDetayDto
@@ -46,6 +53,7 @@ namespace HANEL.MODEL.Dtos.Muhasebe
         public int Int { get; set; }
         public int FaturaId { get; set; }
         public string Guid { get; set; }
+        public string HashKalem { get; set; }
         public string FaturaNo { get; set; }
         public string StokKodu { get; set; }
         public decimal Miktar { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KARYA.CORE.Entities.Enum;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,5 +10,7 @@ namespace KARYA.CORE.Types.Return.Interfaces
         bool Success { get; }
 
         string Message { get; }
+
+        ResultCode Code { get; }
     }
 }

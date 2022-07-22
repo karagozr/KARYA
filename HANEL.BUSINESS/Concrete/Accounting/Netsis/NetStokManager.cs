@@ -50,7 +50,7 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
             }
         }
 
-        public async Task<IDataResult<IEnumerable<StokDto>>> List(string stokKodu=null)
+        public async Task<IDataResult<IEnumerable<StokDto>>> List(string branchCode = null)
         {
             try
             {
@@ -65,13 +65,17 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis
                         $"dbo.TRK(mp.HS_ADI)        as AlisHesapAdi     ,  " +
                         $"dbo.TRK(mp1.HESAP_KODU)   as SatisHesapKodu   ,  " +
                         $"dbo.TRK(mp1.HS_ADI)       as SatisHesapAdi    ,  " +
+                        $"md.SUBE_KODU              as SubeKodu         ,  " +
                         $"st.KDV_ORANI as KdvOrani from TBLSTSABIT as st   " +
-                        $"left join TBLSTMUHDETAY   as md   on st.MUH_DETAYKODU = md.MUH_DETAYKOD   " +
-                        $"left join TBLMUPLAN       as mp   on md.ALIS_HESABI   = mp.HESAP_KODU     " +
-                        $"left join TBLMUPLAN       as mp1  on md.SATIS_HESABI  = mp1.HESAP_KODU    ";
+                        $"left join TBLSTMUHDETAY   as md   on st.MUH_DETAYKODU = md.MUH_DETAYKOD " +
+                        $"left join TBLMUPLAN       as mp   on md.ALIS_HESABI   = mp.HESAP_KODU   " +
+                        $"left join TBLMUPLAN       as mp1  on md.SATIS_HESABI  = mp1.HESAP_KODU  " +
+                        $"where 1=1 ";
 
-                    if(string.IsNullOrEmpty(stokKodu))
-                        queryString += $"where STOK_KODU like '%{stokKodu}%'";
+                    if(!string.IsNullOrEmpty(branchCode))
+                        queryString += $"and (md.SUBE_KODU like '%{branchCode}%' or md.SUBE_KODU is null)";
+
+                  
 
                     var data = await connection.QueryAsync<StokDto>(queryString);
 

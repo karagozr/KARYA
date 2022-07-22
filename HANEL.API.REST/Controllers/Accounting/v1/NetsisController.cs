@@ -46,9 +46,9 @@ namespace HANEL.API.REST.Controllers.Accounting.v1
         }
 
         [HttpGet("StokList")]
-        public async Task<IActionResult> StokList()
+        public async Task<IActionResult> StokList(string branchCode=null)
         {
-            var result = await _stokManager.List();
+            var result = await _stokManager.List(branchCode);
             if (result.Success)
                 return Ok(result.Data);
             return BadRequest(result.Message);

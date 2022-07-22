@@ -1,4 +1,6 @@
 ﻿using HANEL.MODEL.Dtos.Muhasebe;
+using KARYA.COMMON.Helpers;
+using KARYA.CORE.Entities.Enum;
 using KARYA.CORE.Types.Return;
 using KARYA.CORE.Types.Return.Interfaces;
 using KARYA.MODEL.Entities.Netsis;
@@ -7,6 +9,7 @@ using NetOpenX.Rest.Client.Model.Enums;
 using NetOpenX.Rest.Client.Model.NetOpenX;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -61,7 +64,7 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis.NetOpenX
                 FatUst.GIB_FATIRS_NO = invoice.FaturaNo;
                 FatUst.Tarih = Convert.ToDateTime(invoice.FaturaTarihi);
                 FatUst.FiiliTarih = Convert.ToDateTime(invoice.FaturaTarihi);
-                FatUst.EKACK1 = invoice.Aciklama;
+                FatUst.EKACK1 = invoice.Aciklama1;
                 FatUst.EKACK2 = invoice.Aciklama2;
                 FatUst.EKACK15 = invoice.KayitTarihi==null?"": invoice.KayitTarihi.ToString();
                 //FatUst.KDV_DAHILMI = false;
@@ -71,13 +74,21 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis.NetOpenX
                 FatUst.TIPI = JTFaturaTipi.ft_Acik;
                 FatUst.FATIRS_NO = erpFaturaNo;
                 FatUst.EKACK16 = invoice.Guid;
-
+                FatUst.EKACK14 = invoice.AboneNo;
                 //FatUst.GE = 5;
                 //FatUst.FAT_ALTM1 = 0.8;
                 fatura.KayitliNumaraOtomatikGuncellensin = true;
                 fatura.FatUst = FatUst;
                 fatura.Kalems = new List<ItemSlipLines>();
+
+                fatura.FatUst.YUVARLAMA = Convert.ToDouble(invoice.Yuvarlama);
+
+                if (invoice.FaturaDetays.Any(x => !string.IsNullOrEmpty(x.HashKalem) && x.HashKalem.Contains("-015")))
+                {
+                    fatura.FatUst.YUVARLAMA = (double)invoice.FaturaDetays.FirstOrDefault(x => !string.IsNullOrEmpty(x.HashKalem) &&  x.HashKalem.Contains("-015")).Tutar;
+                }
                 
+
                 foreach (var item in invoice.FaturaDetays)
                 {
                     fatura.Kalems.Add(new ItemSlipLines
@@ -93,11 +104,11 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis.NetOpenX
                         STra_NF = Convert.ToDouble(item.Fiyat),
                         ProjeKodu = item.ProjeKodu,
                         Ekalan = item.KalemAciklama,
+                        Ekalan1=item.HashKalem,
                         D_YEDEK10 = Convert.ToDateTime(invoice.FaturaTarihi),
                         Stra_FiiliTar = Convert.ToDateTime(invoice.FaturaTarihi),
                         STra_TAR = Convert.ToDateTime(invoice.FaturaTarihi),
                         STra_testar = Convert.ToDateTime(invoice.FaturaTarihi)
-
 
                     });
                 }
@@ -106,10 +117,10 @@ namespace HANEL.BUSINESS.Concrete.Accounting.Netsis.NetOpenX
 
                 if (!result.IsSuccessful)
                 {
-                    return new ErrorDataResult<string>("NetopenX hata : " + result.ErrorDesc);
+                    return new ErrorDataResult<string>(null,"NetopenX hata : " + result.ErrorDesc, ResultCode.SUCCESS_INVOICE_SAVED);
                 }
 
-                return new SuccessDataResult<string>(result.Data.FatUst.FATIRS_NO,"");
+                return new SuccessDataResult<string>(result.Data.FatUst.FATIRS_NO, ResultCode.SUCCESS_INVOICE_SAVED);
             }
             catch (Exception ex)
             {

@@ -50,7 +50,8 @@ namespace HANEL.DATAACCESS.Concrete.EntityFramework.Context
         public DbSet<FaturaKalem> FaturaKalem { get; set; }
         public DbSet<FaturaKalemVergi> FaturaKalemVergi { get; set; }
         public DbSet<FaturaVergiKalem> FaturaVergiKalem { get; set; }
-
+        public DbSet<OtoFatura> OtoFatura { get; set; }
+        public DbSet<OtoFaturaDetay> OtoFaturaDetay { get; set; }
         public DbSet<Company> Companies { get; set; }
     }
 }

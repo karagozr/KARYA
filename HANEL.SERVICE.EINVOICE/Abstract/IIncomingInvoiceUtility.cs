@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HANEL.SERVICE.EINVOICE.Abstract
 {
@@ -14,5 +15,11 @@ namespace HANEL.SERVICE.EINVOICE.Abstract
         Task<IDataResult<string>> GetInvoiceDocument(FaturaFiltreModel faturaFiltreModel);
         Task<IDataResult<Fatura>> GetInvoice(FaturaFiltreModel faturaFiltreModel);
         Task<IDataResult<IEnumerable<Fatura>>> ListInvoiceWithDetail(FaturaFiltreModel faturaFiltreModel);
+
+        Task<IDataResult<string>> GetInvoiceSubscribeNo(XDocument xml);
+        Task<IDataResult<double>> GetInvoiceRoundingDetail(XDocument xml);
+        Task<IDataResult<double>> GetInvoiceMahsupDetail(XDocument xml);
+
+        Task<IDataResult<XDocument>> GetInvoiceXML(string guid, string belgeTuru, string vergiTcKimlikNo);
     }
 }

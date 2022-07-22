@@ -1,17 +1,20 @@
 ﻿using KARYA.CORE.API.Helpers;
 using KARYA.CORE.API.Middlewares;
 using KARYA.DATAACCESS.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 //using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace KARYA.CORE.API
@@ -23,9 +26,10 @@ namespace KARYA.CORE.API
 
             var assemblyName = typeof(Integration).Assembly.GetName().Name;
             services.AddMvc().AddApplicationPart(Assembly.Load(new AssemblyName(assemblyName)));
+            
             services.AddCoreDependencies();
             services.AddKaryaMigrate(configuration);
-
+            
 
             //services.AddControllers(o => {
             //    o.Conventions.Add(new GroupingByNamespaceConvertion());
@@ -108,5 +112,6 @@ namespace KARYA.CORE.API
             
             
         //}
+
     }
 }

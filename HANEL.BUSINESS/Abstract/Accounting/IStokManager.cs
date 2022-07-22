@@ -12,7 +12,7 @@ namespace HANEL.BUSINESS.Abstract.Accounting
 {
     public interface IStokManager
     {
-        Task<IDataResult<IEnumerable<StokDto>>> List(string stokKodu=null);
+        Task<IDataResult<IEnumerable<StokDto>>> List(string branchCode = null);
 
         Task<IDataResult<StokDto>> Get(string stokKodu);
     }
