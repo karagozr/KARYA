@@ -46,7 +46,7 @@ namespace HANEL.API.REST.DASHBOARD.Middlewares
             if (e.DataId == "hotelRaw")
             {
                 var source = new HotelERPDatasources();
-                e.Data = source.GetHotelAccomodation().Result;
+                e.Data = source.GetHotelAccomodation();
             }
         }
     }

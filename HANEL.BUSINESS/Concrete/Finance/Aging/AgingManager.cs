@@ -2,6 +2,7 @@
 using HANEL.BUSINESS.Abstract.Finance.Aging;
 using HANEL.MODEL.Dtos.Finance.Aging;
 using HANEL.MODEL.Filter.Finance;
+using KARYA.CORE.Aspects.CacheAspects;
 using KARYA.CORE.Types.Return;
 using KARYA.CORE.Types.Return.Interfaces;
 using KARYA.DATAACCESS.Concrete.Dapper;
@@ -15,6 +16,7 @@ namespace HANEL.BUSINESS.Concrete.Finance.Aging
 {
     public class AgingManager : DapperBaseDal, IAgingManager
     {
+        [MicrosoftCacheAspect]
         public async Task<IDataResult<IEnumerable<AgingReportDto>>> GetAgingBranchDetail(AgingFilterModel filter)
         {
             try
@@ -38,6 +40,7 @@ namespace HANEL.BUSINESS.Concrete.Finance.Aging
             throw new NotImplementedException();
         }
 
+        [MicrosoftCacheAspect]
         public async Task<IDataResult<IEnumerable<AgingReportDto>>> GetAgingList(AgingFilterModel filter)
         {
             try
@@ -56,6 +59,7 @@ namespace HANEL.BUSINESS.Concrete.Finance.Aging
             }
         }
 
+        [MicrosoftCacheAspect]
         public async Task<IDataResult<IEnumerable<AgingReportDto>>> GetAgingProjectDetail(AgingFilterModel filter)
         {
             try

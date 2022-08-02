@@ -20,9 +20,9 @@ namespace HANEL.API.REST.DASHBOARD.Data
             hotelReportManager = new HotelReportManager();
         }
 
-        public async Task<IEnumerable<dynamic>> GetHotelAccomodation()
+        public IEnumerable<dynamic> GetHotelAccomodation()
         {
-            var res = await hotelReportManager.RoomSaleAgentCountryMarket();
+            var res =  hotelReportManager.RoomSaleAgentCountryMarket(new MODEL.Filter.Hotel.DateRangeModel { FirstDate = DateTime.Now.AddDays(-100), LastDate = DateTime.Now }).Result;
 
             if (res.Success)
                 return res.Data.ToList();

@@ -2,7 +2,9 @@
 using HANEL.BUSINESS.Abstract.Hotel;
 using HANEL.MODEL.Dtos.Hotel;
 using HANEL.MODEL.Filter.Hotel;
+using KARYA.CORE.Aspects.CacheAspects;
 using KARYA.CORE.Concrete.Dapper;
+using KARYA.CORE.CrossCuttingConcerns.Caching.Microsoft;
 using KARYA.CORE.Types.Return;
 using KARYA.CORE.Types.Return.Interfaces;
 using System;
@@ -80,6 +82,7 @@ namespace HANEL.BUSINESS.Concrete.Hotel
             }
         }
 
+        [MicrosoftCacheAspect]
         public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleAgentCountryMarket(DateRangeModel dateRangeModel = null)
         {
             try
