@@ -6,7 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     
-    <PackageReference Include="DevExpress.AspNetCore.Dashboard" Version="21.2.7" /><PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" /><PackageReference Include="BuildBundlerMinifier" Version="3.2.449" /><PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.113" /></ItemGroup>
+    <PackageReference Include="DevExpress.AspNetCore.Dashboard" Version="21.2.7" />
+    
+    <PackageReference Include="PostSharp" Version="6.10.14" /><PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" /><PackageReference Include="BuildBundlerMinifier" Version="3.2.449" /><PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.113" /></ItemGroup>
   <ItemGroup>
     <Compile Remove="node_modules\**" />
     <Content Remove="node_modules\**" />

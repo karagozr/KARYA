@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="PostSharp" Version="6.10.14" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HANEL.BUSINESS\HANEL.BUSINESS.csproj" />
     <ProjectReference Include="..\HANEL.SERVICE.EINVOICE\HANEL.SERVICE.EINVOICE.csproj" />
   </ItemGroup>

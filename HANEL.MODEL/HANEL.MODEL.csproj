@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PostSharp" Version="6.10.14" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\KARYA.CORE\KARYA.CORE.csproj" />
     <ProjectReference Include="..\KARYA.MODEL\KARYA.MODEL.csproj" />
   </ItemGroup>

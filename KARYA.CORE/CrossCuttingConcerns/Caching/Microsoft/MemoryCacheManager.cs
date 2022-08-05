@@ -10,6 +10,10 @@ namespace KARYA.CORE.CrossCuttingConcerns.Caching.Microsoft
 {
     public class MemoryCacheManager : ICacheManager
     {
+        public MemoryCacheManager()
+        {
+
+        }
         protected ObjectCache Cache => MemoryCache.Default;
 
         public void Add(string key, object data, int cacheTime=60)

@@ -11,18 +11,27 @@ using System.Threading.Tasks;
 
 namespace KARYA.CORE.Aspects.CacheAspects
 {
-    [Serializable]
-    [Aspect(Scope.Global)]
-    [Injection(typeof(MicrosoftCacheAspectAttribute))]
+  
+
+    [Injection(typeof(TraceAspect))]
     public sealed class MicrosoftCacheAspectAttribute : Attribute
     {
-        //private readonly Type _cacheType;
-        private readonly int _cacheMinute;
-        private ICacheManager _cacheManager;
+        public int CacheMinute { get; set; }
 
         public MicrosoftCacheAspectAttribute()
         {
-            _cacheManager = new MemoryCacheManager(); //(ICacheManager)Activator.CreateInstance(_cacheType);
+
+        }
+    }
+
+    [Aspect(Scope.Global, Factory = typeof(AspectFactory))]
+    public sealed class TraceAspect
+    {
+        private ICacheManager _cacheManager;
+        private readonly int _cacheMinute;
+        public TraceAspect(ICacheManager cacheManager)
+        {
+            _cacheManager = cacheManager;
             _cacheMinute = 15;
         }
 
@@ -37,7 +46,7 @@ namespace KARYA.CORE.Aspects.CacheAspects
 
             string argStr = JsonSerializer.Serialize(args).ToString();
             var key = string.Format("{0}.{1}({2})", type.FullName, name, argStr);
-           
+
 
             if (_cacheManager.IsAdd(key))
             {
@@ -54,8 +63,20 @@ namespace KARYA.CORE.Aspects.CacheAspects
             }
 
         }
-
-
-
     }
+
+    public class AspectFactory
+    {
+        public static object GetInstance(Type aspectType)
+        {
+           
+            if (aspectType == typeof(TraceAspect))
+            {
+                var cacheManager = new MemoryCacheManager();
+                return new TraceAspect(cacheManager);
+            }
+            throw new ArgumentException($"Unknown aspect type '{aspectType.FullName}'");
+        }
+    }
+
 }

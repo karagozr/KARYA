@@ -3,6 +3,7 @@ using HANEL.BUSINESS.Abstract.Hotel;
 using HANEL.MODEL.Dtos.Hotel;
 using HANEL.MODEL.Filter.Hotel;
 using KARYA.CORE.Aspects.CacheAspects;
+using KARYA.CORE.Aspects.PostSharp;
 using KARYA.CORE.Concrete.Dapper;
 using KARYA.CORE.CrossCuttingConcerns.Caching.Microsoft;
 using KARYA.CORE.Types.Return;
@@ -15,6 +16,8 @@ using System.Threading.Tasks;
 
 namespace HANEL.BUSINESS.Concrete.Hotel
 {
+   
+
     public class HotelReportManager : DapperRepository, IHotelReportManager
     {
         public HotelReportManager() : base("HOTELERPConnection")
@@ -62,6 +65,7 @@ namespace HANEL.BUSINESS.Concrete.Hotel
             }
         }
 
+        
         public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleSumWithAgentList(DateRangeModel dateRangeModel=null)
         {
             try
@@ -82,7 +86,8 @@ namespace HANEL.BUSINESS.Concrete.Hotel
             }
         }
 
-        [MicrosoftCacheAspect]
+
+        [CacheAspect(typeof(MemoryCacheManager), 20)]
         public async Task<IDataResult<IEnumerable<HotelRoomSaleSumDto>>> RoomSaleAgentCountryMarket(DateRangeModel dateRangeModel = null)
         {
             try

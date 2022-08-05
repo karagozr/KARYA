@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PostSharp" Version="6.10.14" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HANEL.MODEL\HANEL.MODEL.csproj" />
     <ProjectReference Include="..\KARYA.CORE\KARYA.CORE.csproj" />
     <ProjectReference Include="..\KARYA.DATAACCESS\KARYA.DATAACCESS.csproj" />

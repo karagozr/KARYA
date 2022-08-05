@@ -22,7 +22,7 @@ namespace HANEL.API.REST.DASHBOARD.Data
 
         public IEnumerable<dynamic> GetHotelAccomodation()
         {
-            var res =  hotelReportManager.RoomSaleAgentCountryMarket(new MODEL.Filter.Hotel.DateRangeModel { FirstDate = DateTime.Now.AddDays(-100), LastDate = DateTime.Now }).Result;
+            var res =  hotelReportManager.RoomSaleAgentCountryMarket(new MODEL.Filter.Hotel.DateRangeModel { FirstDate = DateTime.Today.AddDays(-100), LastDate = DateTime.Today }).Result;
 
             if (res.Success)
                 return res.Data.ToList();
